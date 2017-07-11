@@ -11,6 +11,7 @@ var jogo = function () {
 		var tick = function() {
 			self.update();
 			self.draw(screen, gameSize);
+			self.end();
 			requestAnimationFrame(tick);
 		};
 		
@@ -58,6 +59,11 @@ var jogo = function () {
 				}
 			}
 			return true;
+		},
+		
+		
+		end: function(){
+			//if (instanceof Player in this.bodies)
 		}
 	};
 	
@@ -67,7 +73,7 @@ var jogo = function () {
 		this.size = { x: 32, y: 32};
 		this.center = { x: gameSize.x / 2, y: gameSize.y - this.size.x };
 		this.keyboarder = new Keyboarder(this);
-		this.spellCount = false;
+		this.spellCount = 10;
 	};
 	
 	Player.prototype = {
@@ -84,8 +90,8 @@ var jogo = function () {
 			} else if (this.keyboarder.isDown(keys.DOWN)){
 				this.center.y += 2;
 			} 
-			if (this.keyboarder.isDown(keys.SPACE) && this.spellCount === false){
-				this.spellCount = true;
+			if (this.keyboarder.isDown(keys.SPACE) && this.spellCount == 10){
+				this.spellCount --;
 				var spell = new Spell(
 					{ x: this.center.x, y: this.center.y - this.size.x / 2},
 					{ x: 0, y: -4}
@@ -93,7 +99,8 @@ var jogo = function () {
 				this.game.addBody(spell);
 			}
 			
-			if (this.spellCount) this.spellCount = false;
+			if (this.spellCount > 0) this.spellCount--;
+			if (this.spellCount === 0 || !this.keyboarder.isDown(keys.SPACE)) this.spellCount = 10;
 			
 		}
 	};
@@ -190,22 +197,23 @@ var jogo = function () {
 		};
 
 		window.addEventListener("touchstart", function(e) {
+			e.preventDefaul();
 			var local = e.changedTouches;
 			pos.x = local.item(0).clientX;
-			pos.y = local.item(0).clientY;
+			//pos.y = local.item(0).clientY;
 			codeX = movimentoX(player, pos.x);
-			codeY = movimentoY(player, pos.y);
+			//codeY = movimentoY(player, pos.y);
 			keyState[codeX] = true;
-			keyState[codeY] = true;
+			//keyState[codeY] = true;
 			keyState[32] = true;
 		});
 		
 		window.addEventListener("touchend", function() {
 			keyState[codeX] = false;
-			keyState[codeY] = false;
+			//keyState[codeY] = false;
 			keyState[32] = false;
 			codeX = 0;
-			codeY = 0
+			//codeY = 0
 		});
 	
 		window.onkeyup = function(e) {
