@@ -1,20 +1,33 @@
 var jogo = function () {
-	var Game = function(canvasId) {
+	var Game = function(canvasId, statusId) {
 		var canvas = document.getElementById(canvasId);
+		var canvasStatus = document.getElementById(statusId);
 		var screen = canvas.getContext('2d');
-		var gameSize = { x: canvas.width, y: canvas.height};
+		var statusScreen = canvasStatus.getContext('2d');
+		var gameSize = { x: canvas.width, y: canvas.height };
+		var statusSize = { x: canvasStatus.width, y: canvasStatus.height };
 		
-		this.bodies = createEnemy(this).concat(new Player(this, gameSize));
-		this.spellArr = new Array();
+		this.fase = 1;
+		this.mortes = 0;
 		
 		var self = this;
+		var bodies;
+		var spellArr;
+		
+		var start = function(){
+			self.textUpdate(("Fase: " + self.fase + " Mortes: " + self.mortes), statusScreen, statusSize);
+			
+			self.bodies = createEnemy(self).concat(new Player(self, gameSize));
+			self.spellArr = new Array();
+		};
+		start();
+		
 		var tick = function() {
 			self.update();
 			self.draw(screen, gameSize);
-			self.end();
+			if(self.end()) start();
 			requestAnimationFrame(tick);
 		};
-		
 		tick();
 	};
 	
@@ -22,6 +35,7 @@ var jogo = function () {
 		update: function() {
 			var bodies = this.bodies;
 			var spellArr = this.spellArr;
+			
 			var notCollidingWithAnythig = function(b1) {
 				return spellArr.filter(function(b2) { return colliding(b1, b2); }).length === 0;
 			};
@@ -61,15 +75,37 @@ var jogo = function () {
 			return true;
 		},
 		
-		
 		end: function(){
-			//if (instanceof Player in this.bodies)
-		}
+			var player = false;
+			var enemy = false;
+			for(var i = 0; i < this.bodies.length; i++){
+				if (this.bodies[i] instanceof Player) player = true;
+				else if (this.bodies[i] instanceof Enemy) enemy = true;
+			}
+			if (!player){
+				this.mortes++;
+				console.log(this.mortes);
+				return true;
+			} else if (!enemy){
+				this.fase++;
+				console.log("you win");
+				return true;
+			}
+		},
+		
+		textUpdate: function(text, statusScreen, statusSize){
+			statusScreen.font = 'italic 15pt Arial';
+			statusScreen.textAlign = 'center';
+		
+			statusScreen.clearRect(0, 0, statusSize.x, statusSize.y);
+			statusScreen.strokeText(text, statusSize.x / 2, statusSize.y / 2);
+		}		
 	};
 	
 	//JOGADOR
 	var Player = function(game, gameSize) {
 		this.game = game;
+		this.gameSize = gameSize;
 		this.size = { x: 32, y: 32};
 		this.center = { x: gameSize.x / 2, y: gameSize.y - this.size.x };
 		this.keyboarder = new Keyboarder(this);
@@ -80,14 +116,14 @@ var jogo = function () {
 		update: function() {
 			var keys = this.keyboarder.KEYS;
 			
-			if (this.keyboarder.isDown(keys.LEFT)){
+			if (this.keyboarder.isDown(keys.LEFT) && this.center.x > 16){
 				this.center.x -= 2;
-			} else if (this.keyboarder.isDown(keys.RIGHT)){
+			} else if (this.keyboarder.isDown(keys.RIGHT) && this.center.x < this.gameSize.x - 16){
 				this.center.x += 2;
 			} 
-			if (this.keyboarder.isDown(keys.UP)){
+			if (this.keyboarder.isDown(keys.UP) && this.center.y > 16){
 				this.center.y -= 2;
-			} else if (this.keyboarder.isDown(keys.DOWN)){
+			} else if (this.keyboarder.isDown(keys.DOWN && this.center.y < this.gameSize.y - 16)){
 				this.center.y += 2;
 			} 
 			if (this.keyboarder.isDown(keys.SPACE) && this.spellCount == 10){
@@ -220,7 +256,6 @@ var jogo = function () {
 			keyState[e.keyCode] = false;
 		};
 		
-		
 		this.isDown = function(keyCode) {
 			return keyState[keyCode] === true;
 		};
@@ -249,6 +284,6 @@ var jogo = function () {
 	
 	
 	window.onload = function(){
-		new Game("screen");
+		new Game("screen", "status");
 	};
 }; jogo();
