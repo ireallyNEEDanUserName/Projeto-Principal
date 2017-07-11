@@ -1,14 +1,22 @@
 <html>
 <head>
 	<title> Skull Game </title>
+	<link href="style.css" type="text/css" rel="stylesheet">
 </head>
 <body>
 	<p><a href="../index.php">Home</a> <a href="skull.html">New Game</a> </p>
-	<canvas id="screen" width="600" height="500">
-	<img id="mago" src="imgs/mago.jpg">
-	<img id="spell" src="imgs/esplosao1.png">
-	<img id="esqueleto" src="imgs/esqueleto.jpg">
-	
+	<div id="canvas1">
+		<canvas id="status" width="600" height="50">
+		</canvas>
+	</div>
+	<br />
+	<div>
+		<canvas id="screen" width="600" height="500">
+		<img id="mago" src="imgs/mago.jpg">
+		<img id="spell" src="imgs/esplosao1.png">
+		<img id="esqueleto" src="imgs/esqueleto.jpg">
+		</canvas>
+	</div>
 	
 	<script src="code.js"></script>
 	
