@@ -47,15 +47,17 @@ var jogo = function () {
 			if(this.spellArr.length > 0){
 				
 				var colide = false;
-				f = 0;
 				for (var z = 0; z < this.bodies.length; z++){
-					do{
-						console.log(this.spellArr[f]);
+					for (var f = 0; f < this.spellArr.length; f++){
 						colide = colliding(this.bodies[z], this.spellArr[f]);
-						this.bodies.pop(z);
-						this.spellArr.pop(f);
-						f++;
-					}while(!colide || f > this.spellArr.length )
+						if(colide){
+							//colide = false;
+							this.bodies.splice(z, 1);
+							this.spellArr.splice(f, 1);
+							break;
+						}
+					}
+					if(colide) break;
 				}
 			}
 			
@@ -240,32 +242,25 @@ var jogo = function () {
 	
 	var Keyboarder = function(player){
 		var keyState = {};
-		var pos = { x: 0, y: 0 };
+		var posx = 0;
 		var codeX = 0;
-		var codeY = 0;
 		
 		window.onkeydown = function(e) {
 			keyState[e.keyCode] = true;
 		};
 
 		window.addEventListener("touchstart", function(e) {
-			e.preventDefaul();
 			var local = e.changedTouches;
-			pos.x = local.item(0).clientX;
-			//pos.y = local.item(0).clientY;
-			codeX = movimentoX(player, pos.x);
-			//codeY = movimentoY(player, pos.y);
+			posx = local.item(0).clientX;
+			codeX = movimentoX(player, posx);
 			keyState[codeX] = true;
-			//keyState[codeY] = true;
 			keyState[32] = true;
 		});
 		
 		window.addEventListener("touchend", function() {
 			keyState[codeX] = false;
-			//keyState[codeY] = false;
 			keyState[32] = false;
 			codeX = 0;
-			//codeY = 0
 		});
 	
 		window.onkeyup = function(e) {
@@ -287,17 +282,7 @@ var jogo = function () {
 		else if(player.center.x < pos) mov = 39;
 		
 		return mov;
-	};
-	
-	var movimentoY = function(player, pos) {
-		var mov = 0;
-		
-		if(player.center.y < pos) mov = 40;
-		else if(player.center.y > pos) mov = 38;
-		
-		return mov;
-	};
-	
+	};	
 	
 	window.onload = function(){
 		new Game("screen", "status");
