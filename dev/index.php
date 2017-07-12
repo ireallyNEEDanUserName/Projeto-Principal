@@ -2,11 +2,11 @@
 <html>
 
           <head> <title> No Life DEV </title></head>
-          <link href="logo.css" type="text/css" rel="stylesheet">
+          <link href="logo.css" type="text/css" rel="stylesheet" />
 <body
 #fiz daqui pra baixo.
-<div id="css">
-<img src="img/nld_logo.jpg" alt="Logo do Site" title="NDL" width="50" height="50" />
+<div id="logo">
+          <img src="img/nld_logo.jpg" alt="Logo do Site" title="NDL" width="50" height="50" />
 </div>
 # Ate aqui pra por o logo.
 
