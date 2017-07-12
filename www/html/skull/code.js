@@ -9,6 +9,7 @@ var jogo = function () {
 		
 		this.fase = 1;
 		this.mortes = 0;
+		this.qtdEnemy = 9;
 		
 		var self = this;
 		var bodies;
@@ -17,13 +18,14 @@ var jogo = function () {
 		var start = function(){
 			self.textUpdate(("Fase: " + self.fase + " Mortes: " + self.mortes), statusScreen, statusSize);
 			
-			self.bodies = createEnemy(self).concat(new Player(self, gameSize));
+			self.bodies = createEnemy(self, (self.qtdEnemy + self.fase)).concat(new Player(self, gameSize));
 			self.spellArr = new Array();
+			console.log(self.bodies.length);
 		};
 		start();
 		
 		var tick = function() {
-			self.update();
+			self.update(gameSize);
 			self.draw(screen, gameSize);
 			if(self.end()) start();
 			requestAnimationFrame(tick);
@@ -32,16 +34,32 @@ var jogo = function () {
 	};
 	
 	Game.prototype = {
-		update: function() {
-			var bodies = this.bodies;
-			var spellArr = this.spellArr;
+		update: function(gameSize) {
 			
-			var notCollidingWithAnythig = function(b1) {
-				return spellArr.filter(function(b2) { return colliding(b1, b2); }).length === 0;
+			//Remover magias que ja estão fora da tela.
+			var longeDaTela = function(b1){
+				return !(b1.center.x > gameSize.x || b1.center.x < 0 ||
+					b1.center.y < 0 || b1.center.y  > gameSize.y);
 			};
+			this.spellArr = this.spellArr.filter(longeDaTela);
 			
-			this.bodies = this.bodies.filter(notCollidingWithAnythig);
-		
+			//funcao de colisao com as magias.
+			if(this.spellArr.length > 0){
+				
+				var colide = false;
+				f = 0;
+				for (var z = 0; z < this.bodies.length; z++){
+					do{
+						console.log(this.spellArr[f]);
+						colide = colliding(this.bodies[z], this.spellArr[f]);
+						this.bodies.pop(z);
+						this.spellArr.pop(f);
+						f++;
+					}while(!colide || f > this.spellArr.length )
+				}
+			}
+			
+			
 			for (var i = 0; i < this.bodies.length; i++){
 				this.bodies[i].update();
 			}
@@ -66,7 +84,7 @@ var jogo = function () {
 		
 		enemyBelow: function(enemy){
 			for(var i = 0; i < this.bodies.length; i++){
-				if(this.bodies[i] instanceof Enemy){
+				if(this.bodies[i] instanceof Enemy && this.bodies[i] !== enemy){
 					if(enemy.center.y < this.bodies[i].center.y){
 						return false;
 					}
@@ -84,11 +102,9 @@ var jogo = function () {
 			}
 			if (!player){
 				this.mortes++;
-				console.log(this.mortes);
 				return true;
 			} else if (!enemy){
 				this.fase++;
-				console.log("you win");
 				return true;
 			}
 		},
@@ -185,12 +201,12 @@ var jogo = function () {
 	
 	//FUNCÕES DO JOGO;
 	
-	var createEnemy = function(game) {
+	var createEnemy = function(game, qtd) {
 		var enemy = [];
 		var longe = 40;
-		for (var i = 0; i < 24; i++){
-			var x = longe + (i % 8) * longe;
-			var y = longe + (i % 3) * longe;
+		for (var i = 0; i < qtd; i++){
+			var x = longe + (i % 11) * longe;
+			var y = longe + (i % 5) * longe;
 			enemy.push(new Enemy(game, { x: x, y: y }));
 		}
 		return enemy;
