@@ -141,7 +141,7 @@ var jogo = function () {
 			} 
 			if (this.keyboarder.isDown(keys.UP) && this.center.y > 16){
 				this.center.y -= 2;
-			} else if (this.keyboarder.isDown(keys.DOWN && this.center.y < this.gameSize.y - 16)){
+			} else if (this.keyboarder.isDown(keys.DOWN) && this.center.y < this.gameSize.y - 16){
 				this.center.y += 2;
 			} 
 			if (this.keyboarder.isDown(keys.SPACE) && this.spellCount == 10){
