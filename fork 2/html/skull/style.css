@@ -1,0 +1,5 @@
+canvas {
+	background-image: url("imgs/bgs/secret_cow_lvl.jpg");
+        background-size: cover;
+	border: 2px solid black;
+}
