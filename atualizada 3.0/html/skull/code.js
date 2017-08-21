@@ -10,6 +10,7 @@ var jogo = function () {
 		this.fase = 1;
 		this.mortes = 0;
 		this.qtdEnemy = 9;
+		this.back = 0;
 		
 		var self = this;
 		var bodies;
@@ -17,7 +18,6 @@ var jogo = function () {
 		
 		var start = function(){
 			self.textUpdate(("Fase: " + self.fase + " Mortes: " + self.mortes), statusScreen, statusSize);
-			
 			self.bodies = createEnemy(self, (self.qtdEnemy + self.fase)).concat(new Player(self, gameSize));
 			self.spellArr = new Array();
 			console.log(self.bodies.length);
@@ -26,7 +26,7 @@ var jogo = function () {
 		
 		var tick = function() {
 			self.update(gameSize);
-			self.draw(screen, gameSize);
+			self.draw(screen, gameSize, self.back);
 			if(self.end()) start();
 			requestAnimationFrame(tick);
 		};
@@ -71,7 +71,7 @@ var jogo = function () {
 		},
 		
 		draw: function(screen, gameSize) {
-			screen.clearRect(0, 0, gameSize.x, gameSize.y);
+			drawBack(screen, gameSize, back);
 			for (var i = 0; i < this.bodies.length; i++){
 				drawRect(screen, this.bodies[i]);
 			}
@@ -237,7 +237,16 @@ var jogo = function () {
 						body.size.x, body.size.y);
 	};
 	
+	var getBack = function(back){
+		var img = document.getElementById("fundo");
+		img.src = "imgs/bgs/" + back + ".jpg";
+		return img;
+	};
 	
+	var drawBack = function(screen, size, back){
+		var img = getBack(back);
+		screen.drawImage(img, 0, 0, size.x, size.y);
+	};
 	
 	var Keyboarder = function(player){
 		var keyState = {};
