@@ -1,5 +1,9 @@
 #ATUALIZAR AQUI QUIAS MODIFICAÇÕES FORAM REALIZADAS E EM QUAIS ARQUIVOS E A DATA DA MESMA.#
 
-21/08/17 - Adicionado link do conf.js no index.html
-21/08/17 - Criado arquivo conf.js na pasta html para abrir conteudo na div centro.
-21/08/17 - Adicionado no skull/style.css o fundo somente no jogo, e fundo branco no placar.
+--------------------- 21/08/17--------------------------
+Adicionado link do conf.js no index.html
+Criado arquivo conf.js na pasta html para abrir conteudo na div centro.
+Adicionado no skull/style.css o fundo somente no jogo como backup, e fundo branco no placar.
+Adicionado a pasta bgs em skull/imgs para background, manter a numeração, um papel para cada 5 fases.
+Editado skull.html e adicionado a referencia do background.
+Editado code.js e criado funções para recuperar e para desenhar na tela o fundo.
