@@ -1,0 +1,122 @@
+#logo {
+	float: left;
+	width: 6%;
+	padding: 5px;
+	margin: 1px 10px 10px 10px;
+	position: relative;
+}
+
+body,html {
+	background-image: url("img/BG.jpg");
+        background-size: cover;
+
+	}
+
+
+
+#todos {
+	width: 100%;
+	height: 100%;
+	margin: 0%;
+	position: relative;
+	float: left;
+}
+
+#topo {
+       /* width: 100%;*/
+       /* height: 13%;*/
+	width: 1345px;
+	height: 80px;
+        float: left;
+        position: absolute;
+        color: red;
+	/*border: 5px solid pink;*/
+}
+
+
+
+#centro {
+        /*width: 1178px;*/
+	width: 1035px;
+        height: 562px;
+	top: 90px;
+	left: 176px;
+	float: left;
+        position: absolute;
+	color: black;
+	/*border: 5px solid blue;*/
+}
+
+#menu {
+	width: 165px;
+	height: 562px;
+	top: 90px;
+        float: left;
+        position: absolute;
+	color: red;
+	/*border: 5px solid green;*/
+}
+
+#li1{
+	list-style-type: none;
+}
+
+#logom {
+        float: center;
+        width: 330;
+        padding: 5px;
+        position: relative;
+}
+
+#menum {
+        width: 340px;
+        height: 410px;
+        top: 90px;
+        float: left;
+        position: absolute;
+	align: center;
+	color: red;
+}
+
+#li1m{
+        list-style-type: none;
+	float: center;
+}
+
+#publim {
+	width: 165px;
+	height: 155px;
+	top: 400px;
+	position: absolute;
+	float: left;
+	/*border: 5px solid black;*/
+	background-image: url("img/anuncio.jpg");
+	background-size: cover;
+}
+
+/*#publitop {
+	width: 130px;
+        height: 80px;
+	border: 5px solid black;
+	right:	2px;
+	top: 3px;
+	float: right;
+	position: relative;
+	background-image: url("img/anuncio.jpg");
+        background-size: cover;
+
+} */
+
+#publir {
+        width: 130px;
+        height: 563px;
+        /*border: 5px solid black;*/
+        top: 80px;
+        float: right;
+        position: relative;
+        background-image: url("img/anuncio.jpg");
+        background-size: cover;
+
+}
+
+
