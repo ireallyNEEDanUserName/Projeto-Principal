@@ -227,7 +227,7 @@ var jogo = function () {
 		var longe = 40;
 		for (var i = 0; i < qtd; i++){
 			var x = longe + (i % 11) * longe;
-			var y = longe + (i % 5) * longe;
+			var y = longe + (i % 4) * longe;
 			enemy.push(new Enemy(game, { x: x, y: y }));
 		}
 		return enemy;
