@@ -42,23 +42,32 @@ var jogo = function () {
 					b1.center.y < 0 || b1.center.y  > gameSize.y);
 			};
 			this.spellArr = this.spellArr.filter(longeDaTela);
+			this.spellArrMob = this.spellArrMob.filter(longeDaTela);
 			
-			//funcao de colisao com as magias.
-			if(this.spellArr.length > 0){
-				
+			//funcao de colisao magia e corpos.
+			var colideFunc = function(bodies, spell, type){
 				var colide = false;
-				for (var z = 0; z < this.bodies.length; z++){
-					for (var f = 0; f < this.spellArr.length; f++){
-						colide = colliding(this.bodies[z], this.spellArr[f]);
+				for (var z = 0; z < bodies.length; z++){
+					while(type == 1 && bodies[z] instanceof Enemy) z++;
+					for (var f = 0; f < spell.length; f++){						
+						colide = colliding(bodies[z], spell[f]);
 						if(colide){
-							//colide = false;
-							this.bodies.splice(z, 1);
-							this.spellArr.splice(f, 1);
+							bodies.splice(z, 1);
+							spell.splice(f, 1);
 							break;
 						}
 					}
-					if(colide) break;
 				}
+			};
+			
+			//funcao de colisao com as magias do player com mob.
+			if(this.spellArr.length > 0){
+				colideFunc(this.bodies, this.spellArr, 0);
+			}
+			
+			//funcao de colisao magias mob com player
+			if(this.spellArrMob.length > 0){
+				colideFunc(this.bodies, this.spellArrMob, 1);
 			}
 			
 			
@@ -67,6 +76,9 @@ var jogo = function () {
 			}
 			for (var j = 0; j < this.spellArr.length; j++){
 				this.spellArr[j].update();
+			}
+			for (var z = 0; z < this.spellArrMob.length; z++){
+				this.spellArrMob[z].update();
 			}
 		},
 		
@@ -78,10 +90,17 @@ var jogo = function () {
 			for (var j = 0; j < this.spellArr.length; j++){
 				drawRect(screen, this.spellArr[j]);
 			}
+			for (var z = 0; z < this.spellArrMob.length; z++){
+				drawRect(screen, this.spellArrMob[z]);
+			}
 		},
 		
 		addBody: function(body){
 			this.spellArr.push(body);
+		},
+		
+		addBodyMob: function(body){
+			this.spellArrMob.push(body);
 		},
 		
 		enemyBelow: function(enemy){
@@ -196,7 +215,7 @@ var jogo = function () {
 						{ x: this.center.x, y: this.center.y + this.size.x / 2},
 						{ x: Math.random() - 0.5, y: 3}
 					);
-				this.game.addBody(spell);
+				this.game.addBodyMob(spell);
 			}
 		}
 	};
