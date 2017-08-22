@@ -6,4 +6,7 @@ Criado arquivo conf.js na pasta html para abrir conteudo na div centro.
 Adicionado no skull/style.css o fundo somente no jogo como backup, e fundo branco no placar.
 Adicionado a pasta bgs em skull/imgs para background, manter a numeração, um papel para cada 5 fases.
 Editado skull.html e adicionado a referencia do background.
-Editado code.js e criado funções para recuperar e para desenhar na tela o fundo.
+Editado code.js e criado funções para recuperar e para desenhar na tela o fundo que muda a cada 5 fases.
+Aumentado a frequencia do tiro dos mobs e diminuido uma linha de mobs.
+Editado o m.skull.html para refletir as mudanças no jogo e no skull.html
+--------------------------------------------------------
