@@ -57,6 +57,13 @@ body,html {
 	/*border: 5px solid green;*/
 }
 
+.botao {
+	width: 110px;
+	height: auto;
+	color: black;
+	text-align: center;
+}
+
 #li1{
 	list-style-type: none;
 }
