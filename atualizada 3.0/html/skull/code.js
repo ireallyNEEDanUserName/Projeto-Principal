@@ -117,6 +117,7 @@ var jogo = function () {
 				return true;
 			} else if (!enemy){
 				this.fase++;
+				if((this.fase % 5) == 0) this.back++;
 				return true;
 			}
 		},
@@ -201,7 +202,7 @@ var jogo = function () {
 			this.center.x += this.speedX;
 			this.patrolX += this.speedX;
 			
-			if(Math.random() > 0.999) {
+			if(Math.random() > 0.998) {
 				var spell = new Spell(
 						{ x: this.center.x, y: this.center.y + this.size.x / 2},
 						{ x: Math.random() - 0.5, y: 3}
