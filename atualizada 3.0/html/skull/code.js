@@ -15,11 +15,13 @@ var jogo = function () {
 		var self = this;
 		var bodies;
 		var spellArr;
+		var spellArrMob;
 		
 		var start = function(){
 			self.textUpdate(("Fase: " + self.fase + " Mortes: " + self.mortes), statusScreen, statusSize);
 			self.bodies = createEnemy(self, (self.qtdEnemy + self.fase)).concat(new Player(self, gameSize));
 			self.spellArr = new Array();
+			self.spellArrMob = new Array();
 			console.log(self.bodies.length);
 		};
 		start();
@@ -82,7 +84,7 @@ var jogo = function () {
 			}
 		},
 		
-		draw: function(screen, gameSize) {
+		draw: function(screen, gameSize, back) {
 			drawBack(screen, gameSize, back);
 			for (var i = 0; i < this.bodies.length; i++){
 				drawRect(screen, this.bodies[i]);
