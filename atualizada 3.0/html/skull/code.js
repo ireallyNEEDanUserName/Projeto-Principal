@@ -105,17 +105,6 @@ var jogo = function () {
 			this.spellArrMob.push(body);
 		},
 		
-		enemyBelow: function(enemy){
-			for(var i = 0; i < this.bodies.length; i++){
-				if(this.bodies[i] instanceof Enemy && this.bodies[i] !== enemy){
-					if(enemy.center.y < this.bodies[i].center.y){
-						return false;
-					}
-				}
-			}
-			return true;
-		},
-		
 		end: function(){
 			var player = false;
 			var enemy = false;
@@ -212,7 +201,7 @@ var jogo = function () {
 			this.center.x += this.speedX;
 			this.patrolX += this.speedX;
 			
-			if(Math.random() > 0.995 && this.game.enemyBelow(this)) {
+			if(Math.random() > 0.995) {
 				var spell = new Spell(
 						{ x: this.center.x, y: this.center.y + this.size.x / 2},
 						{ x: Math.random() - 0.5, y: 3}
