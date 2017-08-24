@@ -1,6 +1,6 @@
 $(document).ready(function(){
 	$('a').click(function(){
-		var href = $(this).attr('name');
+		var href = $(this).attr('href');
 		$('#centro').load( href );
 	})
 });
