@@ -20,7 +20,7 @@ $(document).ready(function(){
 		}, "fast")
 	})
 	
-	$('.imagen').click(function(){
+	$('.imagem').click(function(){
 		var isso = $(this);
 		clicar(isso);
 	})
