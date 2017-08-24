@@ -1,27 +1,7 @@
 <html>	
 	<title> Magic The Apping </title>
 
-	<script type="text/javascript">
-		var userAgent = navigator.userAgent.toLowerCase();
-		var devices = new Array('nokia','iphone','blackberry','sony','lg',
-		'htc_tattoo','samsung','symbian','SymbianOS','elaine','palm',
-		'series60','windows ce','android','obigo','netfront',
-		'openwave','mobilexplorer','operamini');
-		var url_redirect = 'm_inicial.php';
-		function mobiDetect(userAgent, devices) {
-			for(var i = 0; i < devices.length; i++) {
-				if (userAgent.search(devices[i]) > 0) {
-					return true;
-				}
-			}
-				return false;
-			}
-				if (mobiDetect(userAgent, devices)) {
-					window.location.href = url_redirect;
-				}
-	</script>
-
-
+	<script type="text/javascript" src="../mobile.js"></script>
 	<link href="../logo.css" type="text/css" rel="stylesheet" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href="cardo.css" type="text/css" rel="stylesheet" media="all" />
