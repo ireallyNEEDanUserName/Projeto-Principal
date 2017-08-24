@@ -1,32 +1,6 @@
 <html>	
 	<title> Skull Invaders</title>
 
- <script type="text/javascript">
-                var userAgent = navigator.userAgent.toLowerCase();
-                var devices = new Array('nokia','iphone','blackberry','sony','lg',
-                'htc_tattoo','samsung','symbian','SymbianOS','elaine','palm',
-                'series60','windows ce','android','obigo','netfront',
-                'openwave','mobilexplorer','operamini');
-                var url_redirect = 'm.skull.html';
-                function mobiDetect(userAgent, devices) {
-                        for(var i = 0; i < devices.length; i++) {
-                                if (userAgent.search(devices[i]) > 0) {
-                                        return true;
-                                }
-                        }
-                                return false;
-                        }
-                                if (mobiDetect(userAgent, devices)) {
-                                        window.location.href = url_redirect;
-                                }
-        </script>
-
-
-
-
-
-
-
 
 	<link href="../logo.css" type="text/css" rel="stylesheet" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -34,51 +8,27 @@
 	<link href="style.css" type="text/css" rel="stylesheet">
 
 	<body>
-		<div id="topo">
-			<div id="logo">
-				<a href="../index.html">
-					<img src="../img/NDL10.jpg" alt="Logo do Site" title="NDL" width="80" height="80" /> 
-				</a>
-			</div> 
-			<h1 ALIGN="center">Chegue o mais longe que puder! HAHAHAHA!!!! </h1>
+		<div id="topo"> 
+			<h1 ALIGN="center">Chegue o mais longe que puder!</h1>
 		 </div>
-
-		<div id="menu">
-
-			<h3 ALIGN="center">Nossos Apps </h3>
-
-				<ul>
-					<li><a href="/magic/inicial.php">Magic The Apping </a> </li>
-					<li><a href="skull.html">Skull Invaders</a></li>
-					<li>Link pro video</li>
-				</ul>
-			<h3 ALIGN="center">APP por IMG </h3>
-
-				 <ul>
-                                        <li1> <a href="/magic/inicial.php"> <img src="http://i.imgur.com/ZIMl4W5.png" height='50' width='50' . title="Magic the Apping"/></a></li1>
-                                        <li1><a href="skull.html"> <img src="http://i.imgur.com/xMbgTmA.png" height='50' width='50' . title="Skull Invaders"/> </a> </li1>
-                                </ul>
-
-
-		</div>
 
 		<div id="centro" align="center">
 			<div id="canvas">
-                		<canvas id="status" width="600" height="50">
-                		</canvas>
-        		</div>
-        		<br />
-        		<div>
-                		<canvas id="screen" width="600" height="470" >
-                			<img id="mago" src="http://i.imgur.com/ty2xfJP.png">
-                			<img id="spell" src="http://i.imgur.com/VAW78xv.png">
-                			<img id="esqueleto" src="http://i.imgur.com/LGfOQtu.png">
+                <canvas id="status" width="600" height="50">
+                </canvas>
+        	</div>
+        	<br />
+        	<div>
+                <canvas id="screen" width="600" height="470" >
+                	<img id="mago" src="http://i.imgur.com/ty2xfJP.png">
+                	<img id="spell" src="http://i.imgur.com/VAW78xv.png">
+                	<img id="esqueleto" src="http://i.imgur.com/LGfOQtu.png">
 						
 					<!-- fundos -->
 					<img id="fundo" src="">
-               			</canvas>
-        		</div>
-	        	<script src="code.js"></script>
+               	</canvas>
+        	</div>
+	        <script src="code.js"></script>
 		</div>
 
 	</body>
