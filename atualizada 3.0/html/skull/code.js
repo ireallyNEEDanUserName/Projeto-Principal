@@ -12,13 +12,14 @@ var jogo = function () {
 		this.qtdEnemy = 9;
 		this.back = 0;
 		
+		var nome = document.getElementById("caixaNome").value;
 		var self = this;
 		var bodies;
 		var spellArr;
 		var spellArrMob;
 		
 		var start = function(){
-			self.textUpdate(("Fase: " + self.fase + " Mortes: " + self.mortes), statusScreen, statusSize);
+			self.textUpdate((nome + " | Fase: " + self.fase + " Mortes: " + self.mortes), statusScreen, statusSize);
 			self.bodies = createEnemy(self, (self.qtdEnemy + self.fase)).concat(new Player(self, gameSize));
 			self.spellArr = new Array();
 			self.spellArrMob = new Array();
@@ -303,7 +304,11 @@ var jogo = function () {
 		return mov;
 	};	
 	
-	window.onload = function(){
-		new Game("screen", "status");
-	};
-}; jogo();
+	new Game("screen", "status");
+	
+}; 
+
+
+var inicio = function() {
+	jogo();
+};
