@@ -1,5 +1,16 @@
 $(document).ready(function(){
 	
+
+	$("#jogoStart").click(function(){
+		var nome = $("#caixaNome").val();
+		console.log(nome);
+		if(nome.length != 0){
+			console.log(nome);
+			$("#form").fadeOut("fast");
+			inicio();
+		}
+	})
+	
 	$('.botao').mouseenter(function(){
 		$(this).css({'color': 'blue'})
 	})
@@ -7,27 +18,10 @@ $(document).ready(function(){
 		$(this).css({'color': 'black'})
 	})
 	
-	$('.botao').mousedown(function(){
-		var isso = $(this);
-		clicar(isso);
-		$(this).animate({
-			width: '-=5px'
-		}, "fast")
-	})
-	$('.botao').mouseup(function(){
-		$(this).animate({
-			width: '+=5px'
-		}, "fast")
-	})
-	
-	$('.imagem').click(function(){
-		var isso = $(this);
-		clicar(isso);
-	})
 });
 
 
 var clicar = function(isso){
 	var href = isso.attr('href');
-	$('#centro').load( href );
+	$(window).load( href );
 };
