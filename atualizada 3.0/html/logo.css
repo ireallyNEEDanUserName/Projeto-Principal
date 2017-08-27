@@ -8,9 +8,8 @@
 
 body,html {
 	background-image: url("img/BG.jpg");
-        background-size: cover;
-
-	}
+    background-size: cover;
+}
 
 
 
@@ -48,13 +47,14 @@ body,html {
 }
 
 #menu {
-	width: 165px;
+	width: 190px;
 	height: 562px;
 	top: 90px;
-        float: left;
-        position: absolute;
-	color: red;
-	/*border: 5px solid green;*/
+    float: left;
+    position: absolute;
+	color: black;
+	/*background-color: white; 
+	border: 5px solid green;*/
 }
 
 .botao {
