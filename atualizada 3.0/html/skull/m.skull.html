@@ -2,19 +2,20 @@
 	<title> Magic The Apping </title>
 
 	<link href="../logo.css" type="text/css" rel="stylesheet" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-	<link href="style.css" type="text/css" rel="stylesheet">
+	<link href="style.css" type="text/css" rel="stylesheet"/>
+	<script type="text/javascript" src="../jquery-3.2.1.js"></script>
+	<script type="text/javascript" src="../conf.js"></script>
+	<script type="text/javascript" src="code.js"></script>
 
 	<body>
 
 <div id="logom" align="center" >
 		<ul>
-                		
-				<a href="../magic/inicial.php"> <img src="http://i.imgur.com/X4o5pMj.png" height='80' width='80' . title="Dicas para Decks"/></a>
-				<a href="../index.html"> <img src="../img/NDL10.jpg" alt="Logo do Site" title="NDL" width="80" height="80"/></a>
-				<a href="skull.html"> <img src="http://i.imgur.com/xMbgTmA.png" height='80' width='80' . title="Skull Invaders"/> </a>
-
+			<a href="../magic/inicial.php"> <img src="http://i.imgur.com/X4o5pMj.png" height='80' width='80' . title="Dicas para Decks"/></a>
+			<a href="../index.html"> <img src="../img/NDL10.jpg" alt="Logo do Site" title="NDL" width="80" height="80"/></a>
+			<a href="skull.html"> <img src="http://i.imgur.com/xMbgTmA.png" height='80' width='80' . title="Skull Invaders"/> </a>
 		</ul>
 </div>
 
@@ -23,6 +24,15 @@
 		</canvas>
 	</div>
 	<br />
+	
+	<div id="form">
+		<form>
+			<p id="textoNome">Nome de Usuario</p>
+			<input type="text" id="caixaNome"/>
+			<button type="button" id="jogoStart"> Start </button>
+		</form>
+	</div>
+	
 	<div>
 		<canvas id="screen" width="600" height="470">
 			<img id="mago" src="imgs/mago.jpg">
@@ -33,7 +43,5 @@
 			<img id="fundo" src="">	
 		</canvas>
 	</div>
-
-	<script src="code.js"></script>
 
 <html>
