@@ -6,9 +6,9 @@ $(document).ready(function(){
 		if(nome.length != 0){
 			console.log(nome);
 			$("#form").fadeOut("fast");
-			inicio();
 			$("#status").show("fast");
 			$("#screen").show("fast");
+			inicio();
 		}
 	})
 	
