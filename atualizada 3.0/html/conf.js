@@ -1,5 +1,4 @@
 $(document).ready(function(){
-	
 
 	$("#jogoStart").click(function(){
 		var nome = $("#caixaNome").val();
@@ -8,6 +7,8 @@ $(document).ready(function(){
 			console.log(nome);
 			$("#form").fadeOut("fast");
 			inicio();
+			$("#status").show("fast");
+			$("#screen").show("fast");
 		}
 	})
 	
