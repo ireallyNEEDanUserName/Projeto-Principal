@@ -31,10 +31,10 @@
 
 			<h3 ALIGN="center">APP por IMG </h3>
 
-				 <ul>
-                                        <li1> <a href="/magic/inicial.php"> <img src="http://i.imgur.com/ZIMl4W5.png" height='50' width='50' . title="Magic the Apping"/></a></li1>
-                                        <li1> <a href="/skull/skull.html"> <img src="http://i.imgur.com/xMbgTmA.png" height='50' width='50' . title="Skull Invaders"/> </a> </li1>
-                                </ul>
+				<ul>
+                    <li1> <a href="/magic/inicial.php"> <img src="http://i.imgur.com/ZIMl4W5.png" height='50' width='50' . title="Magic the Apping"/></a></li1>
+                    <li1> <a href="/skull/skull.html"> <img src="http://i.imgur.com/xMbgTmA.png" height='50' width='50' . title="Skull Invaders"/> </a> </li1>
+                </ul>
 
 
 		</div>
@@ -54,9 +54,9 @@
 
 			<ul>
 				<li1><a href="dicas_g.php"><img src="http://i.imgur.com/X4o5pMj.png" height='100' width='100' . title="Dicas para Decks"/></a></li1>
-		 		<li1><a href="regras_card.php"> <img src="http://i.imgur.com/YPIkECH.png" height='100' width='100' . title="Regra dos efeitos "/></a></li1>
+		 		<li1><a href="regras_card.php"><img src="http://i.imgur.com/YPIkECH.png" height='100' width='100' . title="Regra dos efeitos "/></a></li1>
 
-        		</ul>
+			</ul>
 
 		</div>
 
