@@ -30,8 +30,6 @@ var jogo = function () {
 		var teclado = new Keyboarder(this);
 		var keys = teclado.KEYS;
 			
-		
-		
 		var escolher = function(){
 			drawBack(screen, gameSize, 1);
 			escolherPlayer(screen, gameSize, imagemJogador);
@@ -46,7 +44,6 @@ var jogo = function () {
 			}
 		};
 		if(!iniciarJogo) escolher();
-		
 		
 		var start = function(){
 			self.textUpdate((nome + " | Fase: " + self.fase + " Mortes: " + self.mortes), statusScreen, statusSize, 15);
@@ -226,7 +223,7 @@ var jogo = function () {
 	
 	Enemy.prototype = {
 		update: function() {
-			if (this.patrolX < 0 || this.patrolX > 180){
+			if (this.patrolX < 0 || this.patrolX > 170){
 				this.speedX = -this.speedX;
 			}
 			
