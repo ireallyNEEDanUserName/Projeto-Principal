@@ -1,4 +1,9 @@
 var jogo = function () {
+	//Definicoes do jogo;
+	var backMax = 4;
+	var imgJogadorMax = 3;
+	var pressionado = false;
+	
 	var Game = function(canvasId, statusId) {
 		var canvas = document.getElementById(canvasId);
 		var canvasStatus = document.getElementById(statusId);
@@ -18,14 +23,38 @@ var jogo = function () {
 		var spellArr;
 		var spellArrMob;
 		
+		var iniciarJogo = false;
+		var imagemJogador = 0;
+		
+		self.textUpdate("Escolha com quem quer jogar. Use as setas para escolher e Enter para selecionar!", statusScreen, statusSize, 10);
+		var teclado = new Keyboarder(this);
+		var keys = teclado.KEYS;
+			
+		
+		
+		var escolher = function(){
+			drawBack(screen, gameSize, 1);
+			escolherPlayer(screen, gameSize, imagemJogador);
+			imagemJogador = escolherPlayerUpdate(imagemJogador, teclado);
+			if(!iniciarJogo) requestAnimationFrame(escolher);
+			else if(iniciarJogo){
+				start();
+				tick();
+			}
+			if (teclado.isDown(keys.ENTER)){
+				iniciarJogo = true;
+			}
+		};
+		if(!iniciarJogo) escolher();
+		
+		
 		var start = function(){
-			self.textUpdate((nome + " | Fase: " + self.fase + " Mortes: " + self.mortes), statusScreen, statusSize);
-			self.bodies = createEnemy(self, (self.qtdEnemy + self.fase)).concat(new Player(self, gameSize));
+			self.textUpdate((nome + " | Fase: " + self.fase + " Mortes: " + self.mortes), statusScreen, statusSize, 15);
+			self.bodies = createEnemy(self, (self.qtdEnemy + self.fase)).concat(new Player(self, gameSize, imagemJogador));
 			self.spellArr = new Array();
 			self.spellArrMob = new Array();
 			console.log(self.bodies.length);
 		};
-		start();
 		
 		var tick = function() {
 			self.update(gameSize);
@@ -33,7 +62,7 @@ var jogo = function () {
 			if(self.end()) start();
 			requestAnimationFrame(tick);
 		};
-		tick();
+		
 	};
 	
 	Game.prototype = {
@@ -123,8 +152,8 @@ var jogo = function () {
 			}
 		},
 		
-		textUpdate: function(text, statusScreen, statusSize){
-			statusScreen.font = 'italic 15pt Arial';
+		textUpdate: function(text, statusScreen, statusSize, tam){
+			statusScreen.font = 'italic ' + tam + 'pt Arial';
 			statusScreen.textAlign = 'center';
 		
 			statusScreen.clearRect(0, 0, statusSize.x, statusSize.y);
@@ -133,11 +162,12 @@ var jogo = function () {
 	};
 	
 	//JOGADOR
-	var Player = function(game, gameSize) {
+	var Player = function(game, gameSize, img) {
 		this.game = game;
 		this.gameSize = gameSize;
+		this.playerImg = img;
 		this.size = { x: 32, y: 32};
-		this.center = { x: gameSize.x / 2, y: gameSize.y - this.size.x };
+		this.center = { x: gameSize.x / 2, y: gameSize.y - this.size.y };
 		this.keyboarder = new Keyboarder(this);
 		this.spellCount = 10;
 	};
@@ -196,7 +226,7 @@ var jogo = function () {
 	
 	Enemy.prototype = {
 		update: function() {
-			if (this.patrolX < 0 || this.patrolX > 200){
+			if (this.patrolX < 0 || this.patrolX > 180){
 				this.speedX = -this.speedX;
 			}
 			
@@ -237,7 +267,8 @@ var jogo = function () {
 	
 	var drawRect = function(screen, body){
 		if(body instanceof Player){
-			var img = document.getElementById("mago");
+			var img = document.getElementById("player");
+			img.src = "imgs/player/" + body.playerImg + ".png";
 		} else if(body instanceof Spell){
 			var img = document.getElementById("spell");
 		} else if(body instanceof Enemy){
@@ -250,6 +281,7 @@ var jogo = function () {
 	};
 	
 	var getBack = function(back){
+		if(back > backMax) back = backMax;
 		var img = document.getElementById("fundo");
 		img.src = "imgs/bgs/" + back + ".jpg";
 		return img;
@@ -260,6 +292,41 @@ var jogo = function () {
 		screen.drawImage(img, 0, 0, size.x, size.y);
 	};
 	
+	var escolherPlayer = function(scr, scrSize, atual){
+		var width = 32;
+		var height = 32;
+		
+		var img = document.getElementById("player");
+		img.src = "imgs/player/" + atual + ".png";
+		
+		scr.drawImage(img,
+					(scrSize.x / 2) - width / 2,
+					scrSize.y / 2 - height,
+					width, height);
+	};
+	
+		
+	var escolherPlayerUpdate = function(atual, teclado) {
+		
+		var keys = teclado.KEYS;
+			
+		if (teclado.isDown(keys.LEFT) && atual > 0 && pressionado === true){
+			atual--;
+			pressionado = false;
+			return atual;
+		}
+		else if (teclado.isDown(keys.RIGHT) && atual < imgJogadorMax && pressionado === true){
+			atual++;
+			pressionado = false;
+			return atual;
+		}
+		else{
+			console.log(atual);
+			return atual;
+		}
+	};
+
+	
 	var Keyboarder = function(player){
 		var keyState = {};
 		var posx = 0;
@@ -267,6 +334,7 @@ var jogo = function () {
 		
 		window.onkeydown = function(e) {
 			keyState[e.keyCode] = true;
+			pressionado = true;
 		};
 
 		window.addEventListener("touchstart", function(e) {
@@ -291,7 +359,7 @@ var jogo = function () {
 			return keyState[keyCode] === true;
 		};
 		
-		this.KEYS = { LEFT: 37, RIGHT: 39, SPACE: 32, UP: 38, DOWN: 40 };
+		this.KEYS = { LEFT: 37, RIGHT: 39, SPACE: 32, UP: 38, DOWN: 40, ENTER: 13 };
 		
 	};
 	
