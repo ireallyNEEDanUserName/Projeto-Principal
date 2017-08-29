@@ -7,10 +7,14 @@ var jogo = function () {
 	var Game = function(canvasId, statusId) {
 		var canvas = document.getElementById(canvasId);
 		var canvasStatus = document.getElementById(statusId);
+		
 		var screen = canvas.getContext('2d');
 		var statusScreen = canvasStatus.getContext('2d');
+		
 		var gameSize = { x: canvas.width, y: canvas.height };
 		var statusSize = { x: canvasStatus.width, y: canvasStatus.height };
+		
+		var canvasRect = canvas.getBoundingClientRect();
 		
 		this.fase = 1;
 		this.mortes = 0;
@@ -23,23 +27,25 @@ var jogo = function () {
 		var spellArr;
 		var spellArrMob;
 		
+		//Funcoes para escolher personagem
 		var iniciarJogo = false;
-		var imagemJogador = 0;
+		var retornarEscolha = [0, false];
+		var teclado = new Keyboarder(this, canvasRect);
+		var keys = teclado.KEYS;
+		var opcoes = new Array();
 		
 		self.textUpdate("Escolha com quem quer jogar. Use as setas para escolher e Enter para selecionar!", statusScreen, statusSize, 10);
-		var teclado = new Keyboarder(this);
-		var keys = teclado.KEYS;
-			
+		
 		var escolher = function(){
 			drawBack(screen, gameSize, 1);
-			escolherPlayer(screen, gameSize, imagemJogador);
-			imagemJogador = escolherPlayerUpdate(imagemJogador, teclado);
+			opcoes = escolherPlayer(screen, gameSize, retornarEscolha[0]);
+			retornarEscolha = escolherPlayerUpdate(retornarEscolha, teclado, opcoes);
 			if(!iniciarJogo) requestAnimationFrame(escolher);
 			else if(iniciarJogo){
 				start();
 				tick();
 			}
-			if (teclado.isDown(keys.ENTER)){
+			if(retornarEscolha[1]){
 				iniciarJogo = true;
 			}
 		};
@@ -47,7 +53,7 @@ var jogo = function () {
 		
 		var start = function(){
 			self.textUpdate((nome + " | Fase: " + self.fase + " Mortes: " + self.mortes), statusScreen, statusSize, 15);
-			self.bodies = createEnemy(self, (self.qtdEnemy + self.fase)).concat(new Player(self, gameSize, imagemJogador));
+			self.bodies = createEnemy(self, (self.qtdEnemy + self.fase)).concat(new Player(self, gameSize, retornarEscolha[0]));
 			self.spellArr = new Array();
 			self.spellArrMob = new Array();
 			console.log(self.bodies.length);
@@ -241,7 +247,6 @@ var jogo = function () {
 	};
 	
 	//FUNCÕES DO JOGO;
-	
 	var createEnemy = function(game, qtd) {
 		var enemy = [];
 		var longe = 40;
@@ -263,13 +268,14 @@ var jogo = function () {
 	};
 	
 	var drawRect = function(screen, body){
+		var img = new Image();
+		
 		if(body instanceof Player){
-			var img = document.getElementById("player");
 			img.src = "imgs/player/" + body.playerImg + ".png";
 		} else if(body instanceof Spell){
-			var img = document.getElementById("spell");
+			img.src = "http://i.imgur.com/VAW78xv.png";
 		} else if(body instanceof Enemy){
-			var img = document.getElementById("esqueleto");
+			img.src = "http://i.imgur.com/LGfOQtu.png";
 		}
 		screen.drawImage(img, 
 						body.center.x - body.size.x / 2,
@@ -277,9 +283,10 @@ var jogo = function () {
 						body.size.x, body.size.y);
 	};
 	
+	//DESENHAR FUNDO DO JOGO
 	var getBack = function(back){
 		if(back > backMax) back = backMax;
-		var img = document.getElementById("fundo");
+		var img = new Image();
 		img.src = "imgs/bgs/" + back + ".jpg";
 		return img;
 	};
@@ -288,44 +295,110 @@ var jogo = function () {
 		var img = getBack(back);
 		screen.drawImage(img, 0, 0, size.x, size.y);
 	};
+	//FIM DO DESENHAR FUNDO DO JOGO
 	
+	//FUNCOES PARA ESCOLHER PERSONAGEM
 	var escolherPlayer = function(scr, scrSize, atual){
 		var width = 32;
 		var height = 32;
+		var posSeta = new Array();
 		
-		var img = document.getElementById("player");
+		var pos = { xD: scrSize.x / 2 - width / 2, xE: scrSize.x / 2 + width / 2, 
+					yC: scrSize.y / 2 - height / 2 , yB: scrSize.y / 2 + height / 2};
+		
+		posSeta[0] = { xD: pos.xD - 70, xE: pos.xD - 38, 
+					   yC: pos.yB + 25 , yB: pos.yB + 57};
+					   
+		posSeta[1] = { xD: pos.xE + 38, xE: pos.xE + 70, 
+					   yC: pos.yB + 25 , yB: pos.yB + 57};
+					   
+		posSeta[2] = { xD: posSeta[0].xD + ((posSeta[1].xE - posSeta[0].xD) / 2) - 53 / 2, 
+					   xE: posSeta[0].xD + ((posSeta[1].xE - posSeta[0].xD) / 2) + 53 / 2, 
+					   yC: pos.yB + 25 , yB: pos.yB + 57};
+		
+		var setaD = new Image();
+		var setaE = new Image();
+		var enter = new Image();
+		var img = new Image();
+		
 		img.src = "imgs/player/" + atual + ".png";
+		setaE.src = "imgs/outros/esquerda.png";
+		setaD.src = "imgs/outros/direita.png";
+		enter.src = "imgs/outros/enter.png";
 		
-		scr.drawImage(img,
-					(scrSize.x / 2) - width / 2,
-					scrSize.y / 2 - height,
-					width, height);
+		scr.drawImage(img, pos.xD, pos.yC, width, height);
+		scr.drawImage(setaE, posSeta[0].xD, posSeta[0].yC, width, height);
+		scr.drawImage(setaD, posSeta[1].xD, posSeta[1].yC, width, height);
+		scr.drawImage(enter, posSeta[2].xD, posSeta[2].yC, 53, height);
+		
+		return posSeta;
 	};
-	
 		
-	var escolherPlayerUpdate = function(atual, teclado) {
+	var escolherPlayerUpdate = function(returN, teclado, opcoes) {
 		
 		var keys = teclado.KEYS;
+		
+		if(pressionado === true){
+			pressionado = false;
 			
-		if (teclado.isDown(keys.LEFT) && atual > 0 && pressionado === true){
-			atual--;
-			pressionado = false;
-			return atual;
-		}
-		else if (teclado.isDown(keys.RIGHT) && atual < imgJogadorMax && pressionado === true){
-			atual++;
-			pressionado = false;
-			return atual;
+			if(teclado.isClicked()){
+				var pos = teclado.posClicked();
+			
+				if(rectCollideEscolhaPlayer(pos, opcoes[0]) ||
+					rectCollideEscolhaPlayer(pos, opcoes[1]) ||
+					rectCollideEscolhaPlayer(pos, opcoes[2])){
+					
+						if(rectCollideEscolhaPlayer(pos, opcoes[0]) && returN[0] > 0){
+								returN[0]--;
+								return returN;
+						}
+						else if(rectCollideEscolhaPlayer(pos, opcoes[1]) && returN[0] < imgJogadorMax){
+									returN[0]++;
+									return returN;
+						}
+						else if(rectCollideEscolhaPlayer(pos, opcoes[2])){
+									returN[1] = true;
+									return returN;
+						}
+						else{
+							return returN;
+						}
+					}
+			} 
+			
+			if (teclado.isDown(keys.LEFT) && returN[0] > 0){
+				returN[0]--;
+				return returN;
+			}
+			else if (teclado.isDown(keys.RIGHT) && returN[0] < imgJogadorMax){
+				returN[0]++;
+				return returN;
+			}
+			else if (teclado.isDown(keys.ENTER)){
+				returN[1] = true;
+				return returN;
+			}
+			else{
+				return returN;
+			}
 		}
 		else{
-			console.log(atual);
-			return atual;
+			return returN;
 		}
+	};
+	
+	var rectCollideEscolhaPlayer = function(pos , opcoes){
+		return ((pos[0] >= opcoes.xD && pos[0] <= opcoes.xE) &&
+				(pos[1] >= opcoes.yC && pos[1] <= opcoes.yB))
 	};
 
 	
-	var Keyboarder = function(player){
+	var Keyboarder = function(player, rect = 0){
 		var keyState = {};
+		var posClick = new Array();
+		var posTouch = new Array();
+		var click = false;
+		var touch = false;
 		var posx = 0;
 		var codeX = 0;
 		
@@ -333,27 +406,51 @@ var jogo = function () {
 			keyState[e.keyCode] = true;
 			pressionado = true;
 		};
-
-		window.addEventListener("touchstart", function(e) {
-			var local = e.changedTouches;
-			posx = local.item(0).clientX;
-			codeX = movimentoX(player, posx);
-			keyState[codeX] = true;
-			keyState[32] = true;
-		});
-		
-		window.addEventListener("touchend", function() {
-			keyState[codeX] = false;
-			keyState[32] = false;
-			codeX = 0;
-		});
-	
 		window.onkeyup = function(e) {
 			keyState[e.keyCode] = false;
 		};
 		
+		window.onmousedown = function(e){
+			posClick[0] = e.clientX - rect.left;
+			posClick[1] = e.screenY - rect.top + 64;
+			click = true;
+			pressionado = true;
+		};
+		window.onmouseup = function(){
+			click = false;
+		};
+
+		window.addEventListener("touchstart", function(e) {
+			var local = e.changedTouches;
+			posx = local.item(0).clientX;
+			posTouch.push(posx);
+			posTouch.push(local.item(0).clientY);
+			codeX = movimentoX(player, posx);
+			keyState[codeX] = true;
+			keyState[32] = true;
+			touch = true;
+			pressionado = true;
+		});
+		window.addEventListener("touchend", function() {
+			keyState[codeX] = false;
+			keyState[32] = false;
+			codeX = 0;
+			touch = false;
+		});
+		
 		this.isDown = function(keyCode) {
 			return keyState[keyCode] === true;
+		};
+		
+		this.isClicked = function(){
+			if(click === true) return true;
+			else if(touch === true) return true;
+			else return false;
+		};
+		
+		this.posClicked = function(){
+			if(click === true) return posClick;
+			else if(touch === true) return posTouch;
 		};
 		
 		this.KEYS = { LEFT: 37, RIGHT: 39, SPACE: 32, UP: 38, DOWN: 40, ENTER: 13 };
