@@ -1,8 +1,9 @@
 #logo {
 	float: left;
+	height: auto;
 	width: 200px;
 	padding: 5px;
-	margin: 1px 10px 10px 10px;
+	/*margin: 1px 10px 10px 10px;*/
 	position: relative;
 }
 
@@ -21,21 +22,19 @@ body,html {
 
 #topo {
 	width: 1000px;
-	height: 80px;
+	height: auto;
 	margin: auto;
+	text-align: center;
 }
 
-
-
 #centro {
-        /*width: 1178px;*/
 	width: 1035px;
-        height: 562px;
+    height: 562px;
 	top: 90px;
 	left: 176px;
-        position: absolute;
+    position: absolute;
 	color: black;
-	/*border: 5px solid blue;*/
+	margin: auto;
 }
 
 #menu {
@@ -45,8 +44,7 @@ body,html {
     float: left;
     position: absolute;
 	color: black;
-	/*background-color: white; 
-	border: 5px solid green;*/
+	text-align: center;
 }
 
 .botao {
@@ -106,15 +104,14 @@ body,html {
 } */
 
 #publir {
-        width: 130px;
-        height: 563px;
-        /*border: 5px solid black;*/
-        top: 80px;
-        float: right;
-        position: relative;
-        background-image: url("img/anuncio.jpg");
-        background-size: cover;
-
+    width: 130px;
+    height: 563px;
+    /*border: 5px solid black;*/
+    top: 80px;
+    float: right;
+    position: relative;
+    background-image: url("img/anuncio.jpg");
+    background-size: cover;
 }
 
 
