@@ -39,7 +39,7 @@
 
 		</div>
 
-		<div id="centro" align="center" >
+		<div id="centro">
 			<?php
 				$txt            = "contador.txt";
 				$arquivo        = fopen($txt,"a+");
