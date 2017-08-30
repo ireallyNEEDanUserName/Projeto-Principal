@@ -17,13 +17,13 @@ var jogo = function () {
 		var canvasRect = canvas.getBoundingClientRect();
 		
 		this.fase = 1;
-		this.mortes = 0;
 		this.qtdEnemy = 9;
 		this.back = 0;
 		
 		var nome = document.getElementById("caixaNome").value;
 		var self = this;
 		var bodies;
+		var localPlayer;
 		var spellArr;
 		var spellArrMob;
 		
@@ -51,18 +51,28 @@ var jogo = function () {
 		};
 		if(!iniciarJogo) escolher();
 		
-		var start = function(){
-			self.textUpdate((nome + " | Fase: " + self.fase + " Mortes: " + self.mortes), statusScreen, statusSize, 15);
-			self.bodies = createEnemy(self, (self.qtdEnemy + self.fase)).concat(new Player(self, gameSize, retornarEscolha[0]));
+		var start = function(inicio = true){
+			if(inicio) self.bodies = createEnemy(self, gameSize, (self.qtdEnemy + self.fase)).concat(new Player(self, gameSize, retornarEscolha[0]));
+			else{
+				localPlayer = verfPlayer(self.bodies);
+				player = self.bodies[localPlayer];
+				self.bodies = createEnemy(self, gameSize, (self.qtdEnemy + self.fase)).concat(player);
+			}
+			
 			self.spellArr = new Array();
 			self.spellArrMob = new Array();
-			console.log(self.bodies.length);
 		};
 		
 		var tick = function() {
 			self.update(gameSize);
 			self.draw(screen, gameSize, self.back);
-			if(self.end()) start();
+			
+			var end = self.end();
+			if(end == "player") start(true);
+			else if(end == "enemy") start(false);
+			
+			localPlayer = verfPlayer(self.bodies);
+			self.textUpdate((nome + " | Fase: " + self.fase + " Vidas: " + self.bodies[localPlayer].vidas), statusScreen, statusSize, 15);
 			requestAnimationFrame(tick);
 		};
 		
@@ -87,9 +97,16 @@ var jogo = function () {
 					for (var f = 0; f < spell.length; f++){						
 						colide = colliding(bodies[z], spell[f]);
 						if(colide){
-							bodies.splice(z, 1);
-							spell.splice(f, 1);
-							break;
+							if(type == 1 && bodies[z].vidas > 0){
+								bodies[z].vidas--;
+								spell.splice(f, 1);
+								break;
+							}
+							else{
+								bodies.splice(z, 1);
+								spell.splice(f, 1);
+								break;
+							}
 						}
 					}
 				}
@@ -135,23 +152,32 @@ var jogo = function () {
 		},
 		
 		addBodyMob: function(body){
-			this.spellArrMob.push(body);
+			if(this.spellArrMob.length<= (this.bodies.length / 2) + 1) this.spellArrMob.push(body);
 		},
 		
 		end: function(){
 			var player = false;
+			var playerPos = 0;
 			var enemy = false;
+			
 			for(var i = 0; i < this.bodies.length; i++){
-				if (this.bodies[i] instanceof Player) player = true;
+				if (this.bodies[i] instanceof Player){
+					player = true;
+					playerPos = i;
+				}
 				else if (this.bodies[i] instanceof Enemy) enemy = true;
 			}
+			
 			if (!player){
-				this.mortes++;
-				return true;
+				return "player";
 			} else if (!enemy){
 				this.fase++;
-				if((this.fase % 5) == 0) this.back++;
-				return true;
+				if((this.fase % 5) == 0){
+					this.back++;
+					this.bodies[playerPos].vidas++;
+					console.log(this.bodies[playerPos].vidas);
+				}
+				return "enemy";
 			}
 		},
 		
@@ -173,6 +199,7 @@ var jogo = function () {
 		this.center = { x: gameSize.x / 2, y: gameSize.y - this.size.y };
 		this.keyboarder = new Keyboarder(this);
 		this.spellCount = 10;
+		this.vidas = 2;
 	};
 	
 	Player.prototype = {
@@ -204,6 +231,15 @@ var jogo = function () {
 		}
 	};
 	
+	var verfPlayer = function(bodies){
+		var localPlayer;
+		for(var i = 0; i < bodies.length; i++){
+			if(bodies[i] instanceof Player) localPlayer = i;
+		}
+		return localPlayer;
+	};
+	//FIM DAS FUNCOES PLAYER
+	
 	//MAGIAS DO JOGO
 	var Spell = function(center, velocity) {
 		this.size = { x: 5, y: 5};
@@ -219,24 +255,25 @@ var jogo = function () {
 	};
 	
 	//MOBS DO JOGO
-	var Enemy = function(game, center) {
+	var Enemy = function(game, gameSize, center) {
 		this.game = game;
+		this.gameSize = gameSize;
 		this.size = { x: 32, y: 32};
 		this.center = center;
 		this.patrolX = 0;
-		this.speedX = 0.3;
+		this.speedX = 0.7;
 	};
 	
 	Enemy.prototype = {
 		update: function() {
-			if (this.patrolX < 0 || this.patrolX > 170){
+			if (verfPosLastMob("equerda", this.center.x) < 16 || verfPosLastMob("direita", this.center.x) > this.gameSize.x - 16){
 				this.speedX = -this.speedX;
 			}
 			
 			this.center.x += this.speedX;
 			this.patrolX += this.speedX;
 			
-			if(Math.random() > 0.998) {
+			if(Math.random() > 0.997) {
 				var spell = new Spell(
 						{ x: this.center.x, y: this.center.y + this.size.x / 2},
 						{ x: Math.random() - 0.5, y: 3}
@@ -246,18 +283,34 @@ var jogo = function () {
 		}
 	};
 	
-	//FUNCÕES DO JOGO;
-	var createEnemy = function(game, qtd) {
+	var verfPosLastMob = function(pos, center){
+		var ultimo = 0;
+		if(pos == "direita"){
+			if(ultimo == 0) ultimo = center;
+			else if(ultimo < center) ultimo = center;
+		}
+		else{
+			if(ultimo == 0) ultimo = center;
+			else if(ultimo > center) ultimo = center;
+		}
+		
+		return ultimo;
+	};
+	
+	var createEnemy = function(game, gameSize, qtd) {
 		var enemy = [];
 		var longe = 40;
 		for (var i = 0; i < qtd; i++){
 			var x = longe + (i % 11) * longe;
 			var y = longe + (i % 4) * longe;
-			enemy.push(new Enemy(game, { x: x, y: y }));
+			enemy.push(new Enemy(game, gameSize, { x: x, y: y }));
 		}
 		return enemy;
 	};
+	//FIM DAS FUNCOES MOBS
 	
+	
+	//FUNCÕES DO JOGO;
 	var colliding = function(b1, b2) {		
 		return !(b1 === b2 ||
 				b1.center.x + b1.size.x / 2 < b2.center.x - b2.size.x / 2 ||
