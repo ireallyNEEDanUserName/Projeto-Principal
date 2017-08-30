@@ -1,6 +1,6 @@
 #logo {
 	float: left;
-	width: 6%;
+	width: 200px;
 	padding: 5px;
 	margin: 1px 10px 10px 10px;
 	position: relative;
@@ -11,8 +11,6 @@ body,html {
     background-size: cover;
 }
 
-
-
 #todos {
 	width: 100%;
 	height: 100%;
@@ -22,14 +20,9 @@ body,html {
 }
 
 #topo {
-       /* width: 100%;*/
-       /* height: 13%;*/
-	width: 1345px;
+	width: 1000px;
 	height: 80px;
-        float: left;
-        position: absolute;
-        color: red;
-	/*border: 5px solid pink;*/
+	margin: auto;
 }
 
 
