@@ -2,9 +2,7 @@ $(document).ready(function(){
 
 	$("#jogoStart").click(function(){
 		var nome = $("#caixaNome").val();
-		console.log(nome);
 		if(nome.length != 0){
-			console.log(nome);
 			$("#form").fadeOut("fast");
 			$("#status").show("fast");
 			$("#screen").show("fast");
