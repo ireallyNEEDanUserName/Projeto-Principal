@@ -14,8 +14,6 @@ var jogo = function () {
 		var gameSize = { x: canvas.width, y: canvas.height };
 		var statusSize = { x: canvasStatus.width, y: canvasStatus.height };
 		
-		var canvasRect = canvas.getBoundingClientRect();
-		
 		this.fase = 1;
 		this.qtdEnemy = 9;
 		this.back = 0;
@@ -30,7 +28,7 @@ var jogo = function () {
 		//Funcoes para escolher personagem
 		var iniciarJogo = false;
 		var retornarEscolha = [0, false];
-		var teclado = new Keyboarder(this, canvasRect);
+		var teclado = new Keyboarder(this, canvas);
 		var keys = teclado.KEYS;
 		var opcoes = new Array();
 		
@@ -52,7 +50,7 @@ var jogo = function () {
 		if(!iniciarJogo) escolher();
 		
 		var start = function(inicio = true){
-			if(inicio) self.bodies = createEnemy(self, gameSize, (self.qtdEnemy + self.fase)).concat(new Player(self, gameSize, retornarEscolha[0]));
+			if(inicio) self.bodies = createEnemy(self, gameSize, (self.qtdEnemy + self.fase)).concat(new Player(self, canvas, gameSize, retornarEscolha[0]));
 			else{
 				localPlayer = verfPlayer(self.bodies);
 				player = self.bodies[localPlayer];
@@ -191,13 +189,14 @@ var jogo = function () {
 	};
 	
 	//JOGADOR
-	var Player = function(game, gameSize, img) {
+	var Player = function(game, canvas, gameSize, img) {
 		this.game = game;
 		this.gameSize = gameSize;
+		this.canvas = canvas;
 		this.playerImg = img;
 		this.size = { x: 32, y: 32};
 		this.center = { x: gameSize.x / 2, y: gameSize.y - this.size.y };
-		this.keyboarder = new Keyboarder(this);
+		this.keyboarder = new Keyboarder(this, this.canvas);
 		this.spellCount = 10;
 		this.vidas = 2;
 	};
@@ -396,6 +395,8 @@ var jogo = function () {
 			
 			if(teclado.isClicked()){
 				var pos = teclado.posClicked();
+				console.log(pos);
+				console.log(opcoes);
 			
 				if(rectCollideEscolhaPlayer(pos, opcoes[0]) ||
 					rectCollideEscolhaPlayer(pos, opcoes[1]) ||
@@ -454,7 +455,12 @@ var jogo = function () {
 		var touch = false;
 		var posx = 0;
 		var codeX = 0;
+		var margin = 0;
 		
+		if(rect != 0) var canvasRect = rect.getBoundingClientRect();
+		if(document.getElementById('centro') != null) margin = document.getElementById('centro').offsetTop;
+
+
 		window.onkeydown = function(e) {
 			keyState[e.keyCode] = true;
 			pressionado = true;
@@ -462,29 +468,31 @@ var jogo = function () {
 		window.onkeyup = function(e) {
 			keyState[e.keyCode] = false;
 		};
+
 		
-		window.onmousedown = function(e){
-			posClick[0] = e.clientX - rect.left;
-			posClick[1] = e.screenY - rect.top + 64;
+		console.log(margin);
+		rect.onmousedown = function(e){
+			posClick[0] = e.clientX - canvasRect.left + window.pageXOffset;
+			posClick[1] = e.clientY - rect.offsetTop + window.pageYOffset - margin;
 			click = true;
 			pressionado = true;
 		};
-		window.onmouseup = function(){
+		rect.onmouseup = function(){
 			click = false;
 		};
 
-		window.addEventListener("touchstart", function(e) {
+		rect.addEventListener("touchstart", function(e) {
 			var local = e.changedTouches;
-			posx = local.item(0).clientX;
+			posx = local.item(0).e.clientX - canvasRect.left + window.pageXOffset;
 			posTouch.push(posx);
-			posTouch.push(local.item(0).clientY);
+			posTouch.push(local.item(0).e.clientY - rect.offsetTop + window.pageYOffset - margin);
 			codeX = movimentoX(player, posx);
 			keyState[codeX] = true;
 			keyState[32] = true;
 			touch = true;
 			pressionado = true;
 		});
-		window.addEventListener("touchend", function() {
+		rect.addEventListener("touchend", function() {
 			keyState[codeX] = false;
 			keyState[32] = false;
 			codeX = 0;
