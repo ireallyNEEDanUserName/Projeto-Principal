@@ -30,6 +30,7 @@ canvas {
 #Restart{
 	top: 15px;
 	position: absolute;
+	right: 20%;
 }
 
 #textoNome{
