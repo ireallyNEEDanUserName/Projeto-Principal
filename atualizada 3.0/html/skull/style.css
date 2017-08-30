@@ -17,7 +17,8 @@ canvas {
 	width: 250px;
 	background-color: #3377ff;
 	border: 3px solid white;
-	margin: 20px;
+	margin: auto;
+	text-align: center;
 	padding: 5px 5px 5px 5px;
 }
 
@@ -25,6 +26,7 @@ canvas {
 	border-style: solid;
 	width: 150px;
 	height: 27px;
+	margin: auto;
 }
 
 #Restart{
@@ -38,6 +40,7 @@ canvas {
 	background-color: #1a75ff;
 	border-style: solid;
 	color: white;
+	margin: auto;
 }
 
 #jogoStart{
