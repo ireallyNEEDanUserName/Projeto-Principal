@@ -453,7 +453,6 @@ var jogo = function () {
 		var posTouch = new Array();
 		var click = false;
 		var touch = false;
-		var posx = 0;
 		var codeX = 0;
 		var margin = 0;
 		
@@ -469,8 +468,6 @@ var jogo = function () {
 			keyState[e.keyCode] = false;
 		};
 
-		
-		console.log(margin);
 		rect.onmousedown = function(e){
 			posClick[0] = e.clientX - canvasRect.left + window.pageXOffset;
 			posClick[1] = e.clientY - rect.offsetTop + window.pageYOffset - margin;
@@ -483,10 +480,10 @@ var jogo = function () {
 
 		rect.addEventListener("touchstart", function(e) {
 			var local = e.changedTouches;
-			posx = local.item(0).e.clientX - canvasRect.left + window.pageXOffset;
-			posTouch.push(posx);
-			posTouch.push(local.item(0).e.clientY - rect.offsetTop + window.pageYOffset - margin);
-			codeX = movimentoX(player, posx);
+			posTouch[0] = local.item(0).clientX - canvasRect.left + window.pageXOffset;
+			posTouch[1] = local.item(0).clientY - rect.offsetTop + window.pageYOffset - margin
+			console.log(posTouch);
+			if(player instanceof Player) codeX = movimentoX(player, posTouch[0]);
 			keyState[codeX] = true;
 			keyState[32] = true;
 			touch = true;
