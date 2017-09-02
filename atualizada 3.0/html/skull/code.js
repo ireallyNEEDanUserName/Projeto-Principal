@@ -479,21 +479,25 @@ var jogo = function () {
 		};
 
 		rect.addEventListener("touchstart", function(e) {
-			var local = e.changedTouches;
-			posTouch[0] = local.item(0).clientX - canvasRect.left + window.pageXOffset;
-			posTouch[1] = local.item(0).clientY - rect.offsetTop + window.pageYOffset - margin
-			console.log(posTouch);
-			if(player instanceof Player) codeX = movimentoX(player, posTouch[0]);
-			keyState[codeX] = true;
-			keyState[32] = true;
-			touch = true;
-			pressionado = true;
+			if(touch == false){
+				var local = e.changedTouches;
+				posTouch[0] = local.item(0).clientX - canvasRect.left + window.pageXOffset;
+				posTouch[1] = local.item(0).clientY - rect.offsetTop + window.pageYOffset - margin
+				console.log(posTouch);
+				if(player instanceof Player) codeX = movimentoX(player, posTouch[0]);
+				keyState[codeX] = true;
+				keyState[32] = true;
+				touch = true;
+				pressionado = true;
+			}
 		});
 		rect.addEventListener("touchend", function() {
-			keyState[codeX] = false;
-			keyState[32] = false;
-			codeX = 0;
-			touch = false;
+			if(touch == true){
+				keyState[codeX] = false;
+				keyState[32] = false;
+				codeX = 0;
+				touch = false;
+			}
 		});
 		
 		this.isDown = function(keyCode) {
