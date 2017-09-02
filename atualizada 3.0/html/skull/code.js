@@ -17,6 +17,8 @@ var jogo = function () {
 		this.fase = 1;
 		this.qtdEnemy = 9;
 		this.back = 0;
+		this.morte = false;
+		var iterateMorte = 0;
 		
 		var nome = document.getElementById("caixaNome").value;
 		var self = this;
@@ -50,20 +52,31 @@ var jogo = function () {
 		if(!iniciarJogo) escolher();
 		
 		var start = function(inicio = true){
+			if(self.morte == false) drawBack(screen, gameSize, 1);
 			if(inicio) self.bodies = createEnemy(self, gameSize, (self.qtdEnemy + self.fase)).concat(new Player(self, canvas, gameSize, retornarEscolha[0]));
 			else{
 				localPlayer = verfPlayer(self.bodies);
 				player = self.bodies[localPlayer];
 				self.bodies = createEnemy(self, gameSize, (self.qtdEnemy + self.fase)).concat(player);
 			}
-			
 			self.spellArr = new Array();
 			self.spellArrMob = new Array();
 		};
 		
 		var tick = function() {
 			self.update(gameSize);
-			self.draw(screen, gameSize, self.back);
+			if(self.morte == true){
+				drawBack(screen, gameSize, "gameOver");
+				iterateMorte++;
+			}
+			else self.draw(screen, gameSize, self.back);
+			if(iterateMorte == 10){
+				if(self.morte == true){
+					self.morte = false;
+					iterateMorte = 0
+					wait(2000);
+				}
+			}
 			
 			var end = self.end();
 			if(end == "player") start(true);
@@ -134,6 +147,7 @@ var jogo = function () {
 		
 		draw: function(screen, gameSize, back) {
 			drawBack(screen, gameSize, back);
+			
 			for (var i = 0; i < this.bodies.length; i++){
 				drawRect(screen, this.bodies[i]);
 			}
@@ -167,13 +181,14 @@ var jogo = function () {
 			}
 			
 			if (!player){
+				this.morte = true
+				this.fase = 1;
 				return "player";
 			} else if (!enemy){
 				this.fase++;
 				if((this.fase % 5) == 0){
 					this.back++;
 					this.bodies[playerPos].vidas++;
-					console.log(this.bodies[playerPos].vidas);
 				}
 				return "enemy";
 			}
@@ -298,11 +313,20 @@ var jogo = function () {
 	
 	var createEnemy = function(game, gameSize, qtd) {
 		var enemy = [];
-		var longe = 40;
+		var longe = 5;
+		var tam = 32;
+		var xAnt = 0;
+		var yAnt = 0;
+		
 		for (var i = 0; i < qtd; i++){
-			var x = longe + (i % 11) * longe;
-			var y = longe + (i % 4) * longe;
-			enemy.push(new Enemy(game, gameSize, { x: x, y: y }));
+			var x = longe + (i % 11) + xAnt + tam;
+			xAnt = x;
+			var y = longe + tam + + ((i % 4) * tam);
+			yAnt = y;
+			if(x < gameSize.x && y < gameSize.y) enemy.push(new Enemy(game, gameSize, { x: x, y: y }));
+			
+			if(x >= gameSize.x) xAnt = 0;
+			else if(y >= gameSize.y) yAnt = 0;
 		}
 		return enemy;
 	};
@@ -395,8 +419,6 @@ var jogo = function () {
 			
 			if(teclado.isClicked()){
 				var pos = teclado.posClicked();
-				console.log(pos);
-				console.log(opcoes);
 			
 				if(rectCollideEscolhaPlayer(pos, opcoes[0]) ||
 					rectCollideEscolhaPlayer(pos, opcoes[1]) ||
@@ -445,6 +467,14 @@ var jogo = function () {
 		return ((pos[0] >= opcoes.xD && pos[0] <= opcoes.xE) &&
 				(pos[1] >= opcoes.yC && pos[1] <= opcoes.yB))
 	};
+	
+	function wait(ms){
+		var start = new Date().getTime();
+		var end = start;
+		while(end < start + ms) {
+			end = new Date().getTime();
+		}
+	}
 
 	
 	var Keyboarder = function(player, rect = 0){
