@@ -1,13 +1,13 @@
 $(document).ready(function(){
 
 	$("#jogoStart").click(function(){
-		var nome = $("#caixaNome").val();
-		if(nome.length != 0){
-			$("#form").fadeOut("fast");
-			$("#status").show("fast");
-			$("#screen").show("fast");
-			inicio();
-		}
+		start();
+	})
+	$("#caixaNome").on('keypress', function(e){
+		if(e.which === 13) start();
+	})
+	$("#codigoFase").on('keypress', function(e){
+		if(e.which === 13) start();
 	})
 	
 	$('.botao').mouseenter(function(){
@@ -23,4 +23,14 @@ $(document).ready(function(){
 var clicar = function(isso){
 	var href = isso.attr('href');
 	$(window).load( href );
+};
+
+var start = function(){
+	var nome = $("#caixaNome").val();
+	if(nome.length != 0){
+		$("#form").fadeOut("fast");
+		$("#status").show("fast");
+		$("#screen").show("fast");
+		inicio();
+	}
 };
