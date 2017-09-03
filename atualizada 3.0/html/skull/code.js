@@ -14,7 +14,13 @@ var jogo = function () {
 		var gameSize = { x: canvas.width, y: canvas.height };
 		var statusSize = { x: canvasStatus.width, y: canvasStatus.height };
 		
-		this.fase = 1;
+		if(document.getElementById("codigoFase").value == "") this.fase = 1;
+		else{
+			var retorno = verf(document.getElementById("codigoFase").value);
+			if(retorno != false) this.fase = retorno - 10000;
+			else this.fase = 1;
+		}
+		console.log(this.fase);
 		this.qtdEnemy = 9;
 		this.back = 0;
 		this.morte = false;
@@ -164,7 +170,7 @@ var jogo = function () {
 		},
 		
 		addBodyMob: function(body){
-			if(this.spellArrMob.length<= (this.bodies.length / 2) + 1) this.spellArrMob.push(body);
+			if(this.spellArrMob.length <= (this.bodies.length / 3) + 1) this.spellArrMob.push(body);
 		},
 		
 		end: function(){
@@ -202,6 +208,38 @@ var jogo = function () {
 			statusScreen.strokeText(text, statusSize.x / 2, statusSize.y / 2);
 		}		
 	};
+	
+	//CODIGO DA FASE
+	var verf = function(achar){
+
+		var str = ["0" , "2" , "b" , "c", "3", "6" , "7" ,
+					"8" , "9" , "1" , "a" , "%", "@"];
+		var inicial = new Array();			
+		var valor = 0;
+	
+		for(var x = 0; x < str.length; x++){
+			inicial[0] = str[x];
+			for(var y = 0; y < str.length; y++){
+				inicial[1] = str[y];
+				for(var z = 0; z < str.length; z++){
+					inicial[2] = str[z]
+					for(var d = 0; d < str.length; d++){
+						inicial[3] = str[d]
+						valor++;
+						if(achar[0] == inicial[0]){
+							if(achar[1] == inicial[1]){
+								if(achar[2] == inicial[2]){
+									if(achar[3] == inicial[3]) return valor;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		return false;
+	}
 	
 	//JOGADOR
 	var Player = function(game, canvas, gameSize, img) {
@@ -323,7 +361,7 @@ var jogo = function () {
 			xAnt = x;
 			var y = longe + tam + + ((i % 4) * tam);
 			yAnt = y;
-			if(x < gameSize.x && y < gameSize.y) enemy.push(new Enemy(game, gameSize, { x: x, y: y }));
+			if(x < gameSize.x - 16 && y < gameSize.y) enemy.push(new Enemy(game, gameSize, { x: x, y: y }));
 			
 			if(x >= gameSize.x) xAnt = 0;
 			else if(y >= gameSize.y) yAnt = 0;
