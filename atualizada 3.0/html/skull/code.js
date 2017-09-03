@@ -14,13 +14,15 @@ var jogo = function () {
 		var gameSize = { x: canvas.width, y: canvas.height };
 		var statusSize = { x: canvasStatus.width, y: canvasStatus.height };
 		
+		//Pegar o codigo digitado em coedigoFase e validar o mesmo e atribuir a fase.
 		if(document.getElementById("codigoFase").value == "") this.fase = 1;
 		else{
 			var retorno = verf(document.getElementById("codigoFase").value);
 			if(retorno != false) this.fase = retorno - 10000;
 			else this.fase = 1;
 		}
-		console.log(this.fase);
+		
+		
 		this.qtdEnemy = 9;
 		this.back = 0;
 		this.morte = false;
@@ -42,14 +44,14 @@ var jogo = function () {
 		
 		self.textUpdate("Escolha com quem quer jogar. Use as setas para escolher e Enter para selecionar!", statusScreen, statusSize, 10);
 		
-		var escolher = function(){
+		var escolher = function(){ //Escolher o personagem que vai usar para jogar.
 			drawBack(screen, gameSize, 1);
 			opcoes = escolherPlayer(screen, gameSize, retornarEscolha[0]);
 			retornarEscolha = escolherPlayerUpdate(retornarEscolha, teclado, opcoes);
 			if(!iniciarJogo) requestAnimationFrame(escolher);
 			else if(iniciarJogo){
-				start();
-				tick();
+				start(); //Carregar variaveis do jogo.
+				tick();  //Loop principal do jogo.
 			}
 			if(retornarEscolha[1]){
 				iniciarJogo = true;
@@ -151,6 +153,7 @@ var jogo = function () {
 			}
 		},
 		
+		//Desenhar tudo que aparece na tela, desde fundo ate personagens e magias.
 		draw: function(screen, gameSize, back) {
 			drawBack(screen, gameSize, back);
 			
@@ -165,32 +168,32 @@ var jogo = function () {
 			}
 		},
 		
-		addBody: function(body){
+		addBody: function(body){ //Adicionar magia do jogador na Array.
 			this.spellArr.push(body);
 		},
 		
-		addBodyMob: function(body){
+		addBodyMob: function(body){ //Adicionar magia do mob na Array.
 			if(this.spellArrMob.length <= (this.bodies.length / 3) + 1) this.spellArrMob.push(body);
 		},
 		
-		end: function(){
+		end: function(){ //Verificar morte do jogador ou de todos mobs para proxima fase ou Game Over.
 			var player = false;
 			var playerPos = 0;
 			var enemy = false;
 			
-			for(var i = 0; i < this.bodies.length; i++){
+			for(var i = 0; i < this.bodies.length; i++){ //Loop para verificar se Player ou Mob ainda esta na Array Bodies.
 				if (this.bodies[i] instanceof Player){
 					player = true;
 					playerPos = i;
 				}
-				else if (this.bodies[i] instanceof Enemy) enemy = true;
+				else if (this.bodies[i] instanceof Enemy) enemy = true; 
 			}
 			
-			if (!player){
+			if (!player){ //Se player morreu retornar fase para 1 e iniciar um novo jogo.
 				this.morte = true
 				this.fase = 1;
 				return "player";
-			} else if (!enemy){
+			} else if (!enemy){ //Se mobs morreram aumentar a fase e verificar se muda o fundo ou ganha mais vida a cada 5 fases.
 				this.fase++;
 				if((this.fase % 5) == 0){
 					this.back++;
@@ -200,7 +203,7 @@ var jogo = function () {
 			}
 		},
 		
-		textUpdate: function(text, statusScreen, statusSize, tam){
+		textUpdate: function(text, statusScreen, statusSize, tam){ //Texto na barra de status em cima do jogo.
 			statusScreen.font = 'italic ' + tam + 'pt Arial';
 			statusScreen.textAlign = 'center';
 		
@@ -209,14 +212,14 @@ var jogo = function () {
 		}		
 	};
 	
-	//CODIGO DA FASE
+	//CODIGO PARA ENTRAR EM UMA FASE ESPECIFICA.
 	var verf = function(achar){
 
 		var str = ["0" , "2" , "b" , "c", "3", "6" , "7" ,
 					"8" , "9" , "1" , "a" , "%", "@"];
 		var inicial = new Array();			
 		var valor = 0;
-	
+		//Loop para verificar o codigo informado e retornar a fase que ele corresponde ou false se o codigo nao for verdadeiro.
 		for(var x = 0; x < str.length; x++){
 			inicial[0] = str[x];
 			for(var y = 0; y < str.length; y++){
