@@ -27,8 +27,9 @@ var jogo = function () {
 		this.back = 0;
 		this.morte = false;
 		var iterateMorte = 0;
+		var drawWait = false;
 		
-		var nome = document.getElementById("caixaNome").value;
+		this.nome = document.getElementById("caixaNome").value;
 		var self = this;
 		var bodies;
 		var localPlayer;
@@ -43,24 +44,10 @@ var jogo = function () {
 		var opcoes = new Array();
 		
 		self.textUpdate("Escolha com quem quer jogar. Use as setas para escolher e Enter para selecionar!", statusScreen, statusSize, 10);
-		
-		var escolher = function(){ //Escolher o personagem que vai usar para jogar.
-			drawBack(screen, gameSize, 1);
-			opcoes = escolherPlayer(screen, gameSize, retornarEscolha[0]);
-			retornarEscolha = escolherPlayerUpdate(retornarEscolha, teclado, opcoes);
-			if(!iniciarJogo) requestAnimationFrame(escolher);
-			else if(iniciarJogo){
-				start(); //Carregar variaveis do jogo.
-				tick();  //Loop principal do jogo.
-			}
-			if(retornarEscolha[1]){
-				iniciarJogo = true;
-			}
-		};
-		if(!iniciarJogo) escolher();
+
 		
 		var start = function(inicio = true){
-			if(self.morte == false) drawBack(screen, gameSize, 1);
+			if(self.morte == false) drawBack(screen, gameSize, self.back);
 			if(inicio) self.bodies = createEnemy(self, gameSize, (self.qtdEnemy + self.fase)).concat(new Player(self, canvas, gameSize, retornarEscolha[0]));
 			else{
 				localPlayer = verfPlayer(self.bodies);
@@ -72,28 +59,44 @@ var jogo = function () {
 		};
 		
 		var tick = function() {
-			self.update(gameSize);
-			if(self.morte == true){
-				drawBack(screen, gameSize, "gameOver");
-				iterateMorte++;
-			}
-			else self.draw(screen, gameSize, self.back);
-			if(iterateMorte == 10){
-				if(self.morte == true){
-					self.morte = false;
-					iterateMorte = 0
-					wait(2000);
+			if(!iniciarJogo){
+				drawBack(screen, gameSize, 1);
+				opcoes = escolherPlayer(screen, gameSize, retornarEscolha[0]);
+				retornarEscolha = escolherPlayerUpdate(retornarEscolha, teclado, opcoes);
+				if(retornarEscolha[1]){
+					iniciarJogo = true;
+					start();
 				}
 			}
+			else{
+				self.update(gameSize);
+				if(self.morte == true){
+					drawBack(screen, gameSize, "gameOver");
+					iterateMorte++;
+				}
+				else if(!drawWait){
+					drawWait = true;
+					self.draw(screen, gameSize, self.back);
+				}
+				else drawWait = false;
+				if(iterateMorte == 10){
+					if(self.morte == true){
+						self.morte = false;
+						iterateMorte = 0
+						wait(2000);
+					}
+				}
 			
-			var end = self.end();
-			if(end == "player") start(true);
-			else if(end == "enemy") start(false);
+				var end = self.end();
+				if(end == "player") start(true);
+				else if(end == "enemy") start(false);
 			
-			localPlayer = verfPlayer(self.bodies);
-			self.textUpdate((nome + " | Fase: " + self.fase + " Vidas: " + self.bodies[localPlayer].vidas), statusScreen, statusSize, 15);
+				if(!(self.bodies[localPlayer] instanceof Player)) localPlayer = verfPlayer(self.bodies);
+				self.textUpdate((self.nome + " | Fase: " + self.fase + " Vidas: " + self.bodies[localPlayer].vidas), statusScreen, statusSize, 15);
+			}
 			requestAnimationFrame(tick);
 		};
+		tick();
 		
 	};
 	
@@ -191,7 +194,9 @@ var jogo = function () {
 			
 			if (!player){ //Se player morreu retornar fase para 1 e iniciar um novo jogo.
 				this.morte = true
+				banco(this.nome, this.fase);
 				this.fase = 1;
+				this.back = 0;
 				return "player";
 			} else if (!enemy){ //Se mobs morreram aumentar a fase e verificar se muda o fundo ou ganha mais vida a cada 5 fases.
 				this.fase++;
@@ -210,6 +215,21 @@ var jogo = function () {
 			statusScreen.clearRect(0, 0, statusSize.x, statusSize.y);
 			statusScreen.strokeText(text, statusSize.x / 2, statusSize.y / 2);
 		}		
+	};
+
+	//CODIGO PARA RANKING
+	var banco = function(nome, fase){
+
+		$.ajax({
+			method: "POST",
+			url: "enviarBanco.php",
+			data: {'nome': nome,
+					'fase': fase},
+			success: function(data){
+				console.log("sucessefull");
+			}
+		});
+
 	};
 	
 	//CODIGO PARA ENTRAR EM UMA FASE ESPECIFICA.
@@ -561,7 +581,7 @@ var jogo = function () {
 				touch = true;
 				pressionado = true;
 			}
-		});
+		}, {passive: true});
 		rect.addEventListener("touchend", function() {
 			if(touch == true){
 				keyState[codeX] = false;
