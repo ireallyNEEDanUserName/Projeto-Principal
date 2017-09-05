@@ -23,13 +23,16 @@ var jogo = function () {
 		}
 		
 		
+
 		this.qtdEnemy = 9;
 		this.back = 0;
 		this.morte = false;
 		var iterateMorte = 0;
 		var drawWait = false;
-		
+		this.mudouFase = false;
+
 		this.nome = document.getElementById("caixaNome").value;
+		this.tipo = document.getElementById("tipo").getAttribute("val");
 		var self = this;
 		var bodies;
 		var localPlayer;
@@ -74,8 +77,9 @@ var jogo = function () {
 					drawBack(screen, gameSize, "gameOver");
 					iterateMorte++;
 				}
-				else if(!drawWait){
+				else if(!drawWait || mudouFase){
 					drawWait = true;
+					mudouFase = false;
 					self.draw(screen, gameSize, self.back);
 				}
 				else drawWait = false;
@@ -194,12 +198,14 @@ var jogo = function () {
 			
 			if (!player){ //Se player morreu retornar fase para 1 e iniciar um novo jogo.
 				this.morte = true
-				banco(this.nome, this.fase);
+				banco(this.nome, this.fase, this.tipo);
 				this.fase = 1;
+				this.mudouFase = true;
 				this.back = 0;
 				return "player";
 			} else if (!enemy){ //Se mobs morreram aumentar a fase e verificar se muda o fundo ou ganha mais vida a cada 5 fases.
 				this.fase++;
+				this.mudouFase = true;
 				if((this.fase % 5) == 0){
 					this.back++;
 					this.bodies[playerPos].vidas++;
@@ -218,13 +224,14 @@ var jogo = function () {
 	};
 
 	//CODIGO PARA RANKING
-	var banco = function(nome, fase){
+	var banco = function(nome, fase, tipo){
 
 		$.ajax({
 			method: "POST",
 			url: "enviarBanco.php",
 			data: {'nome': nome,
-					'fase': fase},
+					'fase': fase,
+					'tipo': tipo},
 			success: function(data){
 				console.log("sucessefull");
 			}
