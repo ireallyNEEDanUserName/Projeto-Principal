@@ -1,29 +1,25 @@
-<html>	<title>Ranking do Jogo</title>
+<html>
+<head>
+	<title>Ranking</title>
+	<link href="../logo.css" type="text/css" rel="stylesheet"/>
+	<link href="style.css" type="text/css" rel="stylesheet"/>
+</head>
 
-<head>Ranking do jogo Skull Invaders </head>
+<body>
+	
+	<table> 
+		<tr>
+			<td>RANKING DOS JOGADORES</td>
+		</tr>
+		<tr>
+			<th>Nome</th>
+			<th>Fase</th>
+			<th>Local</th>
+		</tr>
 
-<?php
-if(!@($conexao=pg_connect ("host=srvuxmagic01 dbname=skull port=5432 user=skullusr password=S@k4lL!"))) {
-   print "Não foi possível estabelecer uma conexão com o banco de dados.";
-} else {
+		<?php include 'rankingBanco.php'; ?>	
 
-   $sql = "SELECT * FROM ranking"; 
-   $result = pg_exec($conexao, $sql); 
- 
-   /* Escreve resultados até que não haja mais linhas na tabela */ 
-   for($i=0; $consulta = @pg_fetch_array($result, $i); $i++) { 
-      echo "Coluna1: " . $consulta['id'] . " - Coluna2:" . $consulta['nome'] . "<br>"; 
-   } 
-   pg_close($conexao); 
-}
-
-
-
-
-
-?>
-
-
-
+	</table>
+</body>
 
 </html>
