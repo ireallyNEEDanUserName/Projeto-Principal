@@ -3,6 +3,19 @@ canvas {
 	border: 2px solid black;
 }
 
+table {
+	border: 5px solid black;
+	width: 100%;
+}
+
+td {
+	text-align: center;
+}
+
+#tipo {
+	display: none;
+}
+
 #status {
 	display: none;
 }
@@ -27,12 +40,6 @@ canvas {
 	width: 150px;
 	height: 27px;
 	margin: auto;
-}
-
-#Restart{
-	top: 15px;
-	position: absolute;
-	right: 20%;
 }
 
 #textoNome{
