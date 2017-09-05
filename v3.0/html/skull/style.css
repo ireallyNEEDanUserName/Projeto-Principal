@@ -3,14 +3,14 @@ canvas {
 	border: 2px solid black;
 }
 
-table {
-	border: 5px solid black;
-	width: 100%;
+table, td, th {
+	border: 2px solid black;
+	border-collapse: collapse;
+	width: 50%;
+	text-align: center;
+	background-color: #CFCFCF;
 }
 
-td {
-	text-align: center;
-}
 
 #tipo {
 	display: none;
