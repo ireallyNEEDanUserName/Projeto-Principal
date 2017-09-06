@@ -603,7 +603,7 @@ var jogo = function () {
 				var local = e.changedTouches;
 				posTouch[0] = local.item(0).clientX - canvasRect.left + window.pageXOffset;
 				posTouch[1] = local.item(0).clientY - rect.offsetTop + window.pageYOffset - margin
-				console.log(posTouch);
+				//console.log(posTouch);
 				if(player instanceof Player) codeX = movimentoX(player, posTouch[0]);
 				keyState[codeX] = true;
 				keyState[32] = true;
