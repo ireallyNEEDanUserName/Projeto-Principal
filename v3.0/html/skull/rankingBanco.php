@@ -15,13 +15,15 @@
 		$allP = pg_fetch_all($resultP);
 		
 		echo "<table>";
-		echo "<th colspan = " . "2 " .">RANKING DOS JOGADORES MOBILE</th>";
+		echo "<th colspan = " . "3 " .">RANKING DOS JOGADORES MOBILE</th>";
 		echo "<tr>
+				<th>Posição</th>
 				<th>Nome</th>
 				<th>Fase</th>
 			</tr>";
 		for($i = 0; $i < count($all); $i++){
 			echo "<tr>";
+			echo "<td>" . ($i + 1) . "</td>";
 			foreach($all[$i] as $key => $value) {
 				if($value !== 'm') echo "<td>" . $value . "</td>";
 			}
@@ -32,14 +34,16 @@
 
 		echo "<br>";
 		echo "<table>";
-		echo "<th colspan = " . "2 " .">RANKING DOS JOGADORES PC</th>";
+		echo "<th colspan = " . "3 " .">RANKING DOS JOGADORES PC</th>";
 		echo "<tr>
+				<th>Posição</th>
 				<th>Nome</th>
 				<th>Fase</th>
 			</tr>";
 
 		for($i = 0; $i < count($allP); $i++){
 			echo "<tr>";
+			echo "<td>" . ($i + 1) . "</td>";
 			foreach($allP[$i] as $key => $value) {
 				if($value !== 'p') echo "<td>" . $value . "</td>";
 			}
