@@ -28,7 +28,7 @@ var jogo = function () {
 		this.back = 0;
 		this.morte = false;
 		var iterateMorte = 0;
-		var drawWait = 3;
+		var drawWait = false;
 		this.mudouFase = false;
 
 		this.nome = document.getElementById("caixaNome").value;
@@ -78,12 +78,12 @@ var jogo = function () {
 					drawBack(screen, gameSize, "gameOver");
 					iterateMorte++;
 				}
-				else if(drawWait >= 2 || mudouFase){
-					drawWait = 0;
+				else if(!drawWait || mudouFase){
+					drawWait = true;
 					mudouFase = false;
 					self.draw(screen, gameSize, self.back);
 				}
-				else drawWait += 1;
+				else drawWait = false;
 				if(iterateMorte == 10){
 					if(self.morte == true){
 						self.morte = false;
@@ -236,7 +236,7 @@ var jogo = function () {
 		var dados = jogo.dadosReturn();
 		banco(dados[0], dados[1], dados[2]);
 	});
-
+	
 	//CODIGO PARA RANKING
 	var banco = function(nome, fase, tipo){
 
