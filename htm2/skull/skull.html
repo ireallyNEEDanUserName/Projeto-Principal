@@ -1,0 +1,63 @@
+<html>	
+	<head>
+		<title> Skull Invaders </title>
+		
+		<script type="text/javascript" src="../mobile.js"></script>
+		<script type="text/javascript" src="../jquery-3.2.1.js"></script>
+		<script type="text/javascript" src="../conf.js"></script>
+		<script type="text/javascript" src="code.js"></script>
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+		
+		<link href="../logo.css" type="text/css" rel="stylesheet"/>
+		<link href="style.css" type="text/css" rel="stylesheet"/>
+		
+	</head>
+	
+	<body>
+		<p id="tipo" val="p"></p>
+		<div id="logo">
+			<a href="../index.html">
+				<img src="../img/NDL10.jpg" alt="Logo do Site" title="NDL" width="80" height="80" />
+			</a>
+			<a href="skull.html" class="imagem" id="Restart">
+				<img src="http://i.imgur.com/xMbgTmA.png" height='50' width='50' title="Reestart!"/>
+			</a>
+		</div>
+		<div id="topo"> 
+			<h1>Chegue o mais longe que puder!</h1>
+		</div>
+		
+		<div id="menu">
+			<a href="ranking.php" id="Ranking">Ranking</a>
+		</div>
+		
+		<div id="centro">
+			<div id="canvas">
+                <canvas id="status" width="600" height="50">
+                </canvas>
+        	</div>
+        	
+        	<br />
+				
+			<div id="form">
+				<form>
+					<br>
+					<p id="textoNome">Nome de Usuario</p>
+					<input type="text" id="caixaNome"/>
+					<br>
+					<p id="textoNome">Codigo da Fase</p>
+					<input type="text" id="codigoFase"/>
+					<br>
+					<button type="button" id="jogoStart"> Start </button>
+				</form>
+			</div>
+				
+            <canvas id="screen" width="600" height="470" >
+            </canvas>		
+		</div>
+
+	</body>
+		
+<html>

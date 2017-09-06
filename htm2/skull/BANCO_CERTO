@@ -1,0 +1,15 @@
+<?php
+$conn_str = "host=srvuxmagic01 port=5432 dbname=skull user=skullusr password=S@k4lL!";
+$connect = pg_connect($conn_str);
+
+$nome = $_POST['nome'];
+$fase = $_POST['fase'];
+
+if($fase > 1){
+        $query = "INSERT INTO ranking VALUES ('$nome', $fase)";
+
+        $qResult = pg_query($connect, $query);
+}
+pg_close($connect);
+
+?>
