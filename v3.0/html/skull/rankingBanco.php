@@ -1,6 +1,8 @@
 <?php
+	
+	$strBanco = "host=localhost port=5432 dbname=skull user=skullusr password=S@k4lL!";
 
-	if(!@($conexao=pg_connect ("host=localhost port=5432 dbname=skull user=skullusr password=S@k4lL!"))) {
+	if(!@($conexao=pg_connect ($strBanco))) {
 		print "Não foi possível estabelecer uma conexão com o banco de dados.";
 	}
 	else {
