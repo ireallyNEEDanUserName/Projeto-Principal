@@ -20,15 +20,15 @@ var jogo = function () {
 			var retorno = verf(document.getElementById("codigoFase").value);
 			if(retorno != false) this.fase = retorno - 10000;
 			else this.fase = 1;
-		}
-		
-		
+		}		
+
+		loadAssets(); //CHAMADA DA FUNCAO QUE CARREGA OS FUNDOS.
 
 		this.qtdEnemy = 9;
 		this.back = 0;
 		this.morte = false;
 		var iterateMorte = 0;
-		var drawWait = false;
+		var drawWait = 3;
 		this.mudouFase = false;
 
 		this.nome = document.getElementById("caixaNome").value;
@@ -48,6 +48,7 @@ var jogo = function () {
 		
 		self.textUpdate("Escolha com quem quer jogar. Use as setas para escolher e Enter para selecionar!", statusScreen, statusSize, 10);
 
+
 		
 		var start = function(inicio = true){
 			if(self.morte == false) drawBack(screen, gameSize, self.back);
@@ -63,7 +64,7 @@ var jogo = function () {
 		
 		var tick = function() {
 			if(!iniciarJogo){
-				drawBack(screen, gameSize, 1);
+				drawBack(screen, gameSize, self.back);
 				opcoes = escolherPlayer(screen, gameSize, retornarEscolha[0]);
 				retornarEscolha = escolherPlayerUpdate(retornarEscolha, teclado, opcoes);
 				if(retornarEscolha[1]){
@@ -77,12 +78,12 @@ var jogo = function () {
 					drawBack(screen, gameSize, "gameOver");
 					iterateMorte++;
 				}
-				else if(!drawWait || mudouFase){
-					drawWait = true;
+				else if(drawWait >= 2 || mudouFase){
+					drawWait = 0;
 					mudouFase = false;
 					self.draw(screen, gameSize, self.back);
 				}
-				else drawWait = false;
+				else drawWait += 1;
 				if(iterateMorte == 10){
 					if(self.morte == true){
 						self.morte = false;
@@ -158,6 +159,8 @@ var jogo = function () {
 			for (var z = 0; z < this.spellArrMob.length; z++){
 				this.spellArrMob[z].update();
 			}
+
+			//console.log("Bodies: " + this.bodies.length + " spellMob: " + this.spellArrMob.length + " spellPlayer: " + this.spellArr.length);
 		},
 		
 		//Desenhar tudo que aparece na tela, desde fundo ate personagens e magias.
@@ -220,8 +223,19 @@ var jogo = function () {
 		
 			statusScreen.clearRect(0, 0, statusSize.x, statusSize.y);
 			statusScreen.strokeText(text, statusSize.x / 2, statusSize.y / 2);
-		}		
+		},
+
+		dadosReturn: function(){
+			var dados = [this.nome, this.fase, this.tipo];
+			return dados;
+		}	
 	};
+
+	//CODIGO PARA MANDAR PRO BANCO ANTES DE FECHAR OU ATUALIZAR A PAGINA.
+	window.addEventListener("beforeunload", function(){
+		var dados = jogo.dadosReturn();
+		banco(dados[0], dados[1], dados[2]);
+	});
 
 	//CODIGO PARA RANKING
 	var banco = function(nome, fase, tipo){
@@ -355,7 +369,7 @@ var jogo = function () {
 			this.center.x += this.speedX;
 			this.patrolX += this.speedX;
 			
-			if(Math.random() > 0.997) {
+			if(Math.random() > 0.998) {
 				var spell = new Spell(
 						{ x: this.center.x, y: this.center.y + this.size.x / 2},
 						{ x: Math.random() - 0.5, y: 3}
@@ -425,6 +439,14 @@ var jogo = function () {
 						body.center.x - body.size.x / 2,
 						body.center.y - body.size.y / 2,
 						body.size.x, body.size.y);
+	};
+
+	//CARREGAR ASSETS ANTES DO JOGO
+	var loadAssets = function(){
+		var img = new Image();
+		for(var x = 0; x < backMax; x++){
+			img.src = "imgs/bgs/" + x + ".jpg";
+		}
 	};
 	
 	//DESENHAR FUNDO DO JOGO
@@ -626,7 +648,7 @@ var jogo = function () {
 		return mov;
 	};	
 	
-	new Game("screen", "status");
+	var jogo = new Game("screen", "status");
 	
 }; 
 
