@@ -13,5 +13,5 @@ function mobiDetect(userAgent, devices) {
 	return false;
 }
 if (mobiDetect(userAgent, devices)) {
-	if(window.location.href == "index.html") window.location.href = url_redirect;
+	if(window.location.pathname == "index.html") window.location.href = url_redirect;
 }
