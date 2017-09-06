@@ -1,5 +1,5 @@
 <?php
-$conn_str = "host=localhost port=5432 dbname=postgres user=postgres password=root";
+$conn_str = "host=localhost port=5432 dbname=skull user=skullusr password=S@k4lL!";
 $connect = pg_connect($conn_str);
 
 $nome = $_POST['nome'];

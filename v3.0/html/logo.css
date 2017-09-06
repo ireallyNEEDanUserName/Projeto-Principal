@@ -1,61 +1,63 @@
 #logo {
-	float: left;
-	height: auto;
-	width: 200px;
-	padding: 5px;
-	/*margin: 1px 10px 10px 10px;*/
-	position: relative;
+        float: left;
+        height: auto;
+        width: 180px;
+        padding: 5px;
+        /*margin: 1px 10px 10px 10px;*/
+        position: relative;
 }
 
 body,html {
-	background-image: url("img/BG.jpg");
+        background-image: url("img/BG.jpg");
     background-size: cover;
 }
 
 #todos {
-	width: 100%;
-	height: 100%;
-	margin: 0%;
-	position: relative;
-	float: left;
+        width: 100%;
+        height: 100%;
+        margin: 0%;
+        position: relative;
+        float: left;
 }
 
 #topo {
-	width: 1000px;
-	height: auto;
-	margin: auto;
-	text-align: center;
+        width: 1000px;
+        height: auto;
+        margin: auto;
+        text-align: center;
+        /*border: 5px solid pink;*/
 }
 
 #centro {
-	width: 1035px;
+        width: 1035px;
     height: 562px;
-	top: 90px;
-	left: 176px;
+        top: 90px;
+        left: 176px;
     position: absolute;
-	color: black;
-	margin: auto;
+        color: black;
+        margin: auto;
 }
 
 #menu {
-	width: 190px;
-	height: 562px;
-	top: 90px;
-    float: left;
-    position: absolute;
-	color: black;
-	text-align: center;
+        width: 185px;
+        height: 635px;
+        top: 5px;
+        float: left;
+        position: absolute;
+        color: black;
+        text-align: center;
+        /*border: 5px solid white;*/
 }
 
 .botao {
-	width: 110px;
-	height: auto;
-	color: black;
-	text-align: center;
+        width: 110px;
+        height: auto;
+        color: black;
+        text-align: center;
 }
 
 #li1{
-	list-style-type: none;
+        list-style-type: none;
 }
 
 #logom {
@@ -70,48 +72,32 @@ body,html {
         height: 410px;
         top: 90px;
         position: absolute;
-	text-align: center;
-	color: red;
+        text-align: center;
+        color: red;
 }
 
 #li1m{
     list-style-type: none;
-	/*float: center;*/
+        /*float: center;*/
 }
 
 #publim {
-	width: 165px;
-	height: 155px;
-	top: 400px;
-	position: absolute;
-	float: left;
-	/*border: 5px solid black;*/
-	background-image: url("img/anuncio.jpg");
-	background-size: cover;
+        width: 185px;
+        height: 165px;
+        top: 470px;
+        position: absolute;
+        float: left;
+        background-image: url("img/anuncio.jpg");
+        background-size: cover;
 }
 
-/*#publitop {
-	width: 130px;
-        height: 80px;
-	border: 5px solid black;
-	right:	2px;
-	top: 3px;
-	float: right;
-	position: relative;
-	background-image: url("img/anuncio.jpg");
-        background-size: cover;
-
-} */
-
 #publir {
-    width: 130px;
-    height: 563px;
+    width: 145px;
+    height: 585px;
     /*border: 5px solid black;*/
-    top: 80px;
     float: right;
     position: relative;
     background-image: url("img/anuncio.jpg");
     background-size: cover;
+
 }
-
-

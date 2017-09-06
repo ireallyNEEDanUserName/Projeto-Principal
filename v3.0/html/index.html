@@ -5,41 +5,27 @@
 		<script type="text/javascript" src="mobile.js"></script>
 		<script src="jquery-3.2.1.js"></script>
 		<script type="text/javascript" src="conf.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 		<link href="logo.css" type="text/css" rel="stylesheet" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	</head>
 		
-	<body>
-		<div id="logo">
-			<a href="index.html">
-				<img src="img/NDL10.jpg" alt="Logo do Site" title="NDL" width="80" height="80" />
-			</a>
-		</div>
+	<body ng-app="">
 		<div id="topo">
 			<h1>Bem vindo a nossa pagina de APPs. </h1>
 		</div>
-
-		<div id="menu">
-
-			<h3>Nossos Apps </h3>
-
-				<ul>
-					<h4> <a href="magic/inicial.php" class="botao">Magic The Apping </a></h4>
-					<h4> <a href="skull/skull.html" class="botao">Skull Invaders</a></h4>
-					<li>Link pro video</li>
-				</ul>
-
-			<h3>APP por IMG </h3>
-				<ul>
-					<li1> <a href="magic/inicial.php" class="imagem"><img src="http://i.imgur.com/ZIMl4W5.png" height='50' width='50' . title="Magic the Apping"/></a></li1>
-                    <li1> <a href="skull/skull.html" class="imagem"><img src="http://i.imgur.com/xMbgTmA.png" height='50' width='50' . title="Skull Invaders"/></a></li1>
-				</ul>
-				<div id="publim"></div>
+		
+		<div ng-include="'menu.php'">
 
 		</div>
 
-		<div id="centro"></div>
-		<div id="publir"></div>
+		<div id="centro">
+
+			<center><img src="https://i.imgur.com/CyQPWh5.png" /></center>		
+
+		</div>
+	
+		<div ng-include="'publi_d.html'"> </div>
 
 	</body>
 

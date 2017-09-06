@@ -1,12 +1,12 @@
 <?php
 
-	if(!@($conexao=pg_connect ("host=localhost port=5432 dbname=postgres user=postgres password=root"))) {
+	if(!@($conexao=pg_connect ("host=localhost port=5432 dbname=skull user=skullusr password=S@k4lL!"))) {
 		print "Não foi possível estabelecer uma conexão com o banco de dados.";
 	}
 	else {
 
-   		$sql = "SELECT * FROM ranking WHERE versao='m' ORDER BY level desc"; 
-   		$pSql = "SELECT * FROM ranking WHERE versao='p' ORDER BY level desc"; 
+   		$sql = "SELECT * FROM ranking WHERE tipo='m' ORDER BY fase desc"; 
+   		$pSql = "SELECT * FROM ranking WHERE tipo='p' ORDER BY fase desc"; 
    		
    		$result = pg_query($conexao, $sql); 
    		$resultP = pg_query($conexao, $pSql);
