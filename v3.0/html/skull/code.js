@@ -27,9 +27,10 @@ var jogo = function () {
 		this.qtdEnemy = 9;
 		this.back = 0;
 		this.morte = false;
-		var iterateMorte = 0;
+		var iterateEspera = 0;
 		var drawWait = false;
 		this.mudouFase = false;
+		this.codigoFase = false;
 
 		this.nome = document.getElementById("caixaNome").value;
 		this.tipo = document.getElementById("tipo").getAttribute("val");
@@ -72,9 +73,17 @@ var jogo = function () {
 			}
 			else{
 				self.update(gameSize);
+				
 				if(self.morte == true){
 					drawBack(screen, gameSize, "gameOver");
-					iterateMorte++;
+					iterateEspera++;
+				}
+				else if(self.codigoFase == true){
+					drawBack(screen, gameSize, "preto");
+					var codigo = verf(self.fase + 10000, true).toString();				
+					while(codigo.includes(",")) codigo = codigo.replace(",", "");
+					self.textUpdate(("Codigo da Fase " + self.fase + " : " + codigo), screen, gameSize, 30, "white", true);
+					iterateEspera++;
 				}
 				else if(!drawWait || mudouFase){
 					drawWait = true;
@@ -82,12 +91,14 @@ var jogo = function () {
 					self.draw(screen, gameSize, self.back);
 				}
 				else drawWait = false;
-				if(iterateMorte == 10){
-					if(self.morte == true){
-						self.morte = false;
-						iterateMorte = 0
-						wait(2000);
-					}
+				
+				if(iterateEspera == 10){
+				
+					if(self.morte == true) self.morte = false;
+					if(self.codigoFase == true) self.codigoFase = false;
+					
+					iterateEspera = 0
+					wait(2000);
 				}
 			
 				var end = self.end();
@@ -213,6 +224,7 @@ var jogo = function () {
 				this.fase++;
 				this.mudouFase = true;
 				if((this.fase % 5) == 0){
+					this.codigoFase = true;
 					this.back++;
 					this.bodies[playerPos].vidas++;
 				}
@@ -220,12 +232,19 @@ var jogo = function () {
 			}
 		},
 		
-		textUpdate: function(text, statusScreen, statusSize, tam){ //Texto na barra de status em cima do jogo.
-			statusScreen.font = 'italic ' + tam + 'pt Arial';
+		textUpdate: function(text, statusScreen, statusSize, tam, color = "black", clear = false){ //Texto na barra de status em cima do jogo.
+			statusScreen.font = 'italic ' + tam + 'pt Arial' + color;
 			statusScreen.textAlign = 'center';
-		
-			statusScreen.clearRect(0, 0, statusSize.x, statusSize.y);
-			statusScreen.strokeText(text, statusSize.x / 2, statusSize.y / 2);
+			
+			if(!clear){
+				statusScreen.clearRect(0, 0, statusSize.x, statusSize.y);
+				statusScreen.strokeText(text, statusSize.x / 2, statusSize.y / 2);
+			}
+			else{
+				statusScreen.fillStyle = color;
+				statusScreen.fillText(text, statusSize.x / 2, statusSize.y / 2);
+			}
+			
 		},
 
 		dadosReturn: function(){
@@ -257,7 +276,7 @@ var jogo = function () {
 	};
 	
 	//CODIGO PARA ENTRAR EM UMA FASE ESPECIFICA.
-	var verf = function(achar){
+	var verf = function(achar, codigo = false){
 
 		var str = ["0" , "2" , "b" , "c", "3", "6" , "7" ,
 					"8" , "9" , "1" , "a" , "%", "@"];
@@ -273,10 +292,15 @@ var jogo = function () {
 					for(var d = 0; d < str.length; d++){
 						inicial[3] = str[d]
 						valor++;
-						if(achar[0] == inicial[0]){
-							if(achar[1] == inicial[1]){
-								if(achar[2] == inicial[2]){
-									if(achar[3] == inicial[3]) return valor;
+						if(codigo){
+							if(valor == achar) return inicial;
+						}
+						else{
+							if(achar[0] == inicial[0]){
+								if(achar[1] == inicial[1]){
+									if(achar[2] == inicial[2]){
+										if(achar[3] == inicial[3]) return valor;
+									}
 								}
 							}
 						}
@@ -472,7 +496,7 @@ var jogo = function () {
 	
 	//DESENHAR FUNDO DO JOGO
 	var getBack = function(back){
-		if(back > backMax) back = backMax;
+		if(Number.isInteger(back) && back > backMax) back = backMax;
 		var img = new Image();
 		img.src = "imgs/bgs/" + back + ".jpg";
 		return img;
