@@ -475,9 +475,6 @@ var jogo = function () {
 		if(back > backMax) back = backMax;
 		var img = new Image();
 		img.src = "imgs/bgs/" + back + ".jpg";
-		img.addEventListener("success", function(e){
-			console.log(e);
-		});
 		return img;
 	};
 	
@@ -680,8 +677,10 @@ var jogo = function () {
 var loadAssets = function(){
 	for(var x = 0; x <= backMax; x++){
 		var img = new Image();
+		img.addEventListener("load", function(e){
+			console.log(e);
+		});
 		img.src = "imgs/bgs/" + x + ".jpg";
-		//console.log(img);
 	}
 };
 
