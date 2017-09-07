@@ -15,3 +15,5 @@ Editado o m.skull.html para refletir as mudanças no jogo e no skull.html
 Adicionado efeitos ao jogador quando ele é acertado pela magia do Mob.
 Realizada mais uma tentativa de carregar as imagens de fundo antes do jogo começar.
 Configurado o mobile.js para carregar a versão mobile de qualquer pagina.
+Feito codigo da fase aparecer a cada 5 LVLS.
+--------------------------------------------------------
