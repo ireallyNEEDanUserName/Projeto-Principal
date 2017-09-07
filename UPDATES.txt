@@ -10,3 +10,8 @@ Editado code.js e criado funções para recuperar e para desenhar na tela o fund
 Aumentado a frequencia do tiro dos mobs e diminuido uma linha de mobs.
 Editado o m.skull.html para refletir as mudanças no jogo e no skull.html
 --------------------------------------------------------
+
+--------------------- 06/09/17--------------------------
+Adicionado efeitos ao jogador quando ele é acertado pela magia do Mob.
+Realizada mais uma tentativa de carregar as imagens de fundo antes do jogo começar.
+Configurado o mobile.js para carregar a versão mobile de qualquer pagina.
