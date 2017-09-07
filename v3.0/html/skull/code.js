@@ -1,6 +1,7 @@
+var backMax = 4;
+
 var jogo = function () {
 	//Definicoes do jogo;
-	var backMax = 4;
 	var imgJogadorMax = 3;
 	var pressionado = false;
 	
@@ -18,11 +19,10 @@ var jogo = function () {
 		if(document.getElementById("codigoFase").value == "") this.fase = 1;
 		else{
 			var retorno = verf(document.getElementById("codigoFase").value);
-			if(retorno != false) this.fase = retorno - 10000;
+			//console.log(retorno);
+			if(retorno != false && retorno > 10001) this.fase = retorno - 10000;
 			else this.fase = 1;
 		}		
-
-		loadAssets(); //CHAMADA DA FUNCAO QUE CARREGA OS FUNDOS.
 
 		this.qtdEnemy = 9;
 		this.back = 0;
@@ -47,8 +47,6 @@ var jogo = function () {
 		var opcoes = new Array();
 		
 		self.textUpdate("Escolha com quem quer jogar. Use as setas para escolher e Enter para selecionar!", statusScreen, statusSize, 10);
-
-
 		
 		var start = function(inicio = true){
 			if(self.morte == false) drawBack(screen, gameSize, self.back);
@@ -127,7 +125,7 @@ var jogo = function () {
 							if(type == 1 && bodies[z].vidas > 0){
 								bodies[z].vidas--;
 								spell.splice(f, 1);
-								break;
+								return z;
 							}
 							else{
 								bodies.splice(z, 1);
@@ -137,6 +135,7 @@ var jogo = function () {
 						}
 					}
 				}
+				return false;
 			};
 			
 			//funcao de colisao com as magias do player com mob.
@@ -146,7 +145,11 @@ var jogo = function () {
 			
 			//funcao de colisao magias mob com player
 			if(this.spellArrMob.length > 0){
-				colideFunc(this.bodies, this.spellArrMob, 1);
+				var colideReturn = false;
+				colideReturn = colideFunc(this.bodies, this.spellArrMob, 1);
+				if(colideReturn != false) this.bodies[colideReturn].colideReturnPlayer = true;
+				//if(colideReturnPlayer) this.colideReturnPlayer = true;
+				//else this.colideReturnPlayer = false;
 			}
 			
 			
@@ -168,13 +171,13 @@ var jogo = function () {
 			drawBack(screen, gameSize, back);
 			
 			for (var i = 0; i < this.bodies.length; i++){
-				drawRect(screen, this.bodies[i]);
+				drawBody(screen, this.bodies[i]);
 			}
 			for (var j = 0; j < this.spellArr.length; j++){
-				drawRect(screen, this.spellArr[j]);
+				drawBody(screen, this.spellArr[j]);
 			}
 			for (var z = 0; z < this.spellArrMob.length; z++){
-				drawRect(screen, this.spellArrMob[z]);
+				drawBody(screen, this.spellArrMob[z]);
 			}
 		},
 		
@@ -291,6 +294,8 @@ var jogo = function () {
 		this.gameSize = gameSize;
 		this.canvas = canvas;
 		this.playerImg = img;
+		this.colideReturnPlayer = false;
+		this.playerAnimation = 0;
 		this.size = { x: 32, y: 32};
 		this.center = { x: gameSize.x / 2, y: gameSize.y - this.size.y };
 		this.keyboarder = new Keyboarder(this, this.canvas);
@@ -425,28 +430,44 @@ var jogo = function () {
 				);
 	};
 	
-	var drawRect = function(screen, body){
+	//FUNCOES PARA DESENHAR O JOGADOR E MOBS NA TELA
+	var drawBody = function(screen, body){
 		var img = new Image();
+		var corpo = false;
+		var desenhar = true;
 		
 		if(body instanceof Player){
+			corpo = true;
 			img.src = "imgs/player/" + body.playerImg + ".png";
+			if(body.colideReturnPlayer){
+				var desenhar = false;
+				body.playerAnimation++;
+				body.size.x -= 3;
+				body.size.y -= 3;
+			}
 		} else if(body instanceof Spell){
 			img.src = "http://i.imgur.com/VAW78xv.png";
 		} else if(body instanceof Enemy){
 			img.src = "http://i.imgur.com/LGfOQtu.png";
+		}		
+		
+		if(desenhar){
+			screen.drawImage(img, 
+							body.center.x - body.size.x / 2,
+							body.center.y - body.size.y / 2,
+							body.size.x, body.size.y);
 		}
-		screen.drawImage(img, 
-						body.center.x - body.size.x / 2,
-						body.center.y - body.size.y / 2,
-						body.size.x, body.size.y);
-	};
-
-	//CARREGAR ASSETS ANTES DO JOGO
-	var loadAssets = function(){
-		var img = new Image();
-		for(var x = 0; x < backMax; x++){
-			img.src = "imgs/bgs/" + x + ".jpg";
+		
+		if(corpo && body.playerAnimation > 0){
+			body.colideReturnPlayer = false;
+			body.playerAnimation++;
+			if(body.playerAnimation > 5){
+				body.playerAnimation = 0;
+				body.size.x += 3;
+				body.size.y += 3;
+			}
 		}
+		
 	};
 	
 	//DESENHAR FUNDO DO JOGO
@@ -454,6 +475,9 @@ var jogo = function () {
 		if(back > backMax) back = backMax;
 		var img = new Image();
 		img.src = "imgs/bgs/" + back + ".jpg";
+		img.addEventListener("success", function(e){
+			console.log(e);
+		});
 		return img;
 	};
 	
@@ -603,7 +627,7 @@ var jogo = function () {
 				var local = e.changedTouches;
 				posTouch[0] = local.item(0).clientX - canvasRect.left + window.pageXOffset;
 				posTouch[1] = local.item(0).clientY - rect.offsetTop + window.pageYOffset - margin
-				//console.log(posTouch);
+				console.log(posTouch);
 				if(player instanceof Player) codeX = movimentoX(player, posTouch[0]);
 				keyState[codeX] = true;
 				keyState[32] = true;
@@ -652,7 +676,19 @@ var jogo = function () {
 	
 }; 
 
+//CARREGAR ASSETS ANTES DO JOGO
+var loadAssets = function(){
+	for(var x = 0; x <= backMax; x++){
+		var img = new Image();
+		img.src = "imgs/bgs/" + x + ".jpg";
+		//console.log(img);
+	}
+};
+
 
 var inicio = function() {
+	
+	loadAssets(); //CHAMADA DA FUNCAO QUE CARREGA OS FUNDOS.
 	jogo();
+	
 };
