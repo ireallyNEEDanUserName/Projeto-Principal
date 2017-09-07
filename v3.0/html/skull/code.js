@@ -1,8 +1,8 @@
 var backMax = 4;
+var imgJogadorMax = 3;
 
 var jogo = function () {
 	//Definicoes do jogo;
-	var imgJogadorMax = 3;
 	var pressionado = false;
 	
 	var Game = function(canvasId, statusId) {
@@ -678,10 +678,19 @@ var loadAssets = function(){
 	for(var x = 0; x <= backMax; x++){
 		var img = new Image();
 		img.addEventListener("load", function(e){
-			console.log(e);
+			console.log("Carregou Fundo");
 		});
 		img.src = "imgs/bgs/" + x + ".jpg";
 	}
+	
+	for(var y = 0; y <= imgJogadorMax; y++){
+		var img = new Image();
+		img.addEventListener("load", function(e){
+			console.log("Carregou Jogador");
+		});
+		img.src = "imgs/player/" + y + ".png";
+	}
+	
 };
 
 
