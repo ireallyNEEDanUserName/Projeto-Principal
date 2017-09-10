@@ -23,7 +23,11 @@ var jogo = function () {
 			if(retorno != false && retorno > 10001) this.fase = retorno - 10000;
 			else this.fase = 1;
 		}		
-
+		
+		this.loopTexto = 0;
+		this.loopTextoEspera = 0;
+		var tamanhoLetra = 13;
+		
 		this.qtdEnemy = 9;
 		this.back = 0;
 		this.morte = false;
@@ -34,6 +38,7 @@ var jogo = function () {
 
 		this.nome = document.getElementById("caixaNome").value;
 		this.tipo = document.getElementById("tipo").getAttribute("val");
+		if(this.tipo == "p") tamanhoLetra = 20;
 		var self = this;
 		var bodies;
 		var localPlayer;
@@ -46,8 +51,6 @@ var jogo = function () {
 		var teclado = new Keyboarder(this, canvas);
 		var keys = teclado.KEYS;
 		var opcoes = new Array();
-		
-		self.textUpdate("Escolha com quem quer jogar. Use as setas para escolher e Enter para selecionar!", statusScreen, statusSize, 10);
 		
 		var start = function(inicio = true){
 			if(self.morte == false) drawBack(screen, gameSize, self.back);
@@ -63,6 +66,8 @@ var jogo = function () {
 		
 		var tick = function() {
 			if(!iniciarJogo){
+				self.textUpdate("Escolha com quem quer jogar. Use as setas para escolher e Enter para selecionar!", 
+								statusScreen, statusSize, tamanhoLetra);
 				drawBack(screen, gameSize, self.back);
 				opcoes = escolherPlayer(screen, gameSize, retornarEscolha[0]);
 				retornarEscolha = escolherPlayerUpdate(retornarEscolha, teclado, opcoes);
@@ -82,7 +87,7 @@ var jogo = function () {
 					drawBack(screen, gameSize, "preto");
 					var codigo = verf(self.fase + 10000, true).toString();				
 					while(codigo.includes(",")) codigo = codigo.replace(",", "");
-					self.textUpdate(("Codigo da Fase " + self.fase + " : " + codigo), screen, gameSize, 30, "white", true);
+					self.imprimirTexto(("Codigo da Fase " + self.fase + ": " + codigo), screen, gameSize, 25, "white", true);
 					iterateEspera++;
 				}
 				else if(!drawWait || mudouFase){
@@ -106,7 +111,7 @@ var jogo = function () {
 				else if(end == "enemy") start(false);
 			
 				if(!(self.bodies[localPlayer] instanceof Player)) localPlayer = verfPlayer(self.bodies);
-				self.textUpdate((self.nome + " | Fase: " + self.fase + " Vidas: " + self.bodies[localPlayer].vidas), statusScreen, statusSize, 15);
+				self.imprimirTexto((self.nome + " | Fase: " + self.fase + " Vidas: " + self.bodies[localPlayer].vidas), statusScreen, statusSize, 15);
 			}
 			requestAnimationFrame(tick);
 		};
@@ -232,10 +237,33 @@ var jogo = function () {
 			}
 		},
 		
-		textUpdate: function(text, statusScreen, statusSize, tam, color = "black", clear = false){ //Texto na barra de status em cima do jogo.
+		verfTexto: function(text){
+			var textSlice = new Array();
+			var cortar = false;
+			var local = text.length / 2;
+			var wait = false;
+			
+			if(text.length > 10){
+				wait = true;
+				while(!cortar){
+					if(local < text.length){
+						if(text[local] == " ") cortar = true;
+						else local++;
+					}
+					else cortar = true;
+				}
+				textSlice[0] = text.slice(0, local);
+				textSlice[0] += " ...";
+				textSlice[1] = text.slice(local, text.length);
+			}
+			if(wait) return textSlice;
+			else return false;
+		},
+		
+		imprimirTexto: function(text, statusScreen, statusSize, tam, color = "black", clear = false){ //Texto na barra de status em cima do jogo.
 			statusScreen.font = 'italic ' + tam + 'pt Arial' + color;
 			statusScreen.textAlign = 'center';
-			
+
 			if(!clear){
 				statusScreen.clearRect(0, 0, statusSize.x, statusSize.y);
 				statusScreen.strokeText(text, statusSize.x / 2, statusSize.y / 2);
@@ -244,7 +272,23 @@ var jogo = function () {
 				statusScreen.fillStyle = color;
 				statusScreen.fillText(text, statusSize.x / 2, statusSize.y / 2);
 			}
-			
+		},
+		
+		textUpdate: function(text, screen, status, sizeLetra){
+			var texto = this.verfTexto(text);
+			if(texto != false){
+				this.imprimirTexto(texto[this.loopTexto], screen, status, sizeLetra);
+				this.loopTextoEspera++;
+			}
+			else{
+				this.imprimirTexto(text, screen, status, sizeLetra);
+			}
+				
+			if(this.loopTextoEspera == 100){
+				this.loopTextoEspera = 0;
+				this.loopTexto++;
+				if(this.loopTexto > 1) this.loopTexto = 0;
+			}
 		},
 
 		dadosReturn: function(){
