@@ -21,21 +21,21 @@ body,html {
 }
 
 #topo {
-        width: 1000px;
-        height: auto;
-        margin: auto;
-        text-align: center;
-        /*border: 5px solid pink;*/
+    width: 1000px;
+    height: auto;
+    margin: auto;
+    text-align: center;
+    /*border: 5px solid pink;*/
 }
 
 #centro {
-        width: 1035px;
+    width: 700px;
     height: 562px;
-        top: 90px;
-        left: 176px;
+    top: 90px;
+    left: 28%;
     position: absolute;
-        color: black;
-        margin: auto;
+    color: black;
+    margin: auto;
 }
 
 #menu {
