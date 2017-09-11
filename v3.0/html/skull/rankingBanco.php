@@ -24,7 +24,11 @@
 				<th>Nome</th>
 				<th>Fase</th>
 			</tr>";
-		for($i = 0; $i < count($all); $i++){
+		
+		$s = 0;
+		if(count($all) > 10) $s = 10;
+		else $s = $all;
+		for($i = 0; $i <= $s; $i++){
 			echo "<tr>";
 			echo "<td>" . ($i + 1) . "</td>";
 			foreach($all[$i] as $key => $value) {
@@ -43,8 +47,10 @@
 				<th>Nome</th>
 				<th>Fase</th>
 			</tr>";
-
-		for($i = 0; $i < count($allP); $i++){
+		
+		if(count($allP) > 10) $s = 10;
+		else $s = $allP;
+		for($i = 0; $i <= $s; $i++){
 			echo "<tr>";
 			echo "<td>" . ($i + 1) . "</td>";
 			foreach($allP[$i] as $key => $value) {
