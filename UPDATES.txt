@@ -17,3 +17,9 @@ Realizada mais uma tentativa de carregar as imagens de fundo antes do jogo come�
 Configurado o mobile.js para carregar a versão mobile de qualquer pagina.
 Feito codigo da fase aparecer a cada 5 LVLS.
 --------------------------------------------------------
+
+--------------------- 10/09/17--------------------------
+Feito barra de loading para os assets do jogo.
+Atualizado o codigo para não iniciar o jogo se tiver asset faltando ou enquanto não carregar.
+Centralizado o jogo na pagina.
+--------------------------------------------------------
