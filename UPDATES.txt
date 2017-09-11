@@ -22,4 +22,5 @@ Feito codigo da fase aparecer a cada 5 LVLS.
 Feito barra de loading para os assets do jogo.
 Atualizado o codigo para não iniciar o jogo se tiver asset faltando ou enquanto não carregar.
 Centralizado o jogo na pagina.
+Criado função para dividir o texto do status para caber no mobile.
 --------------------------------------------------------
