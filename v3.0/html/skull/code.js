@@ -15,6 +15,8 @@ var jogo = function () {
 		var gameSize = { x: canvas.width, y: canvas.height };
 		var statusSize = { x: canvasStatus.width, y: canvasStatus.height };
 		
+		console.log("Comeco do Jogo");
+		
 		//Pegar o codigo digitado em coedigoFase e validar o mesmo e atribuir a fase.
 		if(document.getElementById("codigoFase").value == "") this.fase = 1;
 		else{
@@ -739,32 +741,70 @@ var jogo = function () {
 	
 	var jogo = new Game("screen", "status");
 	
-}; 
+};
 
 //CARREGAR ASSETS ANTES DO JOGO
-var loadAssets = function(){
-	for(var x = 0; x <= backMax; x++){
-		var img = new Image();
-		img.addEventListener("load", function(e){
-			console.log("Carregou Fundo");
-		});
-		img.src = "imgs/bgs/" + x + ".jpg";
-	}
+var loadAssets = function(tipo = false){
 	
-	for(var y = 0; y <= imgJogadorMax; y++){
-		var img = new Image();
-		img.addEventListener("load", function(e){
-			console.log("Carregou Jogador");
-		});
-		img.src = "imgs/player/" + y + ".png";
-	}
+	//diz qual o numero de fundos e jogadores
+	if(!tipo) var max = backMax;
+	else var max = imgJogadorMax;
 	
+	var deferred = $.Deferred();
+	var sucesso = true;
+	var i = 0;
+	
+	//funcao que carrega os fundos e jogadores
+	var fundo = function(){
+		if(i <= max && sucesso){
+			var imgF = new Image();
+			
+			if(!tipo) imgF.src = "imgs/bgs/" + i + ".jpg";
+			else imgF.src = "imgs/player/" + i + ".png";
+			
+			i++;
+			deferred.notify(i);
+			imgF.addEventListener("load", fundo); //chama o load(funcao fundo()) denovo quando o fundo ja tiver sido carregado.
+			imgF.addEventListener("error", function(){
+				sucesso = false //para de chamar o load quando nao achou a img.
+			});
+			
+		}
+		else{
+			deferred.resolve(sucesso); //quando termina o loop manda o resultado devolta.
+		}
+	};
+	fundo();
+	return deferred.promise();	
 };
 
 
 var inicio = function() {
+
+	/* CHAMADA DA FUNCAO QUE CARREGA OS FUNDOS. LOADASSETS() */
+	var promise = loadAssets();
 	
-	loadAssets(); //CHAMADA DA FUNCAO QUE CARREGA OS FUNDOS.
-	jogo();
+	//mostra a barra de progreco do load
+	promise.progress(function(prog){
+		console.log(prog);
+	});
+	
+	//Chama o jogo depois de ter baixado as imagens
+	promise.then(function(result){
+		if(result){
+			promise = loadAssets(true); //chama o load dos jogadores.
+			
+			//barra de load dos jogadores.
+			promise.progress(function(prog){
+				console.log(prog); 
+			});
+			
+			
+			promise.then(function(result){
+				if(result) jogo(); //chama o jogo se tudo foi carregado corretamente.
+				else $("#screen").toggleClass('error'); //mostra pagina de erro se nao carregou algo.
+			});
+		}
+	});
 	
 };
