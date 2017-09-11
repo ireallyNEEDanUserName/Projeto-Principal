@@ -29,8 +29,10 @@ var start = function(){
 	var nome = $("#caixaNome").val();
 	if(nome.length != 0){
 		$("#form").fadeOut("fast");
-		$("#status").show("fast");
-		$("#screen").show("fast");
+		$("#textoBarra").show("fast");
+		$("#barraProgresso").show("fast");
+		$("#barra").show("fast");
+		
 		inicio();
 	}
 };
