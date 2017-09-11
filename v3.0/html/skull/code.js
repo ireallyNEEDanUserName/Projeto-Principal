@@ -778,29 +778,54 @@ var loadAssets = function(tipo = false){
 	return deferred.promise();	
 };
 
+var carregarBarra = function(tamanho, barra, aumento){
+
+	barra.style.width = tamanho * aumento + '%';
+	barra.innerHTML = tamanho * aumento + '%';
+	tamanho++;
+	return tamanho;
+};
+
 
 var inicio = function() {
+	
+	var barra = document.getElementById("barra");
+	var texto = document.getElementById("textoBarra");
+	var tamanho = 0;
 
 	/* CHAMADA DA FUNCAO QUE CARREGA OS FUNDOS. LOADASSETS() */
 	var promise = loadAssets();
 	
 	//mostra a barra de progreco do load
 	promise.progress(function(prog){
+		aumento = 100 / backMax;
 		console.log(prog);
+		texto.innerHTML = "LOAD DOS MAPAS DO JOGO";
+		tamanho = carregarBarra(tamanho, barra, aumento);
 	});
 	
 	//Chama o jogo depois de ter baixado as imagens
 	promise.then(function(result){
 		if(result){
 			promise = loadAssets(true); //chama o load dos jogadores.
+			tamanho = 0;
 			
 			//barra de load dos jogadores.
 			promise.progress(function(prog){
 				console.log(prog); 
+				aumento = 100 / imgJogadorMax;
+				texto.innerHTML = "LOAD DOS PERSONAGENS DO JOGO";
+				tamanho = carregarBarra(tamanho, barra, aumento);
 			});
-			
-			
+						
 			promise.then(function(result){
+			
+				$("#barraProgresso").fadeOut("fast");
+				$("#barra").fadeOut("fast");
+				$("#textoBarra").fadeOut("fast");
+				
+				$("#status").show("fast");
+				$("#screen").show("fast");
 				if(result) jogo(); //chama o jogo se tudo foi carregado corretamente.
 				else $("#screen").toggleClass('error'); //mostra pagina de erro se nao carregou algo.
 			});
