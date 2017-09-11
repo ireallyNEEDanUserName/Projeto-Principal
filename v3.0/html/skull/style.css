@@ -27,6 +27,12 @@ table, td, th {
 	background-size: cover;
 }
 
+#screen.error {
+	background-image: url("imgs/bgs/error.jpg");
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+}
+
 #form{
 	width: 240px;
 	background-color: #3377ff;
