@@ -17,19 +17,25 @@ var jogo = function () {
 		
 		console.log("Comeco do Jogo");
 		
+		this.tipo = document.getElementById("tipo").getAttribute("val");
+		var tamanhoLetra = 13;
+		if(this.tipo == "p") tamanhoLetra = 20;
+		
 		//Pegar o codigo digitado em coedigoFase e validar o mesmo e atribuir a fase.
 		if(document.getElementById("codigoFase").value == "") this.fase = 1;
 		else{
 			var retorno = verf(document.getElementById("codigoFase").value);
 			//console.log(retorno);
-			if(retorno != false && retorno > 10001) this.fase = retorno - 10000;
+			if(retorno != false && retorno > 10001){
+				this.fase = retorno - 10000;
+				this.tipo += "h";
+			}
 			else this.fase = 1;
-		}		
+		}
 		
 		this.loopTexto = 0;
 		this.loopTextoEspera = 0;
-		var tamanhoLetra = 13;
-		
+			
 		this.qtdEnemy = 9;
 		this.back = 0;
 		this.morte = false;
@@ -39,8 +45,7 @@ var jogo = function () {
 		this.codigoFase = false;
 
 		this.nome = document.getElementById("caixaNome").value;
-		this.tipo = document.getElementById("tipo").getAttribute("val");
-		if(this.tipo == "p") tamanhoLetra = 20;
+		
 		var self = this;
 		var bodies;
 		var localPlayer;
