@@ -12,6 +12,33 @@ table, td, th {
 	background-color: #CFCFCF;
 }
 
+#textoBarra{
+	display: none;
+	font-family: Verdana;
+	border: none;
+	background-color: #32CD32;
+	color: white;
+	padding: 5px 7px 5px 7px;
+	text-align: center;
+}
+
+#barraProgresso {
+	display: none;
+	width: 100%;
+	background-color: grey;
+	margin: auto;
+}
+
+#barra {
+	display: none;
+	width: 0%;
+	height: 30px;
+	background-color: white;
+	text-align: center;
+	line-height: 30px;
+	color: black;
+}
+
 
 #tipo {
 	display: none;
