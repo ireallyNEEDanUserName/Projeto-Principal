@@ -23,4 +23,6 @@ Feito barra de loading para os assets do jogo.
 Atualizado o codigo para não iniciar o jogo se tiver asset faltando ou enquanto não carregar.
 Centralizado o jogo na pagina.
 Criado função para dividir o texto do status para caber no mobile.
+Mostrar somente os dez primeiros colocados no ranking.
+Adicionado extenção "h" em jogo que codigo foi usado.
 --------------------------------------------------------
