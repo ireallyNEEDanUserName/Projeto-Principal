@@ -758,6 +758,7 @@ var loadAssets = function(tipo = false){
 	var deferred = $.Deferred();
 	var sucesso = true;
 	var i = 0;
+	var u = 0;
 	
 	//funcao que carrega os fundos e jogadores
 	var fundo = function(){
@@ -774,6 +775,21 @@ var loadAssets = function(tipo = false){
 				sucesso = false //para de chamar o load quando nao achou a img.
 			});
 			
+		}
+		else if(i > max && sucesso && !tipo && u <= 2){
+			var imgF = new Image();
+			
+			if(u == 0) imgF.src = "imgs/bgs/gameOver.jpg";
+			else if(u == 1) imgF.src = "imgs/bgs/preto.jpg";
+			else imgF.src = "imgs/bgs/error.jpg";
+			
+			u++;
+			deferred.notify((i + u));
+			
+			imgF.addEventListener("load", fundo); //chama o load(funcao fundo()) denovo quando o fundo ja tiver sido carregado.
+			imgF.addEventListener("error", function(){
+				sucesso = false //para de chamar o load quando nao achou a img.
+			});
 		}
 		else{
 			deferred.resolve(sucesso); //quando termina o loop manda o resultado devolta.
