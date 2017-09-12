@@ -31,4 +31,6 @@ Adicionado extenção "h" em jogo que codigo foi usado.
 Incluido no load as paginas de gameOver, preta e error.
 Aidiconado animação nos mobs quando são acertados por uma magia.
 Removido o excesso de mobs nas fases mais altar e inserido vidas, menos mobs e mais de uma vida cada, removendo o lag em qualquer fase.
+Diminuido a letra do codigo da fase no mobile.
+Aumentado o numero maximo de magias no jogo.
 --------------------------------------------------------
