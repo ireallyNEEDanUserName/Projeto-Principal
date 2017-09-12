@@ -18,7 +18,7 @@ var jogo = function () {
 		console.log("Comeco do Jogo");
 		
 		this.tipo = document.getElementById("tipo").getAttribute("val");
-		var tamanhoLetra = 11;
+		var tamanhoLetra = 13;
 		if(this.tipo == "p") tamanhoLetra = 20;
 		
 		//Pegar o codigo digitado em coedigoFase e validar o mesmo e atribuir a fase.
@@ -94,7 +94,7 @@ var jogo = function () {
 					drawBack(screen, gameSize, "preto");
 					var codigo = verf(self.fase + 10000, true).toString();				
 					while(codigo.includes(",")) codigo = codigo.replace(",", "");
-					self.imprimirTexto(("Codigo da Fase " + self.fase + ": " + codigo), screen, gameSize, 25, "white", true);
+					self.imprimirTexto(("Codigo da Fase " + self.fase + ": " + codigo), screen, gameSize, 22, "white", true);
 					iterateEspera++;
 				}
 				else if(!drawWait || mudouFase){
