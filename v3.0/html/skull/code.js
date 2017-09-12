@@ -18,7 +18,7 @@ var jogo = function () {
 		console.log("Comeco do Jogo");
 		
 		this.tipo = document.getElementById("tipo").getAttribute("val");
-		var tamanhoLetra = 13;
+		var tamanhoLetra = 11;
 		if(this.tipo == "p") tamanhoLetra = 20;
 		
 		//Pegar o codigo digitado em coedigoFase e validar o mesmo e atribuir a fase.
@@ -202,7 +202,7 @@ var jogo = function () {
 		},
 		
 		addBodyMob: function(body){ //Adicionar magia do mob na Array.
-			if(this.spellArrMob.length <= (this.bodies.length / 3) + 1) this.spellArrMob.push(body);
+			if(this.spellArrMob.length <= (this.bodies.length / 2) + 1) this.spellArrMob.push(body);
 		},
 		
 		end: function(){ //Verificar morte do jogador ou de todos mobs para proxima fase ou Game Over.
