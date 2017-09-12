@@ -118,7 +118,7 @@ var jogo = function () {
 				else if(end == "enemy") start(false);
 			
 				if(!(self.bodies[localPlayer] instanceof Player)) localPlayer = verfPlayer(self.bodies);
-				self.imprimirTexto((self.nome + " | Fase: " + self.fase + " Vidas: " + self.bodies[localPlayer].vidas), statusScreen, statusSize, 15);
+				self.imprimirTexto((self.nome + " | Fase: " + self.fase + " Vidas: " + self.bodies[localPlayer].vida), statusScreen, statusSize, 15);
 			}
 			requestAnimationFrame(tick);
 		};
@@ -145,14 +145,11 @@ var jogo = function () {
 					for (var f = 0; f < spell.length; f++){						
 						colide = colliding(bodies[z], spell[f]);
 						if(colide){
-							if(type == 1 && bodies[z].vidas > 0){
-								bodies[z].vidas--;
-								spell.splice(f, 1);
-								return z;
-							}
-							else{
-								bodies.splice(z, 1);
-								spell.splice(f, 1);
+							if(bodies[z].vida > 0){
+								bodies[z].vida--; //Tira vida do mob atingido
+								spell.splice(f, 1); //Remove a magia que acertou o mob.
+								if(bodies[z].vida <= 0) bodies.splice(z, 1); //Se vida menor ou igual a 0 remove o mob da lista.	
+								else bodies[z].acertou = true; //Poem em verdadeiro o acerto no mob q nao morreu, para realizar a animacao.
 								break;
 							}
 						}
@@ -168,11 +165,7 @@ var jogo = function () {
 			
 			//funcao de colisao magias mob com player
 			if(this.spellArrMob.length > 0){
-				var colideReturn = false;
-				colideReturn = colideFunc(this.bodies, this.spellArrMob, 1);
-				if(colideReturn != false) this.bodies[colideReturn].colideReturnPlayer = true;
-				//if(colideReturnPlayer) this.colideReturnPlayer = true;
-				//else this.colideReturnPlayer = false;
+				colideFunc(this.bodies, this.spellArrMob, 1);
 			}
 			
 			
@@ -238,7 +231,7 @@ var jogo = function () {
 				if((this.fase % 5) == 0){
 					this.codigoFase = true;
 					this.back++;
-					this.bodies[playerPos].vidas++;
+					this.bodies[playerPos].vida++;
 				}
 				return "enemy";
 			}
@@ -369,13 +362,13 @@ var jogo = function () {
 		this.gameSize = gameSize;
 		this.canvas = canvas;
 		this.playerImg = img;
-		this.colideReturnPlayer = false;
-		this.playerAnimation = 0;
+		this.acertou = false;
+		this.Animation = 0;
 		this.size = { x: 32, y: 32};
 		this.center = { x: gameSize.x / 2, y: gameSize.y - this.size.y };
 		this.keyboarder = new Keyboarder(this, this.canvas);
 		this.spellCount = 10;
-		this.vidas = 2;
+		this.vida = 2;
 	};
 	
 	Player.prototype = {
@@ -438,6 +431,9 @@ var jogo = function () {
 		this.center = center;
 		this.patrolX = 0;
 		this.speedX = 0.7;
+		this.vida = 1;
+		this.acertou = false;
+		this.Animation = 0;
 	};
 	
 	Enemy.prototype = {
@@ -481,15 +477,36 @@ var jogo = function () {
 		var yAnt = 0;
 		
 		for (var i = 0; i < qtd; i++){
+			var mesmaPosicao = false;
+			//Designar a posicao X
 			var x = longe + (i % 11) + xAnt + tam;
 			xAnt = x;
+			//Designar a posicao Y
 			var y = longe + tam + + ((i % 4) * tam);
 			yAnt = y;
-			if(x < gameSize.x - 16 && y < gameSize.y) enemy.push(new Enemy(game, gameSize, { x: x, y: y }));
-			
+		
+			if(x < gameSize.x - 16 && y < gameSize.y){ //Ver se o x e y estao dentro da tela
+				if(i == 0){
+					enemy.push(new Enemy(game, gameSize, { x: x, y: y })); //Criar o primeiro inimigo
+					mesmaPosicao = true;
+				}
+				else{
+					for(var z = 0; z < enemy.length; z++){
+					
+						if(enemy[z].center.x == x){
+							mesmaPosicao = true;
+							enemy[z].vida++;
+							//console.log(enemy[z].vida);
+						}
+					}
+				}
+				
+				if(!mesmaPosicao) enemy.push(new Enemy(game, gameSize, { x: x, y: y }));
+			}
 			if(x >= gameSize.x) xAnt = 0;
 			else if(y >= gameSize.y) yAnt = 0;
 		}
+		
 		return enemy;
 	};
 	//FIM DAS FUNCOES MOBS
@@ -512,19 +529,22 @@ var jogo = function () {
 		var desenhar = true;
 		
 		if(body instanceof Player){
-			corpo = true;
 			img.src = "imgs/player/" + body.playerImg + ".png";
-			if(body.colideReturnPlayer){
-				var desenhar = false;
-				body.playerAnimation++;
-				body.size.x -= 3;
-				body.size.y -= 3;
-			}
 		} else if(body instanceof Spell){
 			img.src = "http://i.imgur.com/VAW78xv.png";
 		} else if(body instanceof Enemy){
 			img.src = "http://i.imgur.com/LGfOQtu.png";
 		}		
+		
+		if(!(body instanceof Spell)){
+			if(body.acertou){
+				var desenhar = false;
+				body.acertou = false;
+				body.Animation++;
+				body.size.x -= 3;
+				body.size.y -= 3;
+			}
+		}
 		
 		if(desenhar){
 			screen.drawImage(img, 
@@ -533,13 +553,12 @@ var jogo = function () {
 							body.size.x, body.size.y);
 		}
 		
-		if(corpo && body.playerAnimation > 0){
-			body.colideReturnPlayer = false;
-			body.playerAnimation++;
-			if(body.playerAnimation > 5){
-				body.playerAnimation = 0;
-				body.size.x += 3;
-				body.size.y += 3;
+		if(body.Animation > 0){
+			body.Animation++;
+			if(body.Animation > 5){
+				body.Animation = 0;
+				body.size.x = 32;
+				body.size.y = 32;
 			}
 		}
 		
