@@ -42,5 +42,6 @@ Adicionado comentario no Code.js
 --------------------- 13/09/17--------------------------
 Ajustado o mobile.js para carregar corretamente as paginas no moblie.
 Criada a busca por tabelas diferentes de ranking, EX: MOBILE, PC...
+Recarrega a pagina quando o jogador morreu, para selecionar outro nome.
 --------------------------------------------------------
 
