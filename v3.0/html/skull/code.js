@@ -520,12 +520,18 @@ var jogo = function () { //Função principal do jogo, com funções secundarias
 	
 	//FUNCÕES DO JOGO;
 	var colliding = function(b1, b2) { //Função de colisão dos corpos no jogo.	
-		return !(b1 === b2 ||
-				b1.center.x + b1.size.x / 2 < b2.center.x - b2.size.x / 2 ||
-				b1.center.y + b1.size.y / 2 < b2.center.y - b2.size.y / 2 ||
-				b1.center.x - b1.size.x / 2 > b2.center.x + b2.size.x / 2 ||
-				b1.center.y - b1.size.y / 2 > b2.center.y + b2.size.y / 2 
-				);
+		
+		if(b1.center != undefined && b2.center != undefined){
+			return !(b1 === b2 ||
+					b1.center.x + b1.size.x / 2 < b2.center.x - b2.size.x / 2 ||
+					b1.center.y + b1.size.y / 2 < b2.center.y - b2.size.y / 2 ||
+					b1.center.x - b1.size.x / 2 > b2.center.x + b2.size.x / 2 ||
+					b1.center.y - b1.size.y / 2 > b2.center.y + b2.size.y / 2 
+					);
+		}
+		else{
+			console.log("Erro na colisao entre: " + b1 + " : " + b2);
+		}
 	};
 	
 	//FUNCOES PARA DESENHAR O JOGADOR E MOBS NA TELA
@@ -680,7 +686,7 @@ var jogo = function () { //Função principal do jogo, com funções secundarias
 				(pos[1] >= opcoes.yC && pos[1] <= opcoes.yB))
 	};
 	
-	function wait(ms){
+	function wait(ms){ //Esperar determinados Milisegundos.
 		var start = new Date().getTime();
 		var end = start;
 		while(end < start + ms) {
