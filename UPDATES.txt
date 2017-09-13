@@ -38,3 +38,9 @@ Aumentado o numero maximo de magias no jogo.
 --------------------- 12/09/17--------------------------
 Adicionado comentario no Code.js
 --------------------------------------------------------
+
+--------------------- 13/09/17--------------------------
+Ajustado o mobile.js para carregar corretamente as paginas no moblie.
+Criada a busca por tabelas diferentes de ranking, EX: MOBILE, PC...
+--------------------------------------------------------
+
