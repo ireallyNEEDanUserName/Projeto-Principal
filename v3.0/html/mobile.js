@@ -3,6 +3,7 @@ var achar = function(texto){
 	for(var x = 0; x < texto.length; x++){
 		if("/" == texto[x]) ultimo = x;
 	}
+	//console.log(ultimo);
 	return ultimo + 1;
 }
 
@@ -22,9 +23,17 @@ function mobiDetect(userAgent, devices) {
 	return false;
 }
 if (mobiDetect(userAgent, devices)) {
+
+	//console.log(window.location.pathname[achar(window.location.pathname)] + " : " + window.location.pathname);
+
 	if(!window.location.href.includes("m.")){
-		var url_redirect = "m." + window.location.pathname.slice(achar(window.location.pathname));
-		//console.log(url_redirect);
+		if(window.location.pathname[achar(window.location.pathname)] != undefined){
+			var url_redirect = "m." + window.location.pathname.slice(achar(window.location.pathname));
+		}
+		else var url_redirect = "m.index.html";
+		
+		
+		console.log(url_redirect);
 		window.location.href = url_redirect;
 	}
 }
