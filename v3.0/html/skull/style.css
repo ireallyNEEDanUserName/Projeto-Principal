@@ -12,6 +12,13 @@ table, td, th {
 	background-color: #CFCFCF;
 }
 
+#textoRanking {
+	text-align: center;
+	background-color: black;
+	color: white;
+	width: 350px;
+}
+
 #textoBarra{
 	display: none;
 	font-family: Verdana;
