@@ -108,15 +108,11 @@ var jogo = function () { //Função principal do jogo, com funções secundarias
 				if(iterateEspera == 10){ //Muda o fundo quando ja tiver rodado dez vezes o loop principal.
 					
 					wait(2000); //Espera 2 segundos antes de continuar o codigo.
-					location.reload();
 					
-					/* JOGO COMEÇA DENOVO, NÃO PRECISA REINICIALIZAR DADOS.
-					if(self.morte == true) self.morte = false;
-					if(self.codigoFase == true) self.codigoFase = false;
+					if(self.morte == true) location.reload();
+					else if(self.codigoFase == true) self.codigoFase = false;
 					
 					iterateEspera = 0
-					
-					*/
 				}
 			
 				var end = self.end(); //Verifica se o jogo terminou.
