@@ -1,32 +1,32 @@
-var backMax = 4;
-var imgJogadorMax = 3;
+var backMax = 4; //Numero de mapas que o jogo tem, EX 0-4.
+var imgJogadorMax = 3; //Numero de opções de jogadores que o jogo tem. EX 0-3
 
-var jogo = function () {
+var jogo = function () { //Função principal do jogo, com funções secundarias definidas aqui.
 	//Definicoes do jogo;
 	var pressionado = false;
 	
-	var Game = function(canvasId, statusId) {
-		var canvas = document.getElementById(canvasId);
-		var canvasStatus = document.getElementById(statusId);
+	var Game = function(canvasId, statusId) { //Loop principal onde o jogo roda.
+		var canvas = document.getElementById(canvasId); //Tela principal do jogo.
+		var canvasStatus = document.getElementById(statusId); //Tela do status onde fica o texto da fase, vida e etc.
 		
-		var screen = canvas.getContext('2d');
+		var screen = canvas.getContext('2d'); 
 		var statusScreen = canvasStatus.getContext('2d');
 		
-		var gameSize = { x: canvas.width, y: canvas.height };
-		var statusSize = { x: canvasStatus.width, y: canvasStatus.height };
+		var gameSize = { x: canvas.width, y: canvas.height }; //Tamanho da tela do jogo.
+		var statusSize = { x: canvasStatus.width, y: canvasStatus.height }; //Tamanho da tela do status.
 		
-		console.log("Comeco do Jogo");
+		console.log("Comeco do Jogo"); 
 		
-		this.tipo = document.getElementById("tipo").getAttribute("val");
+		this.tipo = document.getElementById("tipo").getAttribute("val"); //Tipo de jogo, se mobile ou pc.
 		var tamanhoLetra = 13;
 		if(this.tipo == "p") tamanhoLetra = 20;
 		
 		//Pegar o codigo digitado em coedigoFase e validar o mesmo e atribuir a fase.
-		if(document.getElementById("codigoFase").value == "") this.fase = 1;
+		if(document.getElementById("codigoFase").value == "") this.fase = 1; //Se o codigo não for digitado na caixa de texto, vai para primeira fase.
 		else{
-			var retorno = verf(document.getElementById("codigoFase").value);
+			var retorno = verf(document.getElementById("codigoFase").value); //Chamada de função para verificar o codigo da fase.
 			//console.log(retorno);
-			if(retorno != false && retorno > 10001){
+			if(retorno != false && retorno > 10001){ //Se o codigo não existir ou for menor que 10001.
 				this.fase = retorno - 10000;
 				this.tipo += "h";
 			}
@@ -44,7 +44,7 @@ var jogo = function () {
 		this.mudouFase = false;
 		this.codigoFase = false;
 
-		this.nome = document.getElementById("caixaNome").value;
+		this.nome = document.getElementById("caixaNome").value; //Nome do jogador.
 		
 		var self = this;
 		var bodies;
@@ -59,7 +59,7 @@ var jogo = function () {
 		var keys = teclado.KEYS;
 		var opcoes = new Array();
 		
-		var start = function(inicio = true){
+		var start = function(inicio = true){ //Chama as funções caso a fase mude ou o player morra.
 			if(self.morte == false) drawBack(screen, gameSize, self.back);
 			if(inicio) self.bodies = createEnemy(self, gameSize, (self.qtdEnemy + self.fase)).concat(new Player(self, canvas, gameSize, retornarEscolha[0]));
 			else{
@@ -72,7 +72,7 @@ var jogo = function () {
 		};
 		
 		var tick = function() {
-			if(!iniciarJogo){
+			if(!iniciarJogo){ //Inicio do jogo onde voce seleciona com quem jogar.
 				self.textUpdate("Escolha com quem quer jogar. Use as setas para escolher e Enter para selecionar!", 
 								statusScreen, statusSize, tamanhoLetra);
 				drawBack(screen, gameSize, self.back);
@@ -84,13 +84,13 @@ var jogo = function () {
 				}
 			}
 			else{
-				self.update(gameSize);
+				self.update(gameSize); //Chama o update de tudo no jogo.
 				
-				if(self.morte == true){
+				if(self.morte == true){ //Se o carinha morreu ficar na pagina do game over.
 					drawBack(screen, gameSize, "gameOver");
 					iterateEspera++;
 				}
-				else if(self.codigoFase == true){
+				else if(self.codigoFase == true){ //Se mudou a fase ficar um tempo no codigo na tela.
 					drawBack(screen, gameSize, "preto");
 					var codigo = verf(self.fase + 10000, true).toString();				
 					while(codigo.includes(",")) codigo = codigo.replace(",", "");
@@ -104,23 +104,23 @@ var jogo = function () {
 				}
 				else drawWait = false;
 				
-				if(iterateEspera == 10){
+				if(iterateEspera == 10){ //Muda o fundo quando ja tiver rodado dez vezes o loop principal.
 				
 					if(self.morte == true) self.morte = false;
 					if(self.codigoFase == true) self.codigoFase = false;
 					
 					iterateEspera = 0
-					wait(2000);
+					wait(2000); //Espera 2 segundos antes de continuar o codigo.
 				}
 			
-				var end = self.end();
-				if(end == "player") start(true);
-				else if(end == "enemy") start(false);
+				var end = self.end(); //Verifica se o jogo terminou.
+				if(end == "player") start(true); //Chamar inicio do jogo se o jogador morreu.
+				else if(end == "enemy") start(false); //Chamar inicio do jogo se todos os mobs morreram.
 			
-				if(!(self.bodies[localPlayer] instanceof Player)) localPlayer = verfPlayer(self.bodies);
+				if(!(self.bodies[localPlayer] instanceof Player)) localPlayer = verfPlayer(self.bodies); //Verificar a localização do jogador para imprimir status na tela.
 				self.imprimirTexto((self.nome + " | Fase: " + self.fase + " Vidas: " + self.bodies[localPlayer].vida), statusScreen, statusSize, 15);
 			}
-			requestAnimationFrame(tick);
+			requestAnimationFrame(tick); //Chamada da função tick, fazendo loop no jogo.
 		};
 		tick();
 		
@@ -134,17 +134,17 @@ var jogo = function () {
 				return !(b1.center.x > gameSize.x || b1.center.x < 0 ||
 					b1.center.y < 0 || b1.center.y  > gameSize.y);
 			};
-			this.spellArr = this.spellArr.filter(longeDaTela);
-			this.spellArrMob = this.spellArrMob.filter(longeDaTela);
+			this.spellArr = this.spellArr.filter(longeDaTela); //Remover as magias do jogador que estão fora da tela.
+			this.spellArrMob = this.spellArrMob.filter(longeDaTela); //Remover as magias dos mobs que estão fora da tela.
 			
 			//funcao de colisao magia e corpos.
 			var colideFunc = function(bodies, spell, type){
 				var colide = false;
 				for (var z = 0; z < bodies.length; z++){
-					while(type == 1 && bodies[z] instanceof Enemy) z++;
-					for (var f = 0; f < spell.length; f++){						
-						colide = colliding(bodies[z], spell[f]);
-						if(colide){
+					while(type == 1 && bodies[z] instanceof Enemy) z++; //Se for magia dos mobs e o corpo for de um mob, pular para o proximo.
+					for (var f = 0; f < spell.length; f++){	//Testar todas as magias contra o corpo a cima selecionado.				
+						colide = colliding(bodies[z], spell[f]); //Testar se a magia esta no mesmo local que o corpo.
+						if(colide){ //Se a colisão for verdadeira.
 							if(bodies[z].vida > 0){
 								bodies[z].vida--; //Tira vida do mob atingido
 								spell.splice(f, 1); //Remove a magia que acertou o mob.
@@ -170,13 +170,13 @@ var jogo = function () {
 			
 			
 			for (var i = 0; i < this.bodies.length; i++){
-				this.bodies[i].update();
+				this.bodies[i].update(); //Atualizar a posição dos mobs e player no jogo.
 			}
 			for (var j = 0; j < this.spellArr.length; j++){
-				this.spellArr[j].update();
+				this.spellArr[j].update(); //Atualizar a posição das magias do jogador na tela.
 			}
 			for (var z = 0; z < this.spellArrMob.length; z++){
-				this.spellArrMob[z].update();
+				this.spellArrMob[z].update(); //Atualizar a posição das magias dos mobs na tela.
 			}
 
 			//console.log("Bodies: " + this.bodies.length + " spellMob: " + this.spellArrMob.length + " spellPlayer: " + this.spellArr.length);
@@ -184,16 +184,16 @@ var jogo = function () {
 		
 		//Desenhar tudo que aparece na tela, desde fundo ate personagens e magias.
 		draw: function(screen, gameSize, back) {
-			drawBack(screen, gameSize, back);
+			drawBack(screen, gameSize, back); //Desenhar o fundo da tela.
 			
 			for (var i = 0; i < this.bodies.length; i++){
-				drawBody(screen, this.bodies[i]);
+				drawBody(screen, this.bodies[i]); //Desenhar os corpos dos mobs e player na tela.
 			}
 			for (var j = 0; j < this.spellArr.length; j++){
-				drawBody(screen, this.spellArr[j]);
+				drawBody(screen, this.spellArr[j]); //Desenhar magias do jogador na tela.
 			}
 			for (var z = 0; z < this.spellArrMob.length; z++){
-				drawBody(screen, this.spellArrMob[z]);
+				drawBody(screen, this.spellArrMob[z]); //Desenhar magias dos mobs na tela.
 			}
 		},
 		
@@ -215,7 +215,7 @@ var jogo = function () {
 					player = true;
 					playerPos = i;
 				}
-				else if (this.bodies[i] instanceof Enemy) enemy = true; 
+				else if (this.bodies[i] instanceof Enemy) enemy = true;  //Se algum inimigo ainda restar na array retornar verdadeiro.
 			}
 			
 			if (!player){ //Se player morreu retornar fase para 1 e iniciar um novo jogo.
@@ -243,11 +243,11 @@ var jogo = function () {
 			var local = text.length / 2;
 			var wait = false;
 			
-			if(text.length > 10){
+			if(text.length > 10){ //Se o texto for maior que 10 caracteres, dividir ele em duas partes iguais.
 				wait = true;
-				while(!cortar){
+				while(!cortar){ //Enquanto cortar for falso, continuar o loop.
 					if(local < text.length){
-						if(text[local] == " ") cortar = true;
+						if(text[local] == " ") cortar = true; //Cortar somente em um espaço e não no meio de uma palavra.
 						else local++;
 					}
 					else cortar = true;
@@ -260,38 +260,39 @@ var jogo = function () {
 			else return false;
 		},
 		
-		imprimirTexto: function(text, statusScreen, statusSize, tam, color = "black", clear = false){ //Texto na barra de status em cima do jogo.
-			statusScreen.font = 'italic ' + tam + 'pt Arial' + color;
-			statusScreen.textAlign = 'center';
+		//Imprime o texto onde for mandado - Screen e Size da screen.
+		imprimirTexto: function(text, Screen, Size, tam, color = "black", clear = false){ //Texto na barra de status em cima do jogo.
+			Screen.font = 'italic ' + tam + 'pt Arial' + color;
+			Screen.textAlign = 'center';
 
 			if(!clear){
-				statusScreen.clearRect(0, 0, statusSize.x, statusSize.y);
-				statusScreen.strokeText(text, statusSize.x / 2, statusSize.y / 2);
+				Screen.clearRect(0, 0, Size.x, Size.y);
+				Screen.strokeText(text, Size.x / 2, Size.y / 2);
 			}
 			else{
-				statusScreen.fillStyle = color;
-				statusScreen.fillText(text, statusSize.x / 2, statusSize.y / 2);
+				Screen.fillStyle = color;
+				Screen.fillText(text, Size.x / 2, Size.y / 2);
 			}
 		},
 		
 		textUpdate: function(text, screen, status, sizeLetra){
-			var texto = this.verfTexto(text);
+			var texto = this.verfTexto(text); //Ver se o texto vai ser dividido ou não.
 			if(texto != false){
-				this.imprimirTexto(texto[this.loopTexto], screen, status, sizeLetra);
+				this.imprimirTexto(texto[this.loopTexto], screen, status, sizeLetra); //chama a função de imprimir o texto.
 				this.loopTextoEspera++;
 			}
 			else{
-				this.imprimirTexto(text, screen, status, sizeLetra);
+				this.imprimirTexto(text, screen, status, sizeLetra);  //chama a função de imprimir o texto.
 			}
 				
-			if(this.loopTextoEspera == 100){
+			if(this.loopTextoEspera == 100){ //Espera até mudar o texto em cima no status.
 				this.loopTextoEspera = 0;
 				this.loopTexto++;
 				if(this.loopTexto > 1) this.loopTexto = 0;
 			}
 		},
 
-		dadosReturn: function(){
+		dadosReturn: function(){ //Retorno dos dados do jogo para lançar no banco.
 			var dados = [this.nome, this.fase, this.tipo];
 			return dados;
 		}	
@@ -306,7 +307,7 @@ var jogo = function () {
 	//CODIGO PARA RANKING
 	var banco = function(nome, fase, tipo){
 
-		$.ajax({
+		$.ajax({ //Envia dados para a pagina que conecta com o banco e carrega as informções nele.
 			method: "POST",
 			url: "enviarBanco.php",
 			data: {'nome': nome,
@@ -374,7 +375,7 @@ var jogo = function () {
 	Player.prototype = {
 		update: function() {
 			var keys = this.keyboarder.KEYS;
-			
+			//Funções de movimento do jogador.
 			if (this.keyboarder.isDown(keys.LEFT) && this.center.x > 16){
 				this.center.x -= 2;
 			} else if (this.keyboarder.isDown(keys.RIGHT) && this.center.x < this.gameSize.x - 16){
@@ -388,8 +389,8 @@ var jogo = function () {
 			if (this.keyboarder.isDown(keys.SPACE) && this.spellCount == 10){
 				this.spellCount --;
 				var spell = new Spell(
-					{ x: this.center.x, y: this.center.y - this.size.x / 2},
-					{ x: 0, y: -4}
+					{ x: this.center.x, y: this.center.y - this.size.x / 2 },
+					{ x: 0, y: -4 }
 				);
 				this.game.addBody(spell);
 			}
@@ -400,7 +401,7 @@ var jogo = function () {
 		}
 	};
 	
-	var verfPlayer = function(bodies){
+	var verfPlayer = function(bodies){ //Verificar qual a posição do player na array de corpos.
 		var localPlayer;
 		for(var i = 0; i < bodies.length; i++){
 			if(bodies[i] instanceof Player) localPlayer = i;
@@ -411,15 +412,15 @@ var jogo = function () {
 	
 	//MAGIAS DO JOGO
 	var Spell = function(center, velocity) {
-		this.size = { x: 5, y: 5};
-		this.center = center;
-		this.velocity = velocity;
+		this.size = { x: 5, y: 5}; //Tamanho da magia.
+		this.center = center; //Posição da magia na tela.
+		this.velocity = velocity; //Velocidade da magia.
 	};
 	
 	Spell.prototype = {
 		update: function() {
-			this.center.x += this.velocity.x;
-			this.center.y += this.velocity.y;
+			this.center.x += this.velocity.x; //Adicionar a velocidade x na posição x da magia.
+			this.center.y += this.velocity.y; //Adicionar a velocidade y na posição y da magia.
 		}
 	};
 	
@@ -427,7 +428,7 @@ var jogo = function () {
 	var Enemy = function(game, gameSize, center) {
 		this.game = game;
 		this.gameSize = gameSize;
-		this.size = { x: 32, y: 32};
+		this.size = { x: 32, y: 32 };
 		this.center = center;
 		this.patrolX = 0;
 		this.speedX = 0.7;
@@ -438,6 +439,7 @@ var jogo = function () {
 	
 	Enemy.prototype = {
 		update: function() {
+			//Verificar se o mob ainda está dentro da tela na esquerda e direita, e se não inverter a velocidade dele.
 			if (verfPosLastMob("equerda", this.center.x) < 16 || verfPosLastMob("direita", this.center.x) > this.gameSize.x - 16){
 				this.speedX = -this.speedX;
 			}
@@ -493,7 +495,8 @@ var jogo = function () {
 				else{
 					for(var z = 0; z < enemy.length; z++){
 					
-						if(enemy[z].center.x == x){
+						if(enemy[z].center.x == x){ //Se algum inimigo estiver na mesma posição do que sera criado agora, aumentar a vida do que
+													//ja foi criado e esta na mesma posição e não criar um novo.
 							mesmaPosicao = true;
 							enemy[z].vida++;
 							//console.log(enemy[z].vida);
@@ -501,10 +504,11 @@ var jogo = function () {
 					}
 				}
 				
-				if(!mesmaPosicao) enemy.push(new Enemy(game, gameSize, { x: x, y: y }));
+				if(!mesmaPosicao) enemy.push(new Enemy(game, gameSize, { x: x, y: y })); //Se não estiver na mesma posição que nenhum outro mob
+																						// criar novo inimigo.
 			}
-			if(x >= gameSize.x) xAnt = 0;
-			else if(y >= gameSize.y) yAnt = 0;
+			if(x >= gameSize.x) xAnt = 0; //Ver se o x ainda está dentro da tela.
+			else if(y >= gameSize.y) yAnt = 0; //Ver se o y ainda está dentro da tela.
 		}
 		
 		return enemy;
@@ -513,7 +517,7 @@ var jogo = function () {
 	
 	
 	//FUNCÕES DO JOGO;
-	var colliding = function(b1, b2) {		
+	var colliding = function(b1, b2) { //Função de colisão dos corpos no jogo.	
 		return !(b1 === b2 ||
 				b1.center.x + b1.size.x / 2 < b2.center.x - b2.size.x / 2 ||
 				b1.center.y + b1.size.y / 2 < b2.center.y - b2.size.y / 2 ||
@@ -528,6 +532,7 @@ var jogo = function () {
 		var corpo = false;
 		var desenhar = true;
 		
+		//Ver qual tipo é o corpo e carregar a imagem correspondente.
 		if(body instanceof Player){
 			img.src = "imgs/player/" + body.playerImg + ".png";
 		} else if(body instanceof Spell){
@@ -536,24 +541,24 @@ var jogo = function () {
 			img.src = "http://i.imgur.com/LGfOQtu.png";
 		}		
 		
-		if(!(body instanceof Spell)){
-			if(body.acertou){
-				var desenhar = false;
-				body.acertou = false;
-				body.Animation++;
-				body.size.x -= 3;
-				body.size.y -= 3;
+		if(!(body instanceof Spell)){ //Se o corpo não for uma magia.
+			if(body.acertou){ //Se o corpo foi acertado por uma magia.
+				var desenhar = false; //Não desenhar o corpo na proxima vez para fazer o efeito de acerto.
+				body.acertou = false; //Setar a variavel acerto para falso.
+				body.Animation++; 
+				body.size.x -= 3; //Diminuir o tamanho X do corpo.
+				body.size.y -= 3; //Diminuir o tamanho Y do corpo.
 			}
 		}
 		
-		if(desenhar){
+		if(desenhar){ //Se desenhar for verdadeiro desenhar o corpo na tela.
 			screen.drawImage(img, 
 							body.center.x - body.size.x / 2,
 							body.center.y - body.size.y / 2,
 							body.size.x, body.size.y);
 		}
 		
-		if(body.Animation > 0){
+		if(body.Animation > 0){ //Se a animação for maior que 0 começar a animação.
 			body.Animation++;
 			if(body.Animation > 5){
 				body.Animation = 0;
@@ -838,7 +843,7 @@ var inicio = function() {
 	
 	//mostra a barra de progreco do load
 	promise.progress(function(prog){
-		aumento = 100 / (backMax + 3);
+		aumento = 100 / backMax;
 		console.log(prog);
 		texto.innerHTML = "LOAD DOS MAPAS DO JOGO";
 		tamanho = carregarBarra(tamanho, barra, aumento);
