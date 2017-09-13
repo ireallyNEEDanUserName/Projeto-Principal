@@ -112,7 +112,7 @@ var jogo = function () { //Função principal do jogo, com funções secundarias
 					if(self.morte == true) location.reload();
 					else if(self.codigoFase == true) self.codigoFase = false;
 					
-					iterateEspera = 0
+					iterateEspera = 0;
 				}
 			
 				var end = self.end(); //Verifica se o jogo terminou.
