@@ -89,7 +89,7 @@
 				</tr>";
 		
 			$s = 0;
-			if(count($all) > 10) $s = 10;
+			if(count($all) > 50) $s = 50;
 			else $s = count($all);
 			for($i = 0; $i < $s; $i++){
 				echo "<tr>";
