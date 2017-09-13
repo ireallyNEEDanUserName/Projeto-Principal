@@ -34,3 +34,7 @@ Removido o excesso de mobs nas fases mais altar e inserido vidas, menos mobs e m
 Diminuido a letra do codigo da fase no mobile.
 Aumentado o numero maximo de magias no jogo.
 --------------------------------------------------------
+
+--------------------- 12/09/17--------------------------
+Adicionado comentario no Code.js
+--------------------------------------------------------
