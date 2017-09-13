@@ -7,6 +7,14 @@
 	<link href="cardo.css" type="text/css" rel="stylesheet" media="all" />
 	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+	
+	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+  google_ad_client: "ca-pub-9731344339248002",
+  enable_page_level_ads: true
+  });
+</script> 
 
 	<body ng-app="">
 		<div id="topo">
