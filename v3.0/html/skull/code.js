@@ -62,13 +62,12 @@ var jogo = function () { //Função principal do jogo, com funções secundarias
 		var start = function(inicio = true){ //Chama as funções caso a fase mude ou o player morra.
 			if(self.morte == false) drawBack(screen, gameSize, self.back);
 			if(inicio) self.bodies = createEnemy(self, gameSize, (self.qtdEnemy + self.fase)).concat(new Player(self, canvas, gameSize, retornarEscolha[0]));
-			/* DESNECESSARIO POIS A PAGINA RECARREGA QUANDO O PLAYER MORRE.
 			else{ 
 				localPlayer = verfPlayer(self.bodies);
 				player = self.bodies[localPlayer];
 				self.bodies = createEnemy(self, gameSize, (self.qtdEnemy + self.fase)).concat(player);
 			}
-			*/
+			
 			self.spellArr = new Array();
 			self.spellArrMob = new Array();
 		};
