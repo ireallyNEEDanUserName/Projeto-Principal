@@ -8,9 +8,10 @@
 }
 
 body,html {
-    background-image: url("img/BG.jpg");
-    background-size: cover;
-	background-repeat: no-repeat;
+    background-image: url("img/teste.jpg");
+    background-size:cover;
+
+        color: red;
 }
 
 #todos {
@@ -30,13 +31,14 @@ body,html {
 }
 
 #centro {
-    width: 700px;
+    width: 1000px;
     height: 562px;
     top: 90px;
-    left: 28%;
+    left: 15%;
     position: absolute;
-    color: black;
     margin: auto;
+    border: 5px solid white;
+    color: red;
 }
 
 #menu {
@@ -45,7 +47,7 @@ body,html {
         top: 5px;
         float: left;
         position: absolute;
-        color: black;
+        color: red;
         text-align: center;
         /*border: 5px solid white;*/
 }
@@ -53,7 +55,7 @@ body,html {
 .botao {
         width: 110px;
         height: auto;
-        color: black;
+        color: red;
         text-align: center;
 }
 
@@ -102,3 +104,12 @@ body,html {
     background-size: cover;
 
 }
+
+#noticia1 {
+        width: 400px;
+        height: 200px;
+        border: 5px solid pink;
+        color: red;
+        position: relative;
+        float: center
+        }
