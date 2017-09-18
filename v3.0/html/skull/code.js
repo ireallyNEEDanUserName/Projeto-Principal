@@ -851,7 +851,7 @@ var inicio = function() {
 	
 	//mostra a barra de progreco do load
 	promise.progress(function(prog){
-		aumento = 100 / backMax;
+		aumento = 100 / (backMax + 3);
 		console.log(prog);
 		texto.innerHTML = "LOAD DOS MAPAS DO JOGO";
 		tamanho = carregarBarra(tamanho, barra, aumento);
