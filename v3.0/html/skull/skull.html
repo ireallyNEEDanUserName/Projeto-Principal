@@ -1,73 +1,73 @@
-<html>	
-	<head>
-		<title> Skull Invaders </title>
-		
-		<script type="text/javascript" src="../mobile.js"></script>
-		<script type="text/javascript" src="../jquery-3.2.1.js"></script>
-		<script type="text/javascript" src="../conf.js"></script>
-		<script type="text/javascript" src="code.js"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
-		
-		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-		<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-		
-		<link href="../logo.css" type="text/css" rel="stylesheet"/>
-		<link href="style.css" type="text/css" rel="stylesheet"/>
-		
-		
-		<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<html>
+        <head>
+                <title> Skull Invaders </title>
+
+                <script type="text/javascript" src="../mobile.js"></script>
+                <script type="text/javascript" src="../jquery-3.2.1.js"></script>
+                <script type="text/javascript" src="../conf.js"></script>
+                <script type="text/javascript" src="code.js"></script>
+                <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+
+                <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+                <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+
+                <link href="../logo.css" type="text/css" rel="stylesheet"/>
+                <link href="style.css" type="text/css" rel="stylesheet"/>
+
+
+                <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 <script>
   (adsbygoogle = window.adsbygoogle || []).push({
   google_ad_client: "ca-pub-9731344339248002",
   enable_page_level_ads: true
   });
-</script> 
-		
-	</head>
-	
-	<body ng-app="">
-		<p id="tipo" val="p"></p>
+</script>
 
-		<div id="topo"> 
-			<h1>Chegue o mais longe que puder!</h1>
-		</div>
-		
-		<div ng-include="'../menu.php'"> </div>
-		
-		<div id="centro">
-			<div id="canvas">
+        </head>
+
+        <body ng-app="">
+                <p id="tipo" val="p"></p>
+
+                <div id="topo">
+                        <h1>Chegue o mais longe que puder!</h1>
+                </div>
+
+                <div ng-include="'../menu.php'"> </div>
+
+                <div align='center' id="centro">
+                        <div id="canvas">
                 <canvas id="status" width="600" height="50">
                 </canvas>
-        	</div>
-        	
-        	<br />
-				
-			<div id="form">
-				<form>
-					<br>
-					<p id="textoNome">Nome de Usuario</p>
-					<input type="text" id="caixaNome"/>
-					<br>
-					<p id="textoNome">Codigo da Fase</p>
-					<input type="text" id="codigoFase"/>
-					<br>
-					<button type="button" id="jogoStart"> Start </button>
-				</form>
-			</div>
-				
-            <canvas id="screen" width="600" height="470" >
-            </canvas>	
-			
-			<p id="textoBarra"> LOAD </p>
-			<div id="barraProgresso">
-				<div id="barra">0%</div>
-			</div>
-		</div>
+                </div>
+
+                <br />
+
+                        <div id="form">
+                                <form>
+                                        <br>
+                                        <p id="textoNome">Nome de Usuario</p>
+                                        <input type="text" id="caixaNome"/>
+                                        <br>
+                                        <p id="textoNome">Codigo da Fase</p>
+                                        <input type="text" id="codigoFase"/>
+                                        <br>
+                                        <button type="button" id="jogoStart"> Start </button>
+                                </form>
+                        </div>
+
+            <canvas id="screen" width="600" height="470">
+            </canvas>
+
+                        <p id="textoBarra"> LOAD </p>
+                        <div id="barraProgresso">
+                                <div id="barra">0%</div>
+                        </div>
+                </div>
 
 
-		<div ng-include="'../publi_d.html'"> </div>
+                <div ng-include="'../publi_d.html'"> </div>
 
 
-	</body>
+        </body>
 
 <html>
