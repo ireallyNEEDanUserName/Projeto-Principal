@@ -26,6 +26,7 @@
         position: absolute;
         top: 20px;
         left: 20px;
+        color: black;
         }
 #dvid {
         width:10%;
@@ -34,6 +35,7 @@
         position: absolute;
         top: 20px;
         left: 267px;
+        color: black;
        }
 
 #dvfoto {
@@ -51,6 +53,7 @@
         position: absolute;
         top: 282px;
         left: 21px;
-	overflow: auto;
+        overflow: auto;
+        color: black;
         }
 
