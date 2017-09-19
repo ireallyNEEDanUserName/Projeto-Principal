@@ -1,6 +1,9 @@
 <?php
-
-	$tipo = $_POST["Ranking"];
+	
+	if($_POST == null){
+		$tipo = "todos";
+	} else $tipo = $_POST["Ranking"];
+	
 	$texto;
 
 	if($tipo == 'm') $texto = "MOBILE";
