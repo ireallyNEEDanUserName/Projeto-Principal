@@ -28,12 +28,14 @@
                         <form method="POST" action="ranking.php">
                                 <p id="textoRanking"> Selecione qual ranking deseja visualizar. </p>
                                 <select name="Ranking">
+                                        <option value="opcoes"> Opções </option>
                                         <option value="todos"> Todos Rankings </option>
                                         <option value="m"> Mobile </option>
                                         <option value="mh"> Mobile Com Codigo </option>
                                         <option value="p"> PC </option>
                                         <option value="ph"> PC Com Codigo </option>
                                 </select>
+                                Pesquisar: <input type="text" name="Pesquisa">
                                 <input type="submit" value="submit">
                         </form>
 
