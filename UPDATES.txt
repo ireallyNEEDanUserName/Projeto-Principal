@@ -48,4 +48,5 @@ Resolvido RARO bug de detecção de colisão.
 
 --------------------- 19/09/17--------------------------
 Teste para aparecer uma regra aleatoria de carta quando abre o site.
+Adicionado a opção para realizar pesquisa no ranking de jogadores.
 --------------------------------------------------------
