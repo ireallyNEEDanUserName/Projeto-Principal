@@ -1,8 +1,13 @@
 <?php
-	
-	if($_POST == null){
+
+	if(count($_POST) == 0){
 		$tipo = "todos";
-	} else $tipo = $_POST["Ranking"];
+	}
+	else if($_POST["Ranking"] != "opcoes"){
+		$tipo = $_POST["Ranking"];
+	} else if(array_key_exists("Pesquisa", $_POST)){
+		$tipo = $_POST["Pesquisa"];
+	}
 	
 	$texto;
 
@@ -10,6 +15,7 @@
 	else if($tipo == 'p') $texto = "PC";
 	else if($tipo == 'mh') $texto = "MOBILE COM CODIGO";
 	else if($tipo == 'ph') $texto = "PC COM CODIGO";
+	else if(array_key_exists("Pesquisa", $_POST)) $texto = $_POST["Pesquisa"];
 	
 	$strBanco = "host=localhost port=5432 dbname=skull user=skullusr password=S@k4lL!";
 	$strBancoTeste = "host=localhost port=5432 dbname=postgres user=postgres password=root";
@@ -21,8 +27,8 @@
 
 		if($_POST == null or $tipo == "todos"){
 
-   			$sql = "SELECT * FROM ranking WHERE tipo= 'm' ORDER BY fase desc"; 
-   			$pSql = "SELECT * FROM ranking WHERE tipo='p' ORDER BY fase desc"; 
+   			$sql = "SELECT * FROM ranking WHERE tipo= 'm' ORDER BY fase desc LIMIT 10"; 
+   			$pSql = "SELECT * FROM ranking WHERE tipo='p' ORDER BY fase desc LIMIT 10"; 
    		
    			$result = pg_query($conexao, $sql); 
    			$resultP = pg_query($conexao, $pSql);
@@ -39,10 +45,7 @@
 					<th>Fase</th>
 				</tr>";
 		
-			$s = 0;
-			if(count($all) > 10) $s = 10;
-			else $s = count($all);
-			for($i = 0; $i < $s; $i++){
+			for($i = 0; $i < count($all); $i++){
 				echo "<tr>";
 				echo "<td>" . ($i + 1) . "</td>";
 				foreach($all[$i] as $key => $value) {
@@ -61,10 +64,8 @@
 					<th>Nome</th>
 					<th>Fase</th>
 				</tr>";
-			
-			if(count($allP) > 10) $s = 10;
-			else $s = count($allP);
-			for($i = 0; $i < $s; $i++){
+
+			for($i = 0; $i < count($allP); $i++){
 				echo "<tr>";
 				echo "<td>" . ($i + 1) . "</td>";
 				foreach($allP[$i] as $key => $value) {
@@ -75,9 +76,9 @@
 			echo "</table>";
 
 		}
-		else{
+		else if($tipo == 'm' or $tipo == 'p' or $tipo == 'mh' or $tipo == 'ph'){
 
-			$sql = "SELECT * FROM ranking WHERE tipo= '$tipo' ORDER BY fase desc"; 
+			$sql = "SELECT * FROM ranking WHERE tipo= '$tipo' ORDER BY fase desc LIMIT 20"; 
    		
    			$result = pg_query($conexao, $sql);
    			$all = pg_fetch_all($result);
@@ -91,10 +92,7 @@
 					<th>Fase</th>
 				</tr>";
 		
-			$s = 0;
-			if(count($all) > 50) $s = 50;
-			else $s = count($all);
-			for($i = 0; $i < $s; $i++){
+			for($i = 0; $i < count($all); $i++){
 				echo "<tr>";
 				echo "<td>" . ($i + 1) . "</td>";
 				foreach($all[$i] as $key => $value) {
@@ -104,6 +102,37 @@
 			}
 			echo "<table>"; 
 
+		}
+		else{
+			$sql = "SELECT * FROM ranking WHERE name= '$tipo' ORDER BY fase desc"; 
+   		
+   			$result = pg_query($conexao, $sql);
+   			$all = pg_fetch_all($result);
+
+   			if($all != false){
+		
+				echo "<br>";
+				echo "<table>";
+				echo "<th colspan = " . "3 " .">RANKING DO JOGADOR " . strtoupper($texto) . "</th>";
+				echo "<tr>
+						<th>Posição</th>
+						<th>Nome</th>
+						<th>Fase</th>
+					</tr>";
+		
+				for($i = 0; $i < count($all); $i++){
+					echo "<tr>";
+					echo "<td>" . ($i + 1) . "</td>";
+					foreach($all[$i] as $key => $value) {
+						if($key !== 'tipo') echo "<td>" . $value . "</td>";
+					}
+					echo "</tr>";
+				}
+				echo "<table>";
+			}else{
+
+				echo "<p>JOGADOR " . strtoupper($tipo)  . " NÃO ENCONTRADO!!!</p>";
+			}
 		}
 
    		pg_close($conexao); 
