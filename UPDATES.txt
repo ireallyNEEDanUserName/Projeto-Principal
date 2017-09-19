@@ -46,3 +46,6 @@ Recarrega a pagina quando o jogador morreu, para selecionar outro nome.
 Resolvido RARO bug de detecção de colisão.
 --------------------------------------------------------
 
+--------------------- 19/09/17--------------------------
+Teste para aparecer uma regra aleatoria de carta quando abre o site.
+--------------------------------------------------------
