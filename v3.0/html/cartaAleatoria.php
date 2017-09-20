@@ -5,9 +5,9 @@
                $query = "select * from dicas_h";
 	       $result = pg_query($conexao, $query);
 
-               $selecionada = rand(0, count($result));
+               $selecionada = rand(0, count(pg_fetch_all($result));
 	       while($consulta = pg_fetch_assoc($result)){
-                        if($consulta['id'] === $selecionada){
+                        if($consulta['id'] == $selecionada){
         	               echo "<div id=\"todos\"> <img id=\"moldura\" src=\"" . $consulta['moldura'] . "\"/>";
         	               echo "<div id=\"dvnome\">" . $consulta['nome'] . "</div>";
         	               echo "<div id=\"dvid\">" . $consulta['id'] . "</div>";
