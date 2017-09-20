@@ -1,5 +1,6 @@
 var backMax = 4; //Numero de mapas que o jogo tem, EX 0-4.
 var imgJogadorMax = 3; //Numero de opções de jogadores que o jogo tem. EX 0-3
+var imgJogadorMove = 5; //Numero de sprites de movimento, (6*imgJogadorMax) - 1.
 
 var jogo = function () { //Função principal do jogo, com funções secundarias definidas aqui.
 	//Definicoes do jogo;
@@ -365,6 +366,8 @@ var jogo = function () { //Função principal do jogo, com funções secundarias
 		this.gameSize = gameSize;
 		this.canvas = canvas;
 		this.playerImg = img;
+		this.playerImgOriginal = img;
+		this.playerImgCount = 0;
 		this.acertou = false;
 		this.Animation = 0;
 		this.size = { x: 32, y: 32};
@@ -380,9 +383,34 @@ var jogo = function () { //Função principal do jogo, com funções secundarias
 			//Funções de movimento do jogador.
 			if (this.keyboarder.isDown(keys.LEFT) && this.center.x > 16){
 				this.center.x -= 2;
+				
+				this.playerImgCount ++;
+				if(this.playerImgOriginal == 1){
+					if(this.playerImgCount <= 4) this.playerImg = "1_3";
+					else if(this.playerImgCount <= 8) this.playerImg = "1_4";
+					else if(this.playerImgCount <= 12){
+						this.playerImg = "1_5";
+						this.playerImgCount = 0;
+					}
+				}
 			} else if (this.keyboarder.isDown(keys.RIGHT) && this.center.x < this.gameSize.x - 16){
 				this.center.x += 2;
+				
+				this.playerImgCount ++;
+				if(this.playerImgOriginal == 1){
+					if(this.playerImgCount <= 4) this.playerImg = "1_0";
+					else if(this.playerImgCount <= 8) this.playerImg = "1_1";
+					else if(this.playerImgCount <= 12){
+						this.playerImg = "1_2";
+						this.playerImgCount = 0;
+					}
+				}
+			} else{
+				this.playerImgCount = 0;
+				this.playerImg = this.playerImgOriginal;
 			} 
+			
+			
 			if (this.keyboarder.isDown(keys.UP) && this.center.y > 16){
 				this.center.y -= 2;
 			} else if (this.keyboarder.isDown(keys.DOWN) && this.center.y < this.gameSize.y - 16){
@@ -785,23 +813,36 @@ var loadAssets = function(tipo = false){
 	
 	//diz qual o numero de fundos e jogadores
 	if(!tipo) var max = backMax;
-	else var max = imgJogadorMax;
+	else{
+		var max = imgJogadorMax;
+		var max2 = imgJogadorMove;
+	}
 	
 	var deferred = $.Deferred();
 	var sucesso = true;
 	var i = 0;
 	var u = 0;
+	var z = 0;
 	
 	//funcao que carrega os fundos e jogadores
 	var fundo = function(){
-		if(i <= max && sucesso){
+		if((i + z) <= (max + max2) + 1 && sucesso){
 			var imgF = new Image();
 			
 			if(!tipo) imgF.src = "imgs/bgs/" + i + ".jpg";
-			else imgF.src = "imgs/player/" + i + ".png";
+			else if(i <= max){
+				imgF.src = "imgs/player/" + i + ".png";
+				i++;
+			}
+			else if(i > max && z <= max2){ 
+				console.log("dividido: ");
+				var valor = Math.floor((z + 1)/6);
+				imgF.src = "imgs/player/1" /* MUDAR O 1 POR valor.toString() quando tiver os sprites do primeiro char. */  + "_" + z.toString() + ".png"; 
+				console.log(imgF.src);
+				z++;
+			}
 			
-			i++;
-			deferred.notify(i);
+			deferred.notify((i + z));
 			imgF.addEventListener("load", fundo); //chama o load(funcao fundo()) denovo quando o fundo ja tiver sido carregado.
 			imgF.addEventListener("error", function(){
 				sucesso = false //para de chamar o load quando nao achou a img.
@@ -852,7 +893,6 @@ var inicio = function() {
 	//mostra a barra de progreco do load
 	promise.progress(function(prog){
 		aumento = 100 / (backMax + 3);
-		console.log(prog);
 		texto.innerHTML = "LOAD DOS MAPAS DO JOGO";
 		tamanho = carregarBarra(tamanho, barra, aumento);
 	});
@@ -864,9 +904,8 @@ var inicio = function() {
 			tamanho = 0;
 			
 			//barra de load dos jogadores.
-			promise.progress(function(prog){
-				console.log(prog); 
-				aumento = 100 / imgJogadorMax;
+			promise.progress(function(prog){ 
+				aumento = 100 / (imgJogadorMax + imgJogadorMove);
 				texto.innerHTML = "LOAD DOS PERSONAGENS DO JOGO";
 				tamanho = carregarBarra(tamanho, barra, aumento);
 			});
