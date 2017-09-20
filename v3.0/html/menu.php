@@ -26,6 +26,4 @@
 
 &nbsp;
 &nbsp;
-        <div id="publim">
-        </div>
 </div>
