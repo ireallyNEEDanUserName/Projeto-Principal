@@ -368,6 +368,7 @@ var jogo = function () { //Função principal do jogo, com funções secundarias
 		this.playerImg = img;
 		this.playerImgOriginal = img;
 		this.playerImgCount = 0;
+		this.playerUltimaDirecao = 0;
 		this.acertou = false;
 		this.Animation = 0;
 		this.size = { x: 32, y: 32};
@@ -384,7 +385,10 @@ var jogo = function () { //Função principal do jogo, com funções secundarias
 			if (this.keyboarder.isDown(keys.LEFT) && this.center.x > 16){
 				this.center.x -= 2;
 				
-				this.playerImgCount ++;
+				if(this.playerUltimaDirecao == 0 || this.playerUltimaDirecao == 2) this.playerImgCount++;
+				else this.playerImgCount = 1;
+				this.playerUltimaDirecao = 2;
+				
 				if(this.playerImgOriginal == 1){
 					if(this.playerImgCount <= 4) this.playerImg = "1_3";
 					else if(this.playerImgCount <= 8) this.playerImg = "1_4";
@@ -396,7 +400,10 @@ var jogo = function () { //Função principal do jogo, com funções secundarias
 			} else if (this.keyboarder.isDown(keys.RIGHT) && this.center.x < this.gameSize.x - 16){
 				this.center.x += 2;
 				
-				this.playerImgCount ++;
+				if(this.playerUltimaDirecao == 0 || this.playerUltimaDirecao == 1) this.playerImgCount++;
+				else this.playerImgCount = 1;
+				this.playerUltimaDirecao = 1;
+				
 				if(this.playerImgOriginal == 1){
 					if(this.playerImgCount <= 4) this.playerImg = "1_0";
 					else if(this.playerImgCount <= 8) this.playerImg = "1_1";
@@ -835,10 +842,8 @@ var loadAssets = function(tipo = false){
 				i++;
 			}
 			else if(i > max && z <= max2){ 
-				console.log("dividido: ");
 				var valor = Math.floor((z + 1)/6);
 				imgF.src = "imgs/player/1" /* MUDAR O 1 POR valor.toString() quando tiver os sprites do primeiro char. */  + "_" + z.toString() + ".png"; 
-				console.log(imgF.src);
 				z++;
 			}
 			
