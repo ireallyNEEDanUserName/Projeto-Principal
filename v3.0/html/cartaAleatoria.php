@@ -1,7 +1,3 @@
-<head>
-        <link href="magic/cardo.css" type="text/css" rel="stylesheet" media="all" />
-</head>
-
 <?php
         if(!($conexao = pg_connect("host=srvuxmagic01 port=5432 dbname=magic user=magicusr password=123!@"))){
                 print "Não foi possivel conectar no banco.";
