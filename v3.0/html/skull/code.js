@@ -23,7 +23,7 @@ var jogo = function () { //Função principal do jogo, com funções secundarias
 		var tamanhoLetra = 13;
 		if(this.tipo == "p"){
 			tamanhoLetra = 20;
-			velocidadeAttMob = 0.998;
+			velocidadeAttMob = 0.9985;
 		}
 		
 		console.log(velocidadeAttMob);
@@ -492,7 +492,6 @@ var jogo = function () { //Função principal do jogo, com funções secundarias
 			this.patrolX += this.speedX;
 			
 			if(Math.random() > this.velAtt) {
-				console.log(this.velAtt);
 				var spell = new Spell(
 						{ x: this.center.x, y: this.center.y + this.size.x / 2},
 						{ x: Math.random() - 0.5, y: 3}
@@ -589,7 +588,8 @@ var jogo = function () { //Função principal do jogo, com funções secundarias
 		} else if(body instanceof Spell){
 			img.src = "http://i.imgur.com/VAW78xv.png";
 		} else if(body instanceof Enemy){
-			img.src = "http://i.imgur.com/LGfOQtu.png";
+			if(body.vida == 1) img.src = "http://i.imgur.com/LGfOQtu.png";
+			else img.src = "imgs/mobs/1.png";
 		}		
 		
 		if(!(body instanceof Spell)){ //Se o corpo não for uma magia.
