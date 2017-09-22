@@ -818,11 +818,16 @@ var jogo = function () { //Função principal do jogo, com funções secundarias
 //CARREGAR ASSETS ANTES DO JOGO
 var loadAssets = function(tipo = false){
 	
+	var loop = 0;
 	//diz qual o numero de fundos e jogadores
-	if(!tipo) var max = backMax;
+	if(!tipo){
+		var max = backMax;
+		loop = max;
+	}
 	else{
 		var max = imgJogadorMax;
 		var max2 = imgJogadorMove;
+		loop = max + max2 + 1;
 	}
 	
 	var deferred = $.Deferred();
@@ -833,10 +838,13 @@ var loadAssets = function(tipo = false){
 	
 	//funcao que carrega os fundos e jogadores
 	var fundo = function(){
-		if((i + z) <= (max + max2) + 1 && sucesso){
+		if((i + z) <= loop && sucesso){
 			var imgF = new Image();
 			
-			if(!tipo) imgF.src = "imgs/bgs/" + i + ".jpg";
+			if(!tipo){
+				imgF.src = "imgs/bgs/" + i + ".jpg";
+				i++;
+			}
 			else if(i <= max){
 				imgF.src = "imgs/player/" + i + ".png";
 				i++;
@@ -910,7 +918,7 @@ var inicio = function() {
 			
 			//barra de load dos jogadores.
 			promise.progress(function(prog){ 
-				aumento = 100 / (imgJogadorMax + imgJogadorMove);
+				aumento = 100 / (imgJogadorMax + imgJogadorMove + 2);
 				texto.innerHTML = "LOAD DOS PERSONAGENS DO JOGO";
 				tamanho = carregarBarra(tamanho, barra, aumento);
 			});
