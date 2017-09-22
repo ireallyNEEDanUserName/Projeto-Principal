@@ -18,9 +18,15 @@ var jogo = function () { //Função principal do jogo, com funções secundarias
 		
 		console.log("Comeco do Jogo"); 
 		
+		var velocidadeAttMob = 0.999;
 		this.tipo = document.getElementById("tipo").getAttribute("val"); //Tipo de jogo, se mobile ou pc.
 		var tamanhoLetra = 13;
-		if(this.tipo == "p") tamanhoLetra = 20;
+		if(this.tipo == "p"){
+			tamanhoLetra = 20;
+			velocidadeAttMob = 0.998;
+		}
+		
+		console.log(velocidadeAttMob);
 		
 		//Pegar o codigo digitado em coedigoFase e validar o mesmo e atribuir a fase.
 		if(document.getElementById("codigoFase").value == "") this.fase = 1; //Se o codigo não for digitado na caixa de texto, vai para primeira fase.
@@ -62,11 +68,11 @@ var jogo = function () { //Função principal do jogo, com funções secundarias
 		
 		var start = function(inicio = true){ //Chama as funções caso a fase mude ou o player morra.
 			if(self.morte == false) drawBack(screen, gameSize, self.back);
-			if(inicio) self.bodies = createEnemy(self, gameSize, (self.qtdEnemy + self.fase)).concat(new Player(self, canvas, gameSize, retornarEscolha[0]));
+			if(inicio) self.bodies = createEnemy(self, gameSize, (self.qtdEnemy + self.fase), velocidadeAttMob).concat(new Player(self, canvas, gameSize, retornarEscolha[0]));
 			else{ 
 				localPlayer = verfPlayer(self.bodies);
 				player = self.bodies[localPlayer];
-				self.bodies = createEnemy(self, gameSize, (self.qtdEnemy + self.fase)).concat(player);
+				self.bodies = createEnemy(self, gameSize, (self.qtdEnemy + self.fase), velocidadeAttMob).concat(player);
 			}
 			
 			self.spellArr = new Array();
@@ -462,7 +468,7 @@ var jogo = function () { //Função principal do jogo, com funções secundarias
 	};
 	
 	//MOBS DO JOGO
-	var Enemy = function(game, gameSize, center) {
+	var Enemy = function(game, gameSize, center, vel = 0.998) {
 		this.game = game;
 		this.gameSize = gameSize;
 		this.size = { x: 32, y: 32 };
@@ -472,6 +478,7 @@ var jogo = function () { //Função principal do jogo, com funções secundarias
 		this.vida = 1;
 		this.acertou = false;
 		this.Animation = 0;
+		this.velAtt = vel - (this.vida / 10000);
 	};
 	
 	Enemy.prototype = {
@@ -484,7 +491,8 @@ var jogo = function () { //Função principal do jogo, com funções secundarias
 			this.center.x += this.speedX;
 			this.patrolX += this.speedX;
 			
-			if(Math.random() > 0.998) {
+			if(Math.random() > this.velAtt) {
+				console.log(this.velAtt);
 				var spell = new Spell(
 						{ x: this.center.x, y: this.center.y + this.size.x / 2},
 						{ x: Math.random() - 0.5, y: 3}
@@ -508,7 +516,7 @@ var jogo = function () { //Função principal do jogo, com funções secundarias
 		return ultimo;
 	};
 	
-	var createEnemy = function(game, gameSize, qtd) {
+	var createEnemy = function(game, gameSize, qtd, vel) {
 		var enemy = [];
 		var longe = 5;
 		var tam = 32;
@@ -526,7 +534,7 @@ var jogo = function () { //Função principal do jogo, com funções secundarias
 		
 			if(x < gameSize.x - 16 && y < gameSize.y){ //Ver se o x e y estao dentro da tela
 				if(i == 0){
-					enemy.push(new Enemy(game, gameSize, { x: x, y: y })); //Criar o primeiro inimigo
+					enemy.push(new Enemy(game, gameSize, { x: x, y: y }, vel)); //Criar o primeiro inimigo
 					mesmaPosicao = true;
 				}
 				else{
@@ -541,7 +549,7 @@ var jogo = function () { //Função principal do jogo, com funções secundarias
 					}
 				}
 				
-				if(!mesmaPosicao) enemy.push(new Enemy(game, gameSize, { x: x, y: y })); //Se não estiver na mesma posição que nenhum outro mob
+				if(!mesmaPosicao) enemy.push(new Enemy(game, gameSize, { x: x, y: y }, vel)); //Se não estiver na mesma posição que nenhum outro mob
 																						// criar novo inimigo.
 			}
 			if(x >= gameSize.x) xAnt = 0; //Ver se o x ainda está dentro da tela.
