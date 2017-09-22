@@ -50,3 +50,8 @@ Resolvido RARO bug de detecção de colisão.
 Teste para aparecer uma regra aleatoria de carta quando abre o site.
 Adicionado a opção para realizar pesquisa no ranking de jogadores.
 --------------------------------------------------------
+
+--------------------- 22/09/17--------------------------
+Corrigido bugs no load.
+Inserido aumento gradativo de ataques de mobs, conforme os mesmos ganham mais vida, ex: 0,999 - 0,000(vida = 2) = 0,9988.
+--------------------------------------------------------
