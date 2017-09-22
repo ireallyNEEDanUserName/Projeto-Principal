@@ -26,8 +26,6 @@ var jogo = function () { //Função principal do jogo, com funções secundarias
 			velocidadeAttMob = 0.9985;
 		}
 		
-		console.log(velocidadeAttMob);
-		
 		//Pegar o codigo digitado em coedigoFase e validar o mesmo e atribuir a fase.
 		if(document.getElementById("codigoFase").value == "") this.fase = 1; //Se o codigo não for digitado na caixa de texto, vai para primeira fase.
 		else{
@@ -468,7 +466,7 @@ var jogo = function () { //Função principal do jogo, com funções secundarias
 	};
 	
 	//MOBS DO JOGO
-	var Enemy = function(game, gameSize, center, vel = 0.998) {
+	var Enemy = function(game, gameSize, center) {
 		this.game = game;
 		this.gameSize = gameSize;
 		this.size = { x: 32, y: 32 };
@@ -478,7 +476,7 @@ var jogo = function () { //Função principal do jogo, com funções secundarias
 		this.vida = 1;
 		this.acertou = false;
 		this.Animation = 0;
-		this.velAtt = vel - (this.vida / 10000);
+		this.velAtt = 0.998;
 	};
 	
 	Enemy.prototype = {
@@ -533,7 +531,7 @@ var jogo = function () { //Função principal do jogo, com funções secundarias
 		
 			if(x < gameSize.x - 16 && y < gameSize.y){ //Ver se o x e y estao dentro da tela
 				if(i == 0){
-					enemy.push(new Enemy(game, gameSize, { x: x, y: y }, vel)); //Criar o primeiro inimigo
+					enemy.push(new Enemy(game, gameSize, { x: x, y: y })); //Criar o primeiro inimigo
 					mesmaPosicao = true;
 				}
 				else{
@@ -543,12 +541,13 @@ var jogo = function () { //Função principal do jogo, com funções secundarias
 													//ja foi criado e esta na mesma posição e não criar um novo.
 							mesmaPosicao = true;
 							enemy[z].vida++;
+							enemy[z].velAtt = vel - (enemy[z].vida / 10000);
 							//console.log(enemy[z].vida);
 						}
 					}
 				}
 				
-				if(!mesmaPosicao) enemy.push(new Enemy(game, gameSize, { x: x, y: y }, vel)); //Se não estiver na mesma posição que nenhum outro mob
+				if(!mesmaPosicao) enemy.push(new Enemy(game, gameSize, { x: x, y: y })); //Se não estiver na mesma posição que nenhum outro mob
 																						// criar novo inimigo.
 			}
 			if(x >= gameSize.x) xAnt = 0; //Ver se o x ainda está dentro da tela.
