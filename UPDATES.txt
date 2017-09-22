@@ -54,4 +54,5 @@ Adicionado a opção para realizar pesquisa no ranking de jogadores.
 --------------------- 22/09/17--------------------------
 Corrigido bugs no load.
 Inserido aumento gradativo de ataques de mobs, conforme os mesmos ganham mais vida, ex: 0,999 - 0,000(vida = 2) = 0,9988.
+Adicionado mais mobs dependendo da vida que possui, como uma evolução que volta pra inicial se perde vida.
 --------------------------------------------------------
