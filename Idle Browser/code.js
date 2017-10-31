@@ -1,7 +1,11 @@
 var clickBarra = 0;
+var click = false;
 var lvl = 1;
 
 var Idle = function(){
+	
+	var status = {};	
+	status = iniciar(status);
 	
 	var barra = document.getElementById("barra");
 	var barraCheia = document.getElementById("barraProgresso");
@@ -28,16 +32,22 @@ var Idle = function(){
 		if(tempoDesdeOInicio.toFixed(0) >= 100){
 			dataInicialAtualizada = new Date();
 			segundoInicialAtualizado = dataInicialAtualizada.getTime() / 1000;
-			tempoDesdeOInicio = 0;
-			lvl += 1;
-			texto.innerHTML = "Lvl: " + lvl;
+			tempoDesdeOInicio -= 100;
 			clickBarraFunc(false);
+			clickBarra = tempoDesdeOInicio;
+			tempoDesdeOInicio = 0;
+			status.lvl += 1;
+			lvl = status.lvl;
+			texto.innerHTML = "Lvl: " + status.lvl;
 		}
 		
 		barra.innerHTML = tempoDesdeOInicio.toFixed(0) + " XP";
 		barraCheia.style.width = tempoDesdeOInicio.toFixed(0) + 'px'
 		
 		tempoTotal.innerHTML = calcTempoTotal(segundoInicial, segundo);
+		
+		if(click) status.clicks += 1;
+		click = false;
 		
 		requestAnimationFrame(tick);
 	};
@@ -46,9 +56,22 @@ var Idle = function(){
 	
 };
 
+var iniciar = function(status){
+
+	status.lvl = 1;
+	status.atk = 1;
+	status.vel = 1;
+	status.precisao = 1;
+	status.clicks = 0;
+	
+	return status;
+};
+
 var clickBarraFunc = function(bool){
+
 	if(bool){
 		clickBarra += lvl;
+		click = true;
 	}
 	else clickBarra = 0;
 };
