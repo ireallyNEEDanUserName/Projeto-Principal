@@ -44,7 +44,7 @@ a:link, a:active, a:visited{
 	text-align: center;
 }
 
-#barra {
+#barra , #barraMissoes{
 	width: 50px;
 	margin-left: 25px;
 	height: 30px;
@@ -63,4 +63,42 @@ a:link, a:active, a:visited{
 
 #tempoTotal{
 	color: white;
+}
+
+/* PAGINA STATUS.HTML */
+
+#barraStatus {
+	text-align: center;
+}
+
+#dados {
+}
+
+/* PAGINA MISSOES.HTML */
+
+#todasMissoes {
+	font-size: 20px;
+	text-align: center;
+}
+
+.opcoes{
+	width: 100px;
+	color: white;
+	background-color: #16c5b0;
+	text-align: center;
+}
+
+.item{
+	width: 100px;
+	font-family: Verdana;
+	border: none;
+	background-color: #a2ebe9;
+	color: white;
+	margin: auto;
+}
+
+#minerar, #forjar, #cacar {
+	display: none;
+	background-color: #6796a0;
+	width: 150px;
 }
