@@ -39,8 +39,14 @@ $(document).ready(function(){
 	})
 	
 	$('.item').click(function(){
-		var clicked = $(this).text().toLowerCase();
-		console.log(clicked);
+		var clicked = $(this).text();
+		
+		if($(this).attr("id") == "textoForjarPedra"){
+			clicked = "ForjarPedra";
+		}
+		
+		console.log(this);
+		start(clicked);
 	})
 	
 });
