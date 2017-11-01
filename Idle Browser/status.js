@@ -9,7 +9,15 @@ var start = function(){
 var escrever = function(status){
 
 	var dados = document.getElementById("dados");
-	dados.innerHTML = "Lvl: " + status.lvl + " Atk: " + status.atk;
+	
+	var str = "";
+	var cap = "";
+	for(var key in status){
+		cap = key.charAt(0).toUpperCase() + key.slice(1);
+		str += " | " + cap + ": " + status[key] + " | ";
+	}
+	
+	dados.innerHTML = str;
 	
 };
 
