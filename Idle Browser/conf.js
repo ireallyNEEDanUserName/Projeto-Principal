@@ -18,4 +18,29 @@ $(document).ready(function(){
 		
 	})
 	
+	//OPCOES DA PAGINA MISSOES.HTML
+	$('.opcoes').click(function(){
+		var clicked = $(this).attr("value");
+		$("#" + clicked).toggle();
+		$(this).css({ 'color' : 'white'	})
+	})
+	
+	$('.opcoes').mouseover(function(){
+		if (this.style.color == 'black'){
+			$(this).css({
+				'color' : 'white',
+			})
+		}
+		else{
+			$(this).css({
+				'color' : 'black',
+			})
+		}
+	})
+	
+	$('.item').click(function(){
+		var clicked = $(this).text().toLowerCase();
+		console.log(clicked);
+	})
+	
 });
