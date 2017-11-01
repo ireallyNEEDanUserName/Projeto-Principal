@@ -1,0 +1,70 @@
+<html>
+
+<head>
+
+	<script type="text/javascript" src="code.js"></script>
+	<script type="text/javascript" src="missoes.js"></script>
+	<script type="text/javascript" src="../jquery-3.2.1.js"></script>
+	<script type="text/javascript" src="conf.js"></script>
+	<link href="style.css" type="text/css" rel="stylesheet"/>
+	
+</head>
+
+<body>
+	
+	<div id="Menu">
+		<p> 
+			<a id="home" href="index.html">Home | </a>
+			<a id="status" href="status.html">Status |</a>
+			<a id="missoes" href="missoes.html">Missões |</a>
+			<a id="combate">Combate </a>
+		</p>
+	</div>
+
+	
+	
+	<!-- Missoes possiveis de se fazer. -->
+	<div id="todasMissoes">
+		<!-- Minerar -->
+		<p class="opcoes" value="minerar"> Minerar </p>
+		<div id="minerar">
+			<div id="pedra">
+				<p id="textoMinerar" class="item"> Pedra </p>
+				<div id="barraProgresso"> 
+					<div id="barraMissoes">0 %</div>
+				</div>
+			</div>
+			<div id="ferro">
+				<p id="textoMinerar" class="item"> Ferro </p>
+				<div id="barraProgresso"> 
+					<div id="barraMissoes">0 %</div>
+				</div>
+			</div>
+		</div>
+		<!-- Forjar -->
+		<p class="opcoes" value="forjar"> Forjar </p>
+		<div id="forjar">
+			<div id="pedra">
+				<p id="textoForjar" class="item"> Pedra </p>
+				<div id="barraProgresso"> 
+					<div id="barraMissoes">0 %</div>
+				</div>
+			</div>
+		</div>
+		<!-- Caçar -->
+		<p class="opcoes" value="cacar"> Caçar </p>
+		<div id="cacar">
+			<div id="Filhote de Porco">
+				<p id="textoCaca" class="item"> Filhote de Porco </p>
+				<div id="barraProgresso"> 
+					<div id="barra">0 %</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+</body>
+
+
+</html>
