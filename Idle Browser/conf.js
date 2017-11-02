@@ -1,20 +1,10 @@
+
 $(document).ready(function(){
 
 	$('#barra').click(function(){
 		clickBarraFunc(true);
 		
-		if (this.style.color == 'black'){
-			$(this).css({
-				'color' : 'white',
-				'background-color': 'black'
-			})
-		}
-		else{
-			$(this).css({
-				'color' : 'black',
-				'background-color': 'white'
-			})
-		}
+		cor(this, 'black', 'green');
 		
 	})
 	
@@ -25,28 +15,25 @@ $(document).ready(function(){
 		$(this).css({ 'color' : 'white'	})
 	})
 	
-	$('.opcoes').mouseover(function(){
-		if (this.style.color == 'black'){
-			$(this).css({
-				'color' : 'white',
-			})
-		}
-		else{
-			$(this).css({
-				'color' : 'black',
-			})
-		}
-	})
-	
 	$('.item').click(function(){
-		var clicked = $(this).text();
+		var clicked = $(this).attr("id");
 		
-		if($(this).attr("id") == "textoForjarPedra"){
-			clicked = "ForjarPedra";
-		}
-		
-		console.log(this);
 		start(clicked);
 	})
 	
 });
+
+
+
+var cor = function(self, corPrincipal, corSecundaria){
+	if (self.style.color == corPrincipal){
+		$(self).css({
+			'color' : corSecundaria,
+		})
+	}
+	else{
+		$(self).css({
+			'color' : corPrincipal,
+		})
+	}
+};
