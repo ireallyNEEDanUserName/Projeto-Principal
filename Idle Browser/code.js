@@ -10,6 +10,7 @@ var Idle = function(){
 	var barra = document.getElementById("barra");
 	var barraCheia = document.getElementById("barraProgresso");
 	var texto = document.getElementById("textoBarra");
+	texto.innerHTML = "Lvl: " + status.lvl;
 	var tempoTotal = document.getElementById("tempoTotal");
 	
 	var dataInicial = new Date();
@@ -54,17 +55,45 @@ var Idle = function(){
 	
 	tick();
 	
+	window.addEventListener("beforeunload", function(){
+		localStorage.setItem("Jogador", JSON.stringify(status));
+	});
+	
 };
 
 var iniciar = function(status){
-
-	status.lvl = 1;
-	status.atk = 1;
-	status.vel = 1;
-	status.precisao = 1;
-	status.clicks = 0;
 	
+	var txt = localStorage.getItem("Jogador");
+	
+	if(JSON.parse(txt) == null){
+		status.lvl = 1;
+		status.atk = 1;
+		status.vel = 1;
+		status.precisao = 1;
+		status.clicks = 0;
+		status.inventario = {};
+		status.inventario = iniciarInv(status.inventario);
+
+		localStorage.setItem("Jogador", JSON.stringify(status));
+	}else{
+		status = JSON.parse(txt);
+		//console.log(status);
+	}
+		
 	return status;
+};
+
+var salvar = function(status){
+	localStorage.setItem("Jogador", JSON.stringify(status));
+};
+
+var iniciarInv = function(inventario){
+	
+	inventario.construcao = 0;
+	inventario.comida = 0;
+	inventario.dinheiro = 0;
+	
+	return inventario;
 };
 
 var clickBarraFunc = function(bool){
