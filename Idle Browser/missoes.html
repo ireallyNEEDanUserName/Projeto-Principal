@@ -20,44 +20,61 @@
 			<a id="combate">Combate </a>
 		</p>
 	</div>
-
 	
+	<!-- Opçoes -->
+	<p id="Opcoes">
+		<a class="opcoes" value="minerar"> Minerar </a>
+		<a class="opcoes" value="forjar"> Forjar </a>
+		<a class="opcoes" value="cacar"> Caçar </a>
+	</p>
+
+	<div id="Materiais">
+		<p>
+			<i class="materiais" id="construcao"> Construção: </i>
+			<i class="materiais" id="comida"> Comida:  </i>
+			<i class="materiais" id="dinheiro"> Dinheiro:  </i>
+		</p>
+	</div>
+	
+	<script>
+		materiais();
+	</script>
 	
 	<!-- Missoes possiveis de se fazer. -->
 	<div id="todasMissoes">
 		<!-- Minerar -->
-		<p class="opcoes" value="minerar"> Minerar </p>
+		
 		<div id="minerar">
 			<div id="pedra">
-				<p id="textoMinerarPedra" class="item">Pedra</p>
-				<div id="barraProgressoPedra" class="progresso"> 
-					<div id="barraPedra" class="barra">0 %</div>
+				<p id="MinerarPedra" class="item">Pedra</p>
+				<div id="barraProgressoMinerarPedra" class="progresso"> 
+					<div id="barraMinerarPedra" class="barra">0 %</div>
 				</div>
 			</div>
 			<div id="ferro">
-				<p id="textoMinerarFerro" class="item">Ferro</p>
-				<div id="barraProgressoFerro" class="progresso"> 
-					<div id="barraFerro" class="barra">0 %</div>
+				<p id="MinerarFerro" class="item">Ferro</p>
+				<div id="barraProgressoMinerarFerro" class="progresso"> 
+					<div id="barraMinerarFerro" class="barra">0 %</div>
 				</div>
 			</div>
 		</div>
 		<!-- Forjar -->
-		<p class="opcoes" value="forjar"> Forjar </p>
+		
 		<div id="forjar">
 			<div id="pedra">
-				<p id="textoForjarPedra" class="item">Pedra</p>
+				<p id="ForjarPedra" class="item">Pedra</p>
 				<div id="barraProgressoForjarPedra" class="progresso"> 
 					<div id="barraForjarPedra" class="barra">0 %</div>
 				</div>
 			</div>
 		</div>
 		<!-- Caçar -->
-		<p class="opcoes" value="cacar"> Caçar </p>
+		
 		<div id="cacar">
 			<div id="Filhote de Porco">
-				<p id="textoCacaPorco" class="item">Filhote de Porco</p>
-				<div id="barraProgressoPorco" class="progresso"> 
-					<div id="barraPorco" class="barra">0 %</div>
+				<p id="CacaPorco" class="item">Filhote de Porco</p>
+				<div id="barraProgressoCacaPorco" class="progresso"> 
+					<div id="barraCacaPorco" class="barra">0 %</div>
 				</div>
 			</div>
 		</div>
