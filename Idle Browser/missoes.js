@@ -3,8 +3,18 @@ var start = function(tipo){
 	var status = {};
 	status = iniciar(status);
 	
+	var tipoMaterial = "";
+	var qtdMaterial = 1;
+	
+	if(tipo.includes("Ferro")) qtdMaterial = 2;
+	
+	if(tipo.includes("Minerar")) tipoMaterial = "construcao";
+	else if(tipo.includes("Forjar")) tipoMaterial = "dinheiro";
+	else if(tipo.includes("Caca")) tipoMaterial = "comida";
+	
 	var barra = document.getElementById("barra" + tipo);
 	var barraCheia = document.getElementById("barraProgresso" + tipo);
+	var qtd = document.getElementById(tipoMaterial);
 	
 	var dataInicialAtualizada = new Date();
 	var data = new Date();
@@ -25,7 +35,10 @@ var start = function(tipo){
 			dataInicialAtualizada = new Date();
 			segundoInicialAtualizado = dataInicialAtualizada.getTime() / 1000;
 			tempoDesdeOInicio = 0;
-			status.lvl += 1;
+			status = iniciar(status);
+			status.inventario[tipoMaterial] += qtdMaterial;
+			salvar(status);
+			qtd.innerHTML = tipoMaterial.charAt(0).toUpperCase() + tipoMaterial.slice(1) + ": " + status.inventario[tipoMaterial];
 		}
 		
 		barra.innerHTML = tempoDesdeOInicio.toFixed(0) + " %";
@@ -36,4 +49,27 @@ var start = function(tipo){
 	};
 	
 	tick();
+	
 };
+
+var materiais = function(){
+
+	var status = {};
+	status = iniciar(status);
+	
+	escrever(status);
+};
+
+var escrever = function(status){
+
+	var construcao = document.getElementById("construcao");
+	var comida = document.getElementById("comida");
+	var dinheiro = document.getElementById("dinheiro");
+	
+	for(var key in status.inventario){
+		if(key == "construcao") construcao.innerHTML = "Construção: " + status.inventario[key];
+		else if(key == "comida") comida.innerHTML = "Comida: " + status.inventario[key];
+		else if(key == "dinheiro") dinheiro.innerHTML = "Dinheiro: " + status.inventario[key];
+	}
+};
+
