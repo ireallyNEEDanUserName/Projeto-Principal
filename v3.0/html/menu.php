@@ -14,7 +14,7 @@
                 <h4> <a href="../magic/inicial.php" class="botao">Magic The Apping </a></h4>
                 <h4> <a href="../skull/skull.html" class="botao">Skull Invaders</a></h4>
                 <h4> <a href="../skull/ranking.php" class="botao">Skull Ranking</a></h4>
-                <h4> <a href="../idleBrowser/index.html" class="botao">Idle</a></h4>
+                <h4> <a href="../IdleBrowser/index.html" class="botao">Idle</a></h4>
         </ul>
 &nbsp;
 
