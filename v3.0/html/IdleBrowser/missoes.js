@@ -5,6 +5,7 @@ var start = function(tipo){
 	
 	var tipoMaterial = "";
 	var texto = "";
+	var expTexto = "";
 	var qtdMaterial = 1;
 	var exp = 1;
 	
@@ -23,7 +24,7 @@ var start = function(tipo){
 
 	qtdMaterial = 1 + (Math.floor((Math.random() * Math.round(status["lvl".concat(texto)] / 2)) +  Math.round(status["lvl".concat(texto)] / 4)));
 	exp = 1 + qtdMaterial;
-	texto = "exp" + texto;
+	expTexto = "exp" + texto;
 	
 	var barra = document.getElementById("barra" + tipo);
 	var barraCheia = document.getElementById("barraProgresso" + tipo);
@@ -50,8 +51,8 @@ var start = function(tipo){
 			tempoDesdeOInicio = 0;
 			status = iniciar(status);
 			status.inventario[tipoMaterial] += qtdMaterial;
-			status[texto] += exp;
-			console.log(status[texto]);
+			status[expTexto] += exp;
+			console.log(status[expTexto]);
 			salvar(status);
 			qtd.innerHTML = tipoMaterial.charAt(0).toUpperCase() + tipoMaterial.slice(1) + ": " + status.inventario[tipoMaterial];
 		}
