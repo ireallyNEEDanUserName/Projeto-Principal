@@ -66,13 +66,24 @@ var iniciar = function(status){
 	var txt = localStorage.getItem("Jogador");
 	
 	if(JSON.parse(txt) == null){
-		status.lvl = 1;
+		status.lvlCombat = 1;
+		status.expCombat = 0;
 		status.atk = 1;
 		status.vel = 1;
 		status.precisao = 1;
-		status.clicks = 0;
+
+		status.lvlMinerar = 1;
+		status.expMinerar = 0;
+		status.lvlForjar = 1;
+		status.expForjar = 0;
+		status.lvlCacar = 1;
+		status.expCacar = 0;
+
 		status.inventario = {};
 		status.inventario = iniciarInv(status.inventario);
+
+		status.clicks = 0;
+		status.tempoJogador = 0;
 
 		localStorage.setItem("Jogador", JSON.stringify(status));
 	}else{
@@ -85,12 +96,58 @@ var iniciar = function(status){
 
 var iniciarInv = function(inventario){
 	
-	inventario.construcao = 0;
+	inventario.minerio = 0;
 	inventario.comida = 0;
 	inventario.dinheiro = 0;
 	
 	return inventario;
 };
+
+
+//ITENS NAO UTILIZAVEIS NO MOMENTO. 
+/*
+var defItens = function(itens){
+
+	itens.minerio = {};
+	itens.comida = {};
+
+	var minerio = itens.minerio;
+	var comida = itens.comida;
+
+	minerio.pedra = {lvl: 1, minerio: 1, valor: 1};
+	minerio.cobre = {lvl: 3, minerio: 2, valor: 1};
+	minerio.ferro = {lvl: 5, minerio: 3, valor: 2};
+	minerio.prata = {lvl: 8, minerio: 4, valor: 3};
+	minerio.ouro = {lvl: 10, minerio: 7, valor: 7};
+
+	itens.minerio = minerio;
+
+	return itens;
+
+};
+
+var criarElementos = function(){
+
+	var status = {};
+	status = iniciar(status);
+
+	var itens = {};
+	itens = defItens(itens);
+
+	//console.log(status.lvl);
+	//console.log(itens.minerio.pedra.lvl);
+
+	for(var key in itens){
+		//console.log(key);
+		for(var keys in itens[key]){
+			//console.log(keys + ": " + itens[key][keys].lvl);
+		}
+	}
+	
+
+};
+//----------------------------
+*/
 
 var salvar = function(status){
 	localStorage.setItem("Jogador", JSON.stringify(status));
@@ -140,15 +197,10 @@ var materiais = function(){
 };
 
 var escrever = function(status){
-
-	var construcao = document.getElementById("construcao");
-	var comida = document.getElementById("comida");
-	var dinheiro = document.getElementById("dinheiro");
 	
 	for(var key in status.inventario){
-		if(key == "construcao") construcao.innerHTML = "Construção: " + status.inventario[key];
-		else if(key == "comida") comida.innerHTML = "Comida: " + status.inventario[key];
-		else if(key == "dinheiro") dinheiro.innerHTML = "Dinheiro: " + status.inventario[key];
+		var ele = document.getElementById(key);
+		ele.innerHTML = key.charAt(0).toUpperCase() + key.slice(1) + ": " + status.inventario[key];
 	}
 };
 
