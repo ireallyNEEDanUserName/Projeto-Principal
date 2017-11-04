@@ -10,9 +10,9 @@ $(document).ready(function(){
 	//OPCOES DA PAGINA MISSOES.HTML
 	$('.opcoes').click(function(){
 		var clicked = $(this).attr("value");
-
+		
 		$('.habilidade').hide();
-		$("#" + clicked).toggle();
+		$("#" + clicked).show();
 
 	})
 	
