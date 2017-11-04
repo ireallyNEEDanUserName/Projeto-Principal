@@ -4,14 +4,26 @@ var start = function(tipo){
 	status = iniciar(status);
 	
 	var tipoMaterial = "";
+	var texto = "";
 	var qtdMaterial = 1;
+	var exp = 1;
 	
-	if(tipo.includes("Ferro")) qtdMaterial = 2;
-	else if(tipo.includes("Adolescente")) qtdMaterial = 2;
-	
-	if(tipo.includes("Minerar")) tipoMaterial = "construcao";
-	else if(tipo.includes("Forjar")) tipoMaterial = "dinheiro";
-	else if(tipo.includes("Caca")) tipoMaterial = "comida";
+	if(tipo.includes("Minerar")){
+		tipoMaterial = "minerio";
+		texto = "Minerar";
+	}		
+	else if(tipo.includes("Forjar")){
+		tipoMaterial = "dinheiro";
+		texto = "Forjar";
+	} 
+	else if(tipo.includes("Caca")){
+		tipoMaterial = "comida";
+		texto = "Cacar";
+	} 
+
+	qtdMaterial = 1 + (Math.floor((Math.random() * Math.round(status["lvl".concat(texto)] / 2)) +  Math.round(status["lvl".concat(texto)] / 4)));
+	exp = 1 + qtdMaterial;
+	texto = "exp" + texto;
 	
 	var barra = document.getElementById("barra" + tipo);
 	var barraCheia = document.getElementById("barraProgresso" + tipo);
@@ -32,12 +44,14 @@ var start = function(tipo){
 		
 		tempoDesdeOInicio = segundo - segundoInicialAtualizado;
 	
-		if(tempoDesdeOInicio.toFixed(0) >= 100){
+		if(tempoDesdeOInicio.toFixed(0) >= 10){
 			dataInicialAtualizada = new Date();
 			segundoInicialAtualizado = dataInicialAtualizada.getTime() / 1000;
 			tempoDesdeOInicio = 0;
 			status = iniciar(status);
 			status.inventario[tipoMaterial] += qtdMaterial;
+			status[texto] += exp;
+			console.log(status[texto]);
 			salvar(status);
 			qtd.innerHTML = tipoMaterial.charAt(0).toUpperCase() + tipoMaterial.slice(1) + ": " + status.inventario[tipoMaterial];
 		}
