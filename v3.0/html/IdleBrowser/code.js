@@ -204,3 +204,15 @@ var escrever = function(status){
 	}
 };
 
+var upaLevel = function(status,tipo){
+	var level = "lvl" + tipo;
+	var experiencia = "exp" + tipo; 
+	var compExp = (status[level] * status[level]) * (50 + status[level]);
+    if (status[experiencia] >= compExp ) {
+    	status[level] +=1; 
+    	status[experiencia] -= compExp;
+
+    	}
+    console.log(compExp);
+    return status;
+};
