@@ -52,6 +52,7 @@ var start = function(tipo){
 			status = iniciar(status);
 			status.inventario[tipoMaterial] += qtdMaterial;
 			status[expTexto] += exp;
+			status = upaLevel(status,texto);
 			console.log(status[expTexto]);
 			salvar(status);
 			qtd.innerHTML = tipoMaterial.charAt(0).toUpperCase() + tipoMaterial.slice(1) + ": " + status.inventario[tipoMaterial];
