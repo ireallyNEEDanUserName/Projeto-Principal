@@ -66,32 +66,51 @@ var iniciar = function(status){
 	var txt = localStorage.getItem("Jogador");
 	
 	if(JSON.parse(txt) == null){
-		status.lvlCombat = 1;
-		status.expCombat = 0;
-		status.atk = 1;
-		status.vel = 1;
-		status.precisao = 1;
-
-		status.lvlMinerar = 1;
-		status.expMinerar = 0;
-		status.lvlForjar = 1;
-		status.expForjar = 0;
-		status.lvlCacar = 1;
-		status.expCacar = 0;
-
-		status.inventario = {};
-		status.inventario = iniciarInv(status.inventario);
-
-		status.clicks = 0;
-		status.tempoJogador = 0;
+		status = checar(status);
 
 		localStorage.setItem("Jogador", JSON.stringify(status));
 	}else{
 		status = JSON.parse(txt);
+		status = checar(status);
 		//console.log(status);
 	}
 		
 	return status;
+};
+
+var checar = function(status){
+
+	var estrutura = {};
+	
+	estrutura.lvlCombat = 1;
+	estrutura.expCombat = 0;
+	estrutura.atk = 1;
+	estrutura.vel = 1;
+	estrutura.precisao = 1;
+
+	estrutura.lvlMinerar = 1;
+	estrutura.expMinerar = 0;
+	estrutura.lvlForjar = 1;
+	estrutura.expForjar = 0;
+	estrutura.lvlCacar = 1;
+	estrutura.expCacar = 0;
+
+	estrutura.inventario = {};
+	estrutura.inventario = iniciarInv(estrutura.inventario);
+
+	estrutura.clicks = 0;
+	estrutura.tempoJogador = 0;
+	
+	for(var key in estrutura){
+		if(!(key in status)){
+			status[key] = estrutura[key];
+			console.log(status[key] );
+		}
+		
+	}
+	
+	return status;
+	
 };
 
 var iniciarInv = function(inventario){
@@ -199,20 +218,26 @@ var materiais = function(){
 var escrever = function(status){
 	
 	for(var key in status.inventario){
-		var ele = document.getElementById(key);
-		ele.innerHTML = key.charAt(0).toUpperCase() + key.slice(1) + ": " + status.inventario[key];
+		try{
+			var ele = document.getElementById(key);
+			ele.innerHTML = key.charAt(0).toUpperCase() + key.slice(1) + ": " + status.inventario[key];
+		}catch(err){
+			console.log(err);
+		}
 	}
 };
 
-var upaLevel = function(status,tipo){
+var upaLevel = function(status, tipo){
 	var level = "lvl" + tipo;
 	var experiencia = "exp" + tipo; 
 	var compExp = (status[level] * status[level]) * (50 + status[level]);
     if (status[experiencia] >= compExp ) {
-    	status[level] +=1; 
+    	status[level] += 1; 
     	status[experiencia] -= compExp;
-
     	}
-    console.log(compExp);
+    //console.log(compExp);
     return status;
 };
+
+
+
