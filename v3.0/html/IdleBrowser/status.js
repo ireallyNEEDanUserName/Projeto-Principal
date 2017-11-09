@@ -33,6 +33,7 @@ var escreverStatus = function(status){
 			else if(key.includes("Forjar")) texto = "Forjar";
 			else if(key.includes("Caca")) texto = "Cacar";
 			else if(key.includes("Chefe")) texto = "Chefe";
+			else if(key.includes("Combate")) texto = "Combate";
 
 			var level = "lvl" + texto;
 			var experiencia = "exp" + texto; 
