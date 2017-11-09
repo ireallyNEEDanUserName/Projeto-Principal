@@ -182,7 +182,5 @@ var informacoes = function(texto){
 	
 	document.body.insertAdjacentHTML('beforeend', divStatus);
 	
-	console.log(status);
-	console.log(texto);
 	
 };
