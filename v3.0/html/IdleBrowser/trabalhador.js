@@ -139,6 +139,7 @@ var updateEmp = function(status){
 				status.empregados["n" + x] = upaLevel(status.empregados["n" + x], "");
 				status.expChefe += qtdMaterial;
 				status = upaLevel(status, "Chefe");
+				salvar(status);
 			}
 			
 			barra.innerHTML = tempoDesdeOInicio[x] + " %";
