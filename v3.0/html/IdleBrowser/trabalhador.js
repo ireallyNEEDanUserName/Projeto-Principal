@@ -152,3 +152,36 @@ var updateEmp = function(status){
 	tick();
 	
 };
+
+
+var informacoes = function(texto){
+	
+	var objeto = document.getElementById("statusEmpregado");
+	
+	try{
+		document.body.removeChild(objeto);
+	}catch(err){
+		console.log("Erro informacoes Empregado " + err);
+	}
+	
+	var status = {};
+	status = iniciar(status);
+	var tamanho = Object.keys(status.empregados).length;
+	var empAtual;
+	
+	for(var x = 1; x <= tamanho; x++){
+		if(texto.includes(x)) empAtual = x;
+	}
+	
+	var divStatus = "<div id='statusEmpregado'>" + 
+					"Empregado " + empAtual +
+					" | Level: " + status.empregados["n" + empAtual].lvl +
+					" | Experiência: " + status.empregados["n" + empAtual].exp + 
+					"</div>";
+	
+	document.body.insertAdjacentHTML('beforeend', divStatus);
+	
+	console.log(status);
+	console.log(texto);
+	
+};
