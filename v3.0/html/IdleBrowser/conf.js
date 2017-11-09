@@ -19,7 +19,12 @@ $(document).ready(function(){
 	$('.item').click(function(){
 		var clicked = $(this).attr("id");
 		
-		start(clicked);
+		try{
+			start(clicked);
+		}catch(err){
+			console.log("Erro na chamada do conf.js " + err);
+		}
+		
 	})
 
 	//OPCOES DA PAGINA LOJA.HTML
