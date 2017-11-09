@@ -18,11 +18,13 @@ $(document).ready(function(){
 	
 	$('.item').click(function(){
 		var clicked = $(this).attr("id");
+		var texto = $(this).text();
 		
 		try{
 			start(clicked);
 		}catch(err){
 			console.log("Erro na chamada do conf.js " + err);
+			if(texto.includes("Empregado")) informacoes(texto);
 		}
 		
 	})
