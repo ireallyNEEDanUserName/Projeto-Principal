@@ -55,7 +55,7 @@ var start = function(tipo){
 			status = upaLevel(status, texto);
 			//console.log(status);
 			salvar(status);
-			qtd.innerHTML = tipoMaterial.charAt(0).toUpperCase() + tipoMaterial.slice(1) + ": " + status.inventario[tipoMaterial];
+			qtd.innerHTML = maiuscula(tipoMaterial) + ": " + status.inventario[tipoMaterial];
 		}
 		
 		barra.innerHTML = tempoDesdeOInicio.toFixed(0) + " %";
