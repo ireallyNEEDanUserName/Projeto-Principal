@@ -94,7 +94,12 @@ var checar = function(status){
 	estrutura.expForjar = 0;
 	estrutura.lvlCacar = 1;
 	estrutura.expCacar = 0;
+	estrutura.lvlChefe = 1;
+	estrutura.expChefe = 0;
 
+	estrutura.empregados = {};
+	estrutura.empregados = iniciarEmp(estrutura.empregados);
+	
 	estrutura.inventario = {};
 	estrutura.inventario = iniciarInv(estrutura.inventario);
 
@@ -106,9 +111,7 @@ var checar = function(status){
 			status[key] = estrutura[key];
 			console.log(status[key] );
 		}
-		
 	}
-	
 	return status;
 	
 };
@@ -120,6 +123,18 @@ var iniciarInv = function(inventario){
 	inventario.dinheiro = 0;
 	
 	return inventario;
+};
+
+var iniciarEmp = function(empregados){
+	
+	empregados.n1 = {};
+	
+	empregados.n1.tipo = "minerio";
+	empregados.n1.offline = "";
+	empregados.n1.lvl = 1;
+	empregados.n1.exp = 0;
+	
+	return empregados;
 };
 
 
@@ -226,6 +241,7 @@ var escrever = function(status){
 		}
 	}
 };
+
 
 var upaLevel = function(status, tipo){
 	var level = "lvl" + tipo;
