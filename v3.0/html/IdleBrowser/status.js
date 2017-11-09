@@ -20,11 +20,11 @@ var escreverStatus = function(status){
 	for(var key in status){
 		if(key == 'inventario'){
 			for(var chave in status[key]) tam += status[key][chave];			
-			cap = key.charAt(0).toUpperCase() + key.slice(1);
+			cap = maiuscula(key);
 			str += " | " + cap + ": " + tam + " | ";
 		}else if(key == 'empregados'){
 			tam = Object.keys(status[key]).length;
-			cap = key.charAt(0).toUpperCase() + key.slice(1);
+			cap = maiuscula(key);
 			str += " | " + cap + ": " + tam + " | ";
 		}else if(key.includes("exp")){
 		
@@ -38,10 +38,10 @@ var escreverStatus = function(status){
 			var experiencia = "exp" + texto; 
 			var compExp = (status[level] * status[level]) * (50 + status[level]);
 			
-			cap = key.charAt(0).toUpperCase() + key.slice(1);
+			cap = maiuscula(key);
 			str += " | " + cap + ": " + status[key] + " / " + compExp + " | ";
 		}else{
-			cap = key.charAt(0).toUpperCase() + key.slice(1);
+			cap = maiuscula(key);
 			str += " | " + cap + ": " + status[key] + " | ";
 		}
 	}
