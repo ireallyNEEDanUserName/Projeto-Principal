@@ -2,7 +2,7 @@ var start = function(){
 
 	var status = {};
 	status = iniciar(status);
-	escrever(status);
+	escreverStatus(status);
 	
 	window.addEventListener("beforeunload", function(){
 		localStorage.setItem("Jogador", JSON.stringify(status));
@@ -10,7 +10,7 @@ var start = function(){
 	
 };
 
-var escrever = function(status){
+var escreverStatus = function(status){
 
 	var dados = document.getElementById("dados");
 	
@@ -22,12 +22,17 @@ var escrever = function(status){
 			for(var chave in status[key]) tam += status[key][chave];			
 			cap = key.charAt(0).toUpperCase() + key.slice(1);
 			str += " | " + cap + ": " + tam + " | ";
+		}else if(key == 'empregados'){
+			tam = Object.keys(status[key]).length;
+			cap = key.charAt(0).toUpperCase() + key.slice(1);
+			str += " | " + cap + ": " + tam + " | ";
 		}else if(key.includes("exp")){
 		
 			var texto = "";
 			if(key.includes("Minerar")) texto = "Minerar";	
 			else if(key.includes("Forjar")) texto = "Forjar";
 			else if(key.includes("Caca")) texto = "Cacar";
+			else if(key.includes("Chefe")) texto = "Chefe";
 
 			var level = "lvl" + texto;
 			var experiencia = "exp" + texto; 
