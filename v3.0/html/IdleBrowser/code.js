@@ -109,7 +109,7 @@ var checar = function(status){
 	for(var key in estrutura){
 		if(!(key in status)){
 			status[key] = estrutura[key];
-			console.log(status[key] );
+			console.log(status[key]);
 		}
 	}
 	return status;
@@ -127,12 +127,21 @@ var iniciarInv = function(inventario){
 
 var iniciarEmp = function(empregados){
 	
+	var data = new Date();
+	var agora = (data.getTime() / 1000).toFixed(0);
+	
 	empregados.n1 = {};
+	empregados.n2 = {};
 	
 	empregados.n1.tipo = "minerio";
-	empregados.n1.offline = "";
+	empregados.n1.offline = agora;
 	empregados.n1.lvl = 1;
 	empregados.n1.exp = 0;
+	
+	empregados.n2.tipo = "caca";
+	empregados.n2.offline = agora;
+	empregados.n2.lvl = 1;
+	empregados.n2.exp = 0;
 	
 	return empregados;
 };
@@ -235,9 +244,9 @@ var escrever = function(status){
 	for(var key in status.inventario){
 		try{
 			var ele = document.getElementById(key);
-			ele.innerHTML = key.charAt(0).toUpperCase() + key.slice(1) + ": " + status.inventario[key];
+			ele.innerHTML = maiuscula(key) + ": " + status.inventario[key];
 		}catch(err){
-			console.log(err);
+			console.log("Erro na chamada do code.js " + err);
 		}
 	}
 };
@@ -251,8 +260,15 @@ var upaLevel = function(status, tipo){
     	status[level] += 1; 
     	status[experiencia] -= compExp;
     	}
-    //console.log(compExp);
+    console.log("Exp Necessario: " + compExp + " Exp Atual: " + status[experiencia]);
     return status;
+};
+
+
+var maiuscula = function(str){
+	str = str.charAt(0).toUpperCase() + str.slice(1);
+	
+	return str;
 };
 
 
