@@ -127,21 +127,26 @@ var iniciarInv = function(inventario){
 
 var iniciarEmp = function(empregados){
 	
+	empregados = adicionarEmp(empregados, "minerio");
+	empregados = adicionarEmp(empregados, "caca");
+	
+	return empregados;
+};
+
+var adicionarEmp = function(empregados, funcao){
+
+	var tamanho = Object.keys(empregados).length;
+	var nome = "n" + (tamanho + 1);
+
 	var data = new Date();
 	var agora = (data.getTime() / 1000).toFixed(0);
 	
-	empregados.n1 = {};
-	empregados.n2 = {};
+	empregados[nome] = {};
 	
-	empregados.n1.tipo = "minerio";
-	empregados.n1.offline = agora;
-	empregados.n1.lvl = 1;
-	empregados.n1.exp = 0;
-	
-	empregados.n2.tipo = "caca";
-	empregados.n2.offline = agora;
-	empregados.n2.lvl = 1;
-	empregados.n2.exp = 0;
+	empregados[nome].tipo = funcao;
+	empregados[nome].offline = agora;
+	empregados[nome].lvl = 1;
+	empregados[nome].exp = 0;
 	
 	return empregados;
 };
@@ -258,6 +263,9 @@ var upaLevel = function(status, tipo){
 	var compExp = (status[level] * status[level]) * (50 + status[level]);
     if (status[experiencia] >= compExp ) {
     	status[level] += 1; 
+		if(tipo == "Chefe" && status[level] == 5){
+			status.empregados = adicionarEmp(status.empregados, "minerio");
+		}
     	status[experiencia] -= compExp;
     	}
     console.log("Exp Necessario: " + compExp + " Exp Atual: " + status[experiencia]);
