@@ -82,8 +82,8 @@ var checar = function(status){
 
 	var estrutura = {};
 	
-	estrutura.lvlCombat = 1;
-	estrutura.expCombat = 0;
+	estrutura.lvlCombate = 1;
+	estrutura.expCombate = 0;
 	estrutura.atk = 1;
 	estrutura.vel = 1;
 	estrutura.precisao = 1;
