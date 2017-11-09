@@ -10,7 +10,7 @@ a:link, a:active, a:visited{
 	color: white;
 }
 
-#home:hover, #status:hover, #missoes:hover, #combate:hover {
+.Menu:hover {
 	color: black;
 }
 
@@ -139,4 +139,14 @@ a:link, a:active, a:visited{
 .comp {
 	margin-left: 10px;
 	margin-right: 10px;
+}
+
+
+/* PAGINA TRABALHADOR.HTML */
+
+.Empregado {
+	background-color: #6796a0;
+	width: 150px;
+	margin: auto;
+	text-align: center;
 }
