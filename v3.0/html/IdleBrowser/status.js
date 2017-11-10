@@ -4,10 +4,6 @@ var start = function(){
 	status = iniciar(status);
 	escreverStatus(status);
 	
-	window.addEventListener("beforeunload", function(){
-		localStorage.setItem("Jogador", JSON.stringify(status));
-	});
-	
 };
 
 var escreverStatus = function(status){
