@@ -45,7 +45,7 @@ var start = function(tipo){
 		
 		tempoDesdeOInicio = segundo - segundoInicialAtualizado;
 	
-		if(tempoDesdeOInicio.toFixed(0) >= 10){
+		if(tempoDesdeOInicio.toFixed(0) >= 60){
 			dataInicialAtualizada = new Date();
 			segundoInicialAtualizado = dataInicialAtualizada.getTime() / 1000;
 			tempoDesdeOInicio = 0;
@@ -58,8 +58,9 @@ var start = function(tipo){
 			qtd.innerHTML = maiuscula(tipoMaterial) + ": " + status.inventario[tipoMaterial];
 		}
 		
-		barra.innerHTML = tempoDesdeOInicio.toFixed(0) + " %";
-		barraCheia.style.width = tempoDesdeOInicio.toFixed(0) + 'px'
+		var tamanhoBarra = Math.floor(tempoDesdeOInicio.toFixed(0) / (60 / 100));
+		barra.innerHTML = tamanhoBarra + " %";
+		barraCheia.style.width = tamanhoBarra + 'px'
 			
 		
 		requestAnimationFrame(tick);
