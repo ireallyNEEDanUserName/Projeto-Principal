@@ -263,7 +263,7 @@ var upaLevel = function(status, tipo){
 	var compExp = (status[level] * status[level]) * (50 + status[level]);
     if (status[experiencia] >= compExp ) {
     	status[level] += 1; 
-		if(tipo == "Chefe" && status[level] == 5){
+		if(tipo == "Chefe" && (status[level] % 5) == 0){
 			status.empregados = adicionarEmp(status.empregados, "minerio");
 		}
     	status[experiencia] -= compExp;
