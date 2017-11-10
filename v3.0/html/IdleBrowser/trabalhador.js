@@ -92,6 +92,13 @@ var updateOffline = function(status){
 		}
 		
 	}
+	
+	
+	var divStatus = "<div id='statusEmpregado'>" + 
+					"Itens Adquiridos Offline: " + qtd * tamanho +
+					"</div>";
+	
+	document.body.insertAdjacentHTML('beforeend', divStatus);
 
 };
 
