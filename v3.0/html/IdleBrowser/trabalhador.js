@@ -93,13 +93,7 @@ var updateOffline = function(status){
 		
 	}
 	
-	
-	var divStatus = "<div id='statusEmpregado'>" + 
-					"Itens Adquiridos Offline: " + qtd * tamanho +
-					"</div>";
-	
-	document.body.insertAdjacentHTML('beforeend', divStatus);
-
+	textoFinalPagina("Itens Adquiridos Offline: " + qtd * tamanho);
 };
 
 var updateEmp = function(status){
@@ -153,6 +147,7 @@ var updateEmp = function(status){
 				status.expChefe += qtdMaterial;
 				status = upaLevel(status, "Chefe");
 				salvar(status);
+				textoFinalPagina("Você adquiriu " + maiuscula(tipoMaterial) + ": " + qtdMaterial);
 			}
 			
 			var tamanhoBarra = Math.floor(tempoDesdeOInicio[x].toFixed(0) / (tempoMaterial / 100));
