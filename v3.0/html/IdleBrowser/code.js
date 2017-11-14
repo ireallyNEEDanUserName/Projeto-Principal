@@ -272,22 +272,22 @@ var upaLevel = function(status, tipo){
 		}
     	status[experiencia] -= compExp;
     	}
-		var divStatus = "<div id='statusEmpregado'>" + 
-					"PARABÉNSS!! VOCÊ UPOU UM LEVEL DE " + tipo + "! - " + status[level] + 
-					"</div>";
-	
-		document.body.insertAdjacentHTML('beforeend', divStatus);
+		textoFinalPagina("PARABÉNSS!! VOCÊ UPOU UM LEVEL DE " + tipo + "! - " + status[level]);
 		
     console.log("Exp Necessario: " + compExp + " Exp Atual: " + status[experiencia]);
     return status;
 };
 
-
+//FUNCAO PARA DEIXAR A PRIMEIRA LETRA MAIUSCULA.
 var maiuscula = function(str){
 	str = str.charAt(0).toUpperCase() + str.slice(1);
-	
 	return str;
 };
 
+//FUNCAO PARA INSERIR TEXTO NA DIV DO FINAL DA PAGINA.
+var textoFinalPagina = function(texto){
 
+	var divStatus = "<div id='statusEmpregado'>" + texto + "</div>";
+	document.body.insertAdjacentHTML('beforeend', divStatus);
+};
 
