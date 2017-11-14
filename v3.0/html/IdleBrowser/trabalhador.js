@@ -42,8 +42,8 @@ var criarHTML = function(empregados, tamanho){
 	var emp = "<div id=" + nome + " class='Empregado'>" +
 			"<div id=" + maiuscula(empregados[nome].tipo) + ">" +	
 			"<p id=" + maiuscula(empregados[nome].tipo) + "Item' class='item'>Empregado " + tamanho + ": " + maiuscula(empregados[nome].tipo) + "</p>" +
-			"<div id='barraProgresso" + maiuscula(empregados[nome].tipo) + "Item' class='progresso'>" +
-			"<div id='barra" + maiuscula(empregados[nome].tipo) + "Item' class='barra'>0 %</div>" +
+			"<div id='barraProgresso" + nome +"' class='progresso'>" +
+			"<div id='barra" + nome +"' class='barra'>0 %</div>" +
 			"</div>" +
 			"</div>" +
 			"</div>";
@@ -76,8 +76,8 @@ var updateOffline = function(status){
 		var tempoOffline = atual - status.empregados["n" + x].offline;
 		//SE TEMPO FOR MAIOR QUE 6H MUDAR PARA 6H
 		if(tempoOffline > 21600) tempoOffline = 21600;
-		qtd = Math.floor(tempoOffline / tempoNecessarioTarefa) * Math.floor((status.empregados["n" + x].lvl / 3));
-		console.log("Tempo Atual: " + atual, "| Tempo do Empregado: " + status.empregados["n" + x].offline, "| Tempo Offline: " + tempoOffline);
+		qtd = Math.floor(tempoOffline / tempoNecessarioTarefa) * Math.floor((status.empregados["n" + x].lvl / 3) + 1);
+		console.log("Tempo Atual: " + atual, "| Tempo do Empregado: " + status.empregados["n" + x].offline, "| Tempo Offline: " + tempoOffline + " | Qtd: " + qtd);
 		if(status.empregados["n" + x].tipo == "caca") invTipo = "comida";
 		else invTipo = status.empregados["n" + x].tipo;
 		//SE TEMPO OFFLINE FOR MAIOR QUE 1MIN ADICIONAR NO INVENTARIO E DEFINIR TEMPO OFFLINE COMO ATUAL.
@@ -107,6 +107,9 @@ var updateEmp = function(status){
 	var tamanho = Object.keys(status.empregados).length;
 	var x;
 	
+	console.log(status.empregados);
+	console.log("updateEmp - " + tamanho);
+	
 	var dataInicial = new Array();
 	var inicial = new Array();
 	for(x = 1; x <= tamanho; x++){
@@ -123,34 +126,40 @@ var updateEmp = function(status){
 		var tipo;
 		var tipoMaterial;
 		var qtdMaterial;
+		var nome;
 		
 		for(x = 1; x <= tamanho; x++){
-		
+			nome = "n" + x;
 			tempoDesdeOInicio[x] = atual - inicial[x];
+			
+			tipo = status.empregados[nome].tipo;
+			qtdMaterial = 1 + Math.floor((status.empregados[nome].lvl / 2));
+			if(status.empregados[nome].tipo == "caca") tipoMaterial = "comida"; 
+			else tipoMaterial = status.empregados[nome].tipo;
 		
-			tipo = status.empregados["n" + x].tipo;
-			qtdMaterial = 1 + Math.floor((status.empregados["n" + x].lvl / 2));
-			if(status.empregados["n" + x].tipo == "caca") tipoMaterial = "comida"; 
-			else tipoMaterial = status.empregados["n" + x].tipo;
-		
-			var barra = document.getElementById("barra" + maiuscula(tipo) + "Item");
-			var barraCheia = document.getElementById("barraProgresso" + maiuscula(tipo) + "Item");
+			var barra = document.getElementById("barra" + nome);
+			var barraCheia = document.getElementById("barraProgresso" + nome);
 			
 			if(tempoDesdeOInicio[x] >= 100){
 				dataInicial[x] = new Date();
 				inicial[x] = (dataInicial[x].getTime() / 1000).toFixed(0);
-				status.empregados["n" + x].offline = inicial[x];
+				status.empregados[nome].offline = inicial[x];
 				tempoDesdeOInicio.x = 0;
 				status.inventario[tipoMaterial] += qtdMaterial;
-				status.empregados["n" + x].exp += qtdMaterial;
-				status.empregados["n" + x] = upaLevel(status.empregados["n" + x], "");
+				status.empregados[nome].exp += qtdMaterial;
+				status.empregados[nome] = upaLevel(status.empregados[nome], "");
 				status.expChefe += qtdMaterial;
 				status = upaLevel(status, "Chefe");
 				salvar(status);
 			}
 			
-			barra.innerHTML = tempoDesdeOInicio[x] + " %";
-			barraCheia.style.width = tempoDesdeOInicio[x] + 'px'
+			try{
+				barra.innerHTML = tempoDesdeOInicio[x] + " %";
+				barraCheia.style.width = tempoDesdeOInicio[x] + 'px'
+			}
+			catch(err){
+				console.log("Erro em Trabalhador.js " + err);
+			}
 		
 		}
 		
