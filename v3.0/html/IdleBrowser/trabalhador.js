@@ -76,7 +76,7 @@ var updateOffline = function(status){
 		var tempoOffline = atual - status.empregados["n" + x].offline;
 		//SE TEMPO FOR MAIOR QUE 6H MUDAR PARA 6H
 		if(tempoOffline > 21600) tempoOffline = 21600;
-		qtd = Math.floor(tempoOffline / tempoNecessarioTarefa);
+		qtd = Math.floor(tempoOffline / tempoNecessarioTarefa) * Math.floor((status.empregados["n" + x].lvl / 3));
 		console.log("Tempo Atual: " + atual, "| Tempo do Empregado: " + status.empregados["n" + x].offline, "| Tempo Offline: " + tempoOffline);
 		if(status.empregados["n" + x].tipo == "caca") invTipo = "comida";
 		else invTipo = status.empregados["n" + x].tipo;
