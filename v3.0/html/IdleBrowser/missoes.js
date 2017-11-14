@@ -53,7 +53,7 @@ var start = function(tipo){
 			status.inventario[tipoMaterial] += qtdMaterial;
 			status[expTexto] += exp;
 			status = upaLevel(status, texto);
-			//console.log(status);
+			textoFinalPagina("Você adquiriu " + maiuscula(tipoMaterial) + ": " + qtdMaterial);
 			salvar(status);
 			qtd.innerHTML = maiuscula(tipoMaterial) + ": " + status.inventario[tipoMaterial];
 		}
