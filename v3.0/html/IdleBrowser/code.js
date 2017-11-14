@@ -127,17 +127,20 @@ var iniciarInv = function(inventario){
 
 var iniciarEmp = function(empregados){
 	
-	empregados = adicionarEmp(empregados, "minerio");
-	empregados = adicionarEmp(empregados, "caca");
+	var tamanho = Object.keys(empregados).length;
+	console.log("iniciarEmp - " + tamanho);
+	empregados = adicionarEmp(empregados, "minerio", tamanho);
+	
 	
 	return empregados;
 };
 
-var adicionarEmp = function(empregados, funcao){
-
-	var tamanho = Object.keys(empregados).length;
+var adicionarEmp = function(empregados, funcao, tamanho){
+	
+	console.log("adicionarEmp - " + tamanho);
+	
 	var nome = "n" + (tamanho + 1);
-
+	
 	var data = new Date();
 	var agora = (data.getTime() / 1000).toFixed(0);
 	
@@ -264,7 +267,8 @@ var upaLevel = function(status, tipo){
     if (status[experiencia] >= compExp ) {
     	status[level] += 1; 
 		if(tipo == "Chefe" && (status[level] % 5) == 0){
-			status.empregados = adicionarEmp(status.empregados, "minerio");
+			status.empregados = adicionarEmp(status.empregados, "minerio", Object.keys(status.empregados).length);
+			console.log("Funcao upaLevel - " + Object.keys(status.empregados).length);
 		}
     	status[experiencia] -= compExp;
     	}
