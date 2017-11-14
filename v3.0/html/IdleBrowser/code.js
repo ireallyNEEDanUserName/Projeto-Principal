@@ -273,7 +273,7 @@ var upaLevel = function(status, tipo){
     	status[experiencia] -= compExp;
     	}
 		var divStatus = "<div id='statusEmpregado'>" + 
-					"PARABÉNSS!! VOCÊ UPOU UM LEVEL! - " + status[level] + 
+					"PARABÉNSS!! VOCÊ UPOU UM LEVEL DE " + tipo + "! - " + status[level] + 
 					"</div>";
 	
 		document.body.insertAdjacentHTML('beforeend', divStatus);
