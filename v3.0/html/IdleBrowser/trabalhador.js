@@ -127,10 +127,12 @@ var updateEmp = function(status){
 		var tipoMaterial;
 		var qtdMaterial;
 		var nome;
+		var tempoMaterial;
 		
 		for(x = 1; x <= tamanho; x++){
 			nome = "n" + x;
 			tempoDesdeOInicio[x] = atual - inicial[x];
+			tempoMaterial = 100 - Math.floor((status.empregados[nome].lvl / 2));
 			
 			tipo = status.empregados[nome].tipo;
 			qtdMaterial = 1 + Math.floor((status.empregados[nome].lvl / 2));
@@ -140,7 +142,7 @@ var updateEmp = function(status){
 			var barra = document.getElementById("barra" + nome);
 			var barraCheia = document.getElementById("barraProgresso" + nome);
 			
-			if(tempoDesdeOInicio[x] >= 100){
+			if(tempoDesdeOInicio[x] >= tempoMaterial){
 				dataInicial[x] = new Date();
 				inicial[x] = (dataInicial[x].getTime() / 1000).toFixed(0);
 				status.empregados[nome].offline = inicial[x];
@@ -153,9 +155,11 @@ var updateEmp = function(status){
 				salvar(status);
 			}
 			
+			var tamanhoBarra = Math.floor(tempoDesdeOInicio[x].toFixed(0) / (tempoMaterial / 100));
+			
 			try{
-				barra.innerHTML = tempoDesdeOInicio[x] + " %";
-				barraCheia.style.width = tempoDesdeOInicio[x] + 'px'
+				barra.innerHTML = tamanhoBarra + " %";
+				barraCheia.style.width = tamanhoBarra + 'px'
 			}
 			catch(err){
 				console.log("Erro em Trabalhador.js " + err);
