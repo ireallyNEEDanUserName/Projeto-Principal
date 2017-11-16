@@ -70,16 +70,21 @@ var updateOffline = function(status){
 	var x;
 	var invTipo;
 	var qtd;
+	var totalItens;
 	//LOOP POR TODOS EMPREGADOS
 	for(x = 1; x <= tamanho; x++){
 		//TEMPO TOTAL OFFLINE
 		var tempoOffline = atual - status.empregados["n" + x].offline;
 		//SE TEMPO FOR MAIOR QUE 6H MUDAR PARA 6H
 		if(tempoOffline > 21600) tempoOffline = 21600;
-		qtd = Math.floor(tempoOffline / tempoNecessarioTarefa) * Math.floor((status.empregados["n" + x].lvl / 3) + 1);
+		qtd = Math.floor(tempoOffline / tempoNecessarioTarefa) * Math.floor((status.empregados["n" + x].lvl / 3) + 1); //qtd de itens que o trabalhador pega.
+		
 		console.log("Tempo Atual: " + atual, "| Tempo do Empregado: " + status.empregados["n" + x].offline, "| Tempo Offline: " + tempoOffline + " | Qtd: " + qtd);
+		//Tipo item que o trabalhador pega.
 		if(status.empregados["n" + x].tipo == "caca") invTipo = "comida";
 		else invTipo = status.empregados["n" + x].tipo;
+		
+		totalItens += qtd; //Total de itens que todos trabalhadores pegaram.
 		//SE TEMPO OFFLINE FOR MAIOR QUE 1MIN ADICIONAR NO INVENTARIO E DEFINIR TEMPO OFFLINE COMO ATUAL.
 		if(qtd >= 1){
 			status.inventario[invTipo] += qtd;
@@ -93,9 +98,10 @@ var updateOffline = function(status){
 		
 	}
 	
-	textoFinalPagina("Itens Adquiridos Offline: " + qtd * tamanho);
+	textoFinalPagina("Itens Adquiridos Offline: " + totalItens);
 };
 
+//Funcao que roda enquanto a pagina do trabalhador estiver aberta.
 var updateEmp = function(status){
 
 	var tamanho = Object.keys(status.empregados).length;
@@ -108,14 +114,14 @@ var updateEmp = function(status){
 	var inicial = new Array();
 	for(x = 1; x <= tamanho; x++){
 		dataInicial[x] = new Date();
-		inicial[x] = (dataInicial[x].getTime() / 1000).toFixed(0);	
+		inicial[x] = (dataInicial[x].getTime() / 1000).toFixed(0);	 //variavel de tempo de cada trabalhador
 	}
 	
 	var tick = function(){
 	
-		var data = new Date();
-		var atual = (data.getTime() / 1000).toFixed(0);	
-		var tempoDesdeOInicio = new Array();
+		var data = new Date(); 
+		var atual = (data.getTime() / 1000).toFixed(0);	//data atual para comparar o tempo que passou com a variavel 'inicial'
+		var tempoDesdeOInicio = new Array(); //variavel para guardar o tempo que passou desde que começou.
 	
 		var tipo;
 		var tipoMaterial;
@@ -124,33 +130,34 @@ var updateEmp = function(status){
 		var tempoMaterial;
 		
 		for(x = 1; x <= tamanho; x++){
-			nome = "n" + x;
+			nome = "n" + x; //nome do trabalhador.
 			tempoDesdeOInicio[x] = atual - inicial[x];
-			tempoMaterial = 100 - Math.floor((status.empregados[nome].lvl / 2));
+			tempoMaterial = 100 - Math.floor((status.empregados[nome].lvl / 2)); //tempo que demora para pegar o material.
 			
-			tipo = status.empregados[nome].tipo;
-			qtdMaterial = 1 + Math.floor((status.empregados[nome].lvl / 2));
+			tipo = status.empregados[nome].tipo; //tipo do material que o empregado pega.
+			qtdMaterial = 1 + Math.floor((status.empregados[nome].lvl / 2)); //qtuantidade de material que o empregado pega.
 			if(status.empregados[nome].tipo == "caca") tipoMaterial = "comida"; 
 			else tipoMaterial = status.empregados[nome].tipo;
 		
 			var barra = document.getElementById("barra" + nome);
 			var barraCheia = document.getElementById("barraProgresso" + nome);
 			
+			//Caso o tempo seja maior ou igual o tempo necessario.
 			if(tempoDesdeOInicio[x] >= tempoMaterial){
-				dataInicial[x] = new Date();
-				inicial[x] = (dataInicial[x].getTime() / 1000).toFixed(0);
-				status.empregados[nome].offline = inicial[x];
-				tempoDesdeOInicio.x = 0;
-				status.inventario[tipoMaterial] += qtdMaterial;
-				status.empregados[nome].exp += qtdMaterial;
-				status.empregados[nome] = upaLevel(status.empregados[nome], "");
-				status.expChefe += qtdMaterial;
-				status = upaLevel(status, "Chefe");
-				salvar(status);
-				textoFinalPagina("Você adquiriu " + maiuscula(tipoMaterial) + ": " + qtdMaterial);
+				dataInicial[x] = new Date(); 
+				inicial[x] = (dataInicial[x].getTime() / 1000).toFixed(0); //pegar novo tempo inicial para esse empregado.
+				status.empregados[nome].offline = inicial[x]; //adicionar no tempo offline o tempo atual como inicial.
+				tempoDesdeOInicio.x = 0; 
+				status.inventario[tipoMaterial] += qtdMaterial; //adicionar o material no inventario.
+				status.empregados[nome].exp += qtdMaterial; //adicionar no exp no empregado a quantidade de material pego.
+				status.empregados[nome] = upaLevel(status.empregados[nome], ""); //chamada da função que verifica se upou de level do empregado.
+				status.expChefe += qtdMaterial; //adicionar exp na skill do jogador.
+				status = upaLevel(status, "Chefe"); //chamada da função que verifica se upou de level do jogador.
+				salvar(status); //save do jogo.
+				textoFinalPagina("Você adquiriu " + maiuscula(tipoMaterial) + ": " + qtdMaterial); //barra final da tela com informações.
 			}
-			
-			var tamanhoBarra = Math.floor(tempoDesdeOInicio[x].toFixed(0) / (tempoMaterial / 100));
+			//calcular o quanto a barra tem que aumentar para dar os 100%.
+			var tamanhoBarra = Math.floor(tempoDesdeOInicio[x].toFixed(0) / (tempoMaterial / 100)); 
 			
 			try{
 				barra.innerHTML = tamanhoBarra + " %";
@@ -161,15 +168,15 @@ var updateEmp = function(status){
 			}
 		
 		}
-		
+		//chama o loop na função tick().
 		requestAnimationFrame(tick);
 	};
-	
+	//chama a função pela primeira vez.
 	tick();
 	
 };
 
-
+//barra final da pagina com informações do empregado quando clica nele.
 var informacoes = function(texto){
 	
 	var objeto = document.getElementById("statusEmpregado");
@@ -186,16 +193,14 @@ var informacoes = function(texto){
 	var empAtual;
 	
 	for(var x = 1; x <= tamanho; x++){
-		if(texto.includes(x)) empAtual = x;
+		if(texto.includes(x)) empAtual = x; //seleciona o empregado em que foi clicado.
 	}
+	//texto para inserir no final da pagina.
+	var texto = "Empregado " + empAtual +
+				" | Level: " + status.empregados["n" + empAtual].lvl +
+				" | Experiência: " + status.empregados["n" + empAtual].exp;
 	
-	var divStatus = "<div id='statusEmpregado'>" + 
-					"Empregado " + empAtual +
-					" | Level: " + status.empregados["n" + empAtual].lvl +
-					" | Experiência: " + status.empregados["n" + empAtual].exp + 
-					"</div>";
-	
-	document.body.insertAdjacentHTML('beforeend', divStatus);
+	textoFinalPagina(texto);
 	
 	
 };
