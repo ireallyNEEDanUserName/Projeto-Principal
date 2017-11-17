@@ -35,8 +35,15 @@ $(document).ready(function(){
 		var y = $(this).attr("value");
 		var x = $(this).attr("id");
 		var valor = $("#" + y + "Qtd").text();
+		var custo;
+		
+		if(y == "pedra") custo = 2;
+		else if(y == "ferro") custo = 5;
 
-		if(x == "+") document.getElementById(y + "Qtd").innerHTML = parseInt(valor) + 1;
+		if(x == "+"){
+			document.getElementById(y + "Qtd").innerHTML = parseInt(valor) + 1;
+			document.getElementById(y + "Val").innerHTML = (parseInt(valor) + 1) * custo;
+		}
 		else if(x == "-" && parseInt(valor) > 1) document.getElementById(y + "Qtd").innerHTML = parseInt(valor) - 1;
 
 	})
