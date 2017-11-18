@@ -136,7 +136,7 @@ a:link, a:active, a:visited{
 	margin-left: 100px;
 }
 
-.btn {
+.btnCompra {
 	text-align: center;
 	font-size: 25px;
 }
@@ -144,6 +144,14 @@ a:link, a:active, a:visited{
 .comp {
 	margin-left: 10px;
 	margin-right: 10px;
+}
+
+#sell {
+	display: none;
+}
+
+#buy {
+	display: block;
 }
 
 
