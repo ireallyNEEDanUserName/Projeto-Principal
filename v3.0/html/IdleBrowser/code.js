@@ -154,9 +154,7 @@ var adicionarEmp = function(empregados, funcao, tamanho){
 	return empregados;
 };
 
-
-//ITENS NAO UTILIZAVEIS NO MOMENTO. 
-/*
+//Função para criar itens;
 var defItens = function(itens){
 
 	itens.minerio = {};
@@ -165,40 +163,20 @@ var defItens = function(itens){
 	var minerio = itens.minerio;
 	var comida = itens.comida;
 
-	minerio.pedra = {lvl: 1, minerio: 1, valor: 1};
-	minerio.cobre = {lvl: 3, minerio: 2, valor: 1};
-	minerio.ferro = {lvl: 5, minerio: 3, valor: 2};
-	minerio.prata = {lvl: 8, minerio: 4, valor: 3};
-	minerio.ouro = {lvl: 10, minerio: 7, valor: 7};
+	minerio.pedra = {lvl: 1, minerio: 1, sell: 1, buy: 3};
+	minerio.cobre = {lvl: 3, minerio: 2, sell: 1, buy: 3};
+	minerio.ferro = {lvl: 5, minerio: 3, sell: 2, buy: 5};
+	minerio.prata = {lvl: 8, minerio: 4, sell: 3, buy: 7};
+	minerio.ouro = {lvl: 10, minerio: 7, sell: 7, buy: 10};
+	
+	comida.rato = {lvl: 1, comida: 1, sell: 1, buy: 3};
 
 	itens.minerio = minerio;
+	itens.comida = comida;
 
 	return itens;
 
 };
-
-var criarElementos = function(){
-
-	var status = {};
-	status = iniciar(status);
-
-	var itens = {};
-	itens = defItens(itens);
-
-	//console.log(status.lvl);
-	//console.log(itens.minerio.pedra.lvl);
-
-	for(var key in itens){
-		//console.log(key);
-		for(var keys in itens[key]){
-			//console.log(keys + ": " + itens[key][keys].lvl);
-		}
-	}
-	
-
-};
-//----------------------------
-*/
 
 var salvar = function(status){
 	localStorage.setItem("Jogador", JSON.stringify(status));
