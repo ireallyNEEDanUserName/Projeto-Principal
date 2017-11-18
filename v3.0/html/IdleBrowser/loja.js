@@ -38,19 +38,6 @@ var addInv = function(tipo, qtd){
 
 };
 
-
-
-/*
-
-<p id="itens">
-	<i class="comp" value="pedra"> COMPRAR </i> <a class="btn" value="pedra" id="-"> - </a>
-	<br>
-	<i> Ferro: </i> <i id="ferroQtd"> 1 </i> | Custa: <i id="ferroVal"> 5 </i> | <a class="btn" value="ferro" id="+"> + </a> <i class="comp" value="ferro"> COMPRAR </i> <a class="btn" value="ferro" id="-"> - </a>
-</p>
-		
-*/
-
-
 var criarBuy = function(){
 	
 	var itens = {}; 
