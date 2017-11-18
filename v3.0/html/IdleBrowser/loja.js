@@ -55,8 +55,8 @@ var criarBuy = function(){
 			console.log(itens[key][keys]);
 			div += "<i>" +  maiuscula(keys) + ": </i>"+
 					"<i id=" + keys + "Qtd>  1 </i>" +
-					"| Custa: " +
-					"<i id=" + keys + "Val>" + itens[key][keys].buy + "</i> |" +
+					" | Custa: " +
+					"<i id=" + keys + "Val>" + itens[key][keys].buy + "</i> | " +
 					"<a class='btnCompra' value='" + keys + "' id='+' outro='" + key + "' > + </a>" +
 					"<i class='comp' value='" + keys + "'> COMPRAR </i>" +
 					"<a class='btnCompra' value='" + keys + "' id='-' outro='" + key + "'> - </a> <br>";
