@@ -5,29 +5,20 @@ var start = function(){
 
 };
 
-var addInv = function(tipo, qtd){
+var addInv = function(nome, qtd, tipo){
 
 	var status = {};
 	status = iniciar(status);
+	var itens = {}; 
+	itens = defItens(itens);
 	
-	var custo;
-	var qtdGeral;
+	console.log(itens[tipo][nome].buy);
 	
-	if(tipo == "pedra"){
-		tipoMaterial = "minerio";
-		custo = 2;
-		qtdGeral = qtd;
-	}
-	else if(tipo == "ferro"){
-		tipoMaterial = "minerio";
-		custo = 5;
-		qtdGeral = qtd * 2;
-	}
-	
+	var custo = itens[tipo][nome].buy;
 	var preco = qtd * custo;
 	
 	if(status.inventario["dinheiro"] >= preco){
-		status.inventario[tipoMaterial] += qtdGeral;
+		status.inventario[tipo] += qtd;
 		status.inventario["dinheiro"] -= preco;
 		textoFinalPagina("Comprou com sucesso " + qtd + " de " + maiuscula(tipo) + " por: " + preco);
 	}
@@ -58,7 +49,7 @@ var criarBuy = function(){
 					" | Custa: " +
 					"<i id=" + keys + "Val>" + itens[key][keys].buy + "</i> | " +
 					"<a class='btnCompra' value='" + keys + "' id='+' outro='" + key + "' > + </a>" +
-					"<i class='comp' value='" + keys + "'> COMPRAR </i>" +
+					"<i class='compra' value='" + keys + "' outro='" + key + "'> COMPRAR </i>" +
 					"<a class='btnCompra' value='" + keys + "' id='-' outro='" + key + "'> - </a> <br>";
 		}
 	}
@@ -66,5 +57,20 @@ var criarBuy = function(){
 	div += "</p>";
 	
 	titulo.insertAdjacentHTML('afterend', div);
+	
+};
+
+
+var criarSell = function(){
+	
+	var status = {};
+	status = iniciar(status);
+	var itens = {}; 
+	itens = defItens(itens);
+	
+	
+	
+	salvar(status);
+	
 	
 };
