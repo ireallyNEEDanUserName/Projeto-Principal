@@ -63,14 +63,15 @@ $(document).ready(function(){
 
 	})
 
-	$('.comp').click(function(){
+	$('.compra').click(function(){
 
-		var y = $(this).attr("value");
-		var valor = parseInt($("#" + y + "Qtd").text());		
+		var nome = $(this).attr("value");
+		var valor = parseInt($("#" + nome + "Qtd").text());	
+		var tipo = $(this).attr("outro");
 
-		console.log(y + " " + valor);
+		console.log(nome + " " + valor);
 
-		addInv(y, valor);
+		addInv(nome, valor, tipo);
 
 	})
 	
