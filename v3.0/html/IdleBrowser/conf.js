@@ -11,9 +11,19 @@ $(document).ready(function(){
 	$('.opcoes').click(function(){
 		var clicked = $(this).attr("value");
 		
-		$('.habilidade').hide();
-		$("#" + clicked).show();
-
+		console.log(clicked);
+		
+		if(clicked == "buy"){
+			$(document.getElementById('sell')).hide();
+			$(document.getElementById('buy')).show();
+		}else if(clicked == "sell"){
+			$(document.getElementById('buy')).hide();
+			$(document.getElementById('sell')).show();
+		}else{
+			$('.habilidade').hide();
+			$("#" + clicked).show();
+		}
+		
 	})
 	
 	$('.item').click(function(){
@@ -30,21 +40,26 @@ $(document).ready(function(){
 	})
 
 	//OPCOES DA PAGINA LOJA.HTML
-	$('.btn').click(function(){
+	$('.btnCompra').click(function(){
+	
+		var itens = {}; 
+		itens = defItens(itens);
 
-		var y = $(this).attr("value");
+		var nome = $(this).attr("value");
 		var x = $(this).attr("id");
-		var valor = $("#" + y + "Qtd").text();
-		var custo;
+		var tipo = $(this).attr("outro");
 		
-		if(y == "pedra") custo = 2;
-		else if(y == "ferro") custo = 5;
+		var valor = $("#" + nome + "Qtd").text();
+		var custo = $("#" + nome + "val").text();
 
 		if(x == "+"){
-			document.getElementById(y + "Qtd").innerHTML = parseInt(valor) + 1;
-			document.getElementById(y + "Val").innerHTML = (parseInt(valor) + 1) * custo;
+			document.getElementById(nome + "Qtd").innerHTML = parseInt(valor) + 1;
+			document.getElementById(nome + "Val").innerHTML = itens[tipo][nome].buy * (parseInt(valor) + 1);
 		}
-		else if(x == "-" && parseInt(valor) > 1) document.getElementById(y + "Qtd").innerHTML = parseInt(valor) - 1;
+		else if(x == "-" && parseInt(valor) > 1){
+			document.getElementById(nome + "Qtd").innerHTML = parseInt(valor) - 1;
+			document.getElementById(nome + "Val").innerHTML = itens[tipo][nome].buy * (parseInt(valor) - 1);
+		}
 
 	})
 
