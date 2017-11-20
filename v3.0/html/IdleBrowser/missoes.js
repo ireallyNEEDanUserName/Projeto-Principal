@@ -48,7 +48,7 @@ var start = function(tipo, material){
 		
 		tempoDesdeOInicio = segundo - segundoInicialAtualizado;
 		
-		var tempo = itens[classeMaterial][minuscula(tipoMaterial)].tempo - itens[classeMaterial][minuscula(tipoMaterial)].lvl;
+		var tempo = itens[classeMaterial][minuscula(tipoMaterial)].tempo - status["lvl".concat(texto)];
 	
 		if(tempoDesdeOInicio.toFixed(0) >= tempo){
 			dataInicialAtualizada = new Date();
