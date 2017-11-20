@@ -163,13 +163,13 @@ var defItens = function(itens){
 	var minerio = itens.minerio;
 	var comida = itens.comida;
 
-	minerio.pedra = {lvl: 1, minerio: 1, sell: 1, buy: 3};
-	minerio.cobre = {lvl: 3, minerio: 2, sell: 1, buy: 3};
-	minerio.ferro = {lvl: 5, minerio: 3, sell: 2, buy: 5};
-	minerio.prata = {lvl: 8, minerio: 4, sell: 3, buy: 7};
-	minerio.ouro = {lvl: 10, minerio: 7, sell: 7, buy: 10};
+	minerio.pedra = {lvl: 1, tempo: 10, sell: 1, buy: 3, tipo:"minerar"};
+	minerio.cobre = {lvl: 3, tempo: 20, sell: 1, buy: 3, tipo:"minerar"};
+	minerio.ferro = {lvl: 5, tempo: 30, sell: 2, buy: 5, tipo:"minerar"};
+	minerio.prata = {lvl: 8, tempo: 40, sell: 3, buy: 7, tipo:"minerar"};
+	minerio.ouro = {lvl: 10, tempo: 70, sell: 7, buy: 10, tipo:"minerar"};
 	
-	comida.rato = {lvl: 1, comida: 1, sell: 1, buy: 3};
+	comida.rato = {lvl: 1, tempo: 10, sell: 1, buy: 3, tipo:"cacar"};
 
 	itens.minerio = minerio;
 	itens.comida = comida;
@@ -232,7 +232,7 @@ var escrever = function(status){
 			var ele = document.getElementById(key);
 			ele.innerHTML = maiuscula(key) + ": " + status.inventario[key];
 		}catch(err){
-			console.log("Erro na chamada do code.js " + err);
+			console.log("Erro na chamada do code.js da funcao escrever() " + err);
 		}
 	}
 };
@@ -250,7 +250,7 @@ var upaLevel = function(status, tipo){
 		}
     	status[experiencia] -= compExp;
     	}
-		textoFinalPagina("PARABÉNSS!! VOCÊ UPOU UM LEVEL DE " + tipo + "! - " + status[level]);
+		textoFinalPagina("PARABÉNSS!! VOCÊ UPOU UM LEVEL DE " + tipo + "! : " + status[level]);
 		
     console.log("Exp Necessario: " + compExp + " Exp Atual: " + status[experiencia]);
     return status;
@@ -259,6 +259,11 @@ var upaLevel = function(status, tipo){
 //FUNCAO PARA DEIXAR A PRIMEIRA LETRA MAIUSCULA.
 var maiuscula = function(str){
 	str = str.charAt(0).toUpperCase() + str.slice(1);
+	return str;
+};
+
+var minuscula = function(str){
+	str = str.charAt(0).toLowerCase() + str.slice(1);
 	return str;
 };
 
