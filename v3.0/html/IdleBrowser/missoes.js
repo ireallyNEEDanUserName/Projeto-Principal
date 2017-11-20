@@ -1,34 +1,37 @@
-var start = function(tipo){
+var start = function(tipo, material){
 
 	var status = {};
 	status = iniciar(status);
 	
-	var tipoMaterial = "";
+	var itens = {}; 
+	itens = defItens(itens);
+	
+	var tipoMaterial = material;
+	var classeMaterial = "";
 	var texto = "";
 	var expTexto = "";
 	var qtdMaterial = 1;
 	var exp = 1;
 	
-	if(tipo.includes("Minerar")){
-		tipoMaterial = "minerio";
+	if(tipo.includes("minerio")){
 		texto = "Minerar";
+		classeMaterial = "minerio";
 	}		
 	else if(tipo.includes("Forjar")){
-		tipoMaterial = "dinheiro";
 		texto = "Forjar";
 	} 
-	else if(tipo.includes("Caca")){
-		tipoMaterial = "comida";
+	else if(tipo.includes("comida")){
 		texto = "Cacar";
+		classeMaterial = "comida";
 	} 
 
 	qtdMaterial = 1 + (Math.floor((Math.random() * Math.round(status["lvl".concat(texto)] / 2)) +  Math.round(status["lvl".concat(texto)] / 4)));
-	exp = 1 + qtdMaterial;
+	exp = (1 + qtdMaterial) * itens[classeMaterial][minuscula(tipoMaterial)].lvl;
 	expTexto = "exp" + texto;
 	
 	var barra = document.getElementById("barra" + tipo);
 	var barraCheia = document.getElementById("barraProgresso" + tipo);
-	var qtd = document.getElementById(tipoMaterial);
+	var qtd = document.getElementById(classeMaterial);
 	
 	var dataInicialAtualizada = new Date();
 	var data = new Date();
@@ -44,8 +47,10 @@ var start = function(tipo){
 		segundo = data.getTime() / 1000;
 		
 		tempoDesdeOInicio = segundo - segundoInicialAtualizado;
+		
+		var tempo = itens[classeMaterial][minuscula(tipoMaterial)].tempo - itens[classeMaterial][minuscula(tipoMaterial)].lvl;
 	
-		if(tempoDesdeOInicio.toFixed(0) >= 60){
+		if(tempoDesdeOInicio.toFixed(0) >= tempo){
 			dataInicialAtualizada = new Date();
 			segundoInicialAtualizado = dataInicialAtualizada.getTime() / 1000;
 			tempoDesdeOInicio = 0;
@@ -58,7 +63,7 @@ var start = function(tipo){
 			qtd.innerHTML = maiuscula(tipoMaterial) + ": " + status.inventario[tipoMaterial];
 		}
 		
-		var tamanhoBarra = Math.floor(tempoDesdeOInicio.toFixed(0) / (60 / 100));
+		var tamanhoBarra = Math.floor(tempoDesdeOInicio.toFixed(0) / (tempo / 100));
 		barra.innerHTML = tamanhoBarra + " %";
 		barraCheia.style.width = tamanhoBarra + 'px'
 			
@@ -67,6 +72,37 @@ var start = function(tipo){
 	};
 	
 	tick();
+	
+};
+
+
+var criarMissoes = function(){
+	var status = {};
+	status = iniciar(status);
+	var itens = {}; 
+	itens = defItens(itens);
+	
+	var div = "";
+	var titulo = document.getElementById("todasMissoes");	
+
+	
+	for(key in itens){
+		for(keys in itens[key]){
+			if(status["lvl" + maiuscula(itens[key][keys].tipo)] >= itens[key][keys].lvl){
+				div += "<div id='" + itens[key][keys].tipo + "' class='" + key + "'>" +
+						"<div id='" + maiuscula(keys) + "'>" +
+						"<p id='" + key.concat(keys) + "' class='item'>" + maiuscula(keys) + "</p>" +
+						"<div id='barraProgresso" + key.concat(keys) + "' class='progresso'> " +
+						"<div id='barra" + key.concat(keys) + "' class='barra'>0 %</div>" +
+						"</div> </div> </div>";
+			}
+		}		
+	}
+
+	
+	console.log("Itens de missoes");
+	console.log(itens);
+	titulo.insertAdjacentHTML('beforeend', div);
 	
 };
 
