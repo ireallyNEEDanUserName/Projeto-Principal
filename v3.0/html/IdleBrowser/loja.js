@@ -48,9 +48,9 @@ var criarBuy = function(){
 					"<i id=" + keys + "Qtd>  1 </i>" +
 					" | Custa: " +
 					"<i id=" + keys + "Val>" + itens[key][keys].buy + "</i> | " +
-					"<a class='btnCompra' value='" + keys + "' id='+' outro='" + key + "' > + </a>" +
+					"<a class='btnMaisMenos' value='" + keys + "' id='+' outro='" + key + "' > + </a>" +
 					"<i class='compra' value='" + keys + "' outro='" + key + "'> COMPRAR </i>" +
-					"<a class='btnCompra' value='" + keys + "' id='-' outro='" + key + "'> - </a> <br>";
+					"<a class='btnMaisMenos' value='" + keys + "' id='-' outro='" + key + "'> - </a> <br>";
 		}
 	}
 	
@@ -68,6 +68,28 @@ var criarSell = function(){
 	var itens = {}; 
 	itens = defItens(itens);
 	
+	var titulo = document.getElementById("sell");	
+	
+	console.log(itens);
+	
+	div = "<p>";
+	
+	for(var key in status.inventario){
+		console.log(key);
+		if(key != "dinheiro"){
+			div += "<i>" +  maiuscula(key) + ": </i>"+
+					"<i id=" + key + "Qtd>  1 </i>" +
+					" | Valor: " +
+					"<i id=" + key + "Val>" + itens[key] + "</i> | " +
+					"<a class='btnMaisMenos' value='" + key + "' id='+' outro='" + key + "' > + </a>" +
+					"<i class='venda' value='" + key + "' outro='" + key + "'> VENDER </i>" +
+					"<a class='btnMaisMenos' value='" + key + "' id='-' outro='" + key + "'> - </a> <br>";
+		}
+	}
+	
+	div += "<\p>";
+	
+	titulo.insertAdjacentHTML('beforeend', div);
 	
 	
 	salvar(status);
