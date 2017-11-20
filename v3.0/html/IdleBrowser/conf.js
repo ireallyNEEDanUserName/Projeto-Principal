@@ -20,8 +20,11 @@ $(document).ready(function(){
 			$(document.getElementById('buy')).hide();
 			$(document.getElementById('sell')).show();
 		}else{
-			$('.habilidade').hide();
-			$("#" + clicked).show();
+			$('.minerio').hide();
+			$('.comida').hide();
+			
+			//$('.habilidade').show();
+			$("." + clicked).show();
 		}
 		
 	})
@@ -30,17 +33,19 @@ $(document).ready(function(){
 		var clicked = $(this).attr("id");
 		var texto = $(this).text();
 		
+		console.log(clicked, texto);
+		
 		try{
-			start(clicked);
+			start(clicked, texto);
 		}catch(err){
-			console.log("Erro na chamada do conf.js " + err);
+			console.log("Erro na chamada do conf.js no click ('.item') " + err);
 			if(texto.includes("Empregado")) informacoes(texto);
 		}
 		
 	})
 
 	//OPCOES DA PAGINA LOJA.HTML
-	$('.btnCompra').click(function(){
+	$('.btnMaisMenos').click(function(){
 	
 		var itens = {}; 
 		itens = defItens(itens);
