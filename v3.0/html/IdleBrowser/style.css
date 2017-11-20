@@ -102,7 +102,7 @@ a:link, a:active, a:visited{
 	font-size: 20px;
 }
 
-#minerar, #forjar, #cacar {
+.minerio, .comida{
 	display: none;
 	background-color: #6796a0;
 	width: 150px;
@@ -136,12 +136,12 @@ a:link, a:active, a:visited{
 	margin-left: 100px;
 }
 
-.btnCompra {
+.btnMaisMenos{
 	text-align: center;
 	font-size: 25px;
 }
 
-.compra {
+.compra, .venda {
 	margin-left: 10px;
 	margin-right: 10px;
 }
