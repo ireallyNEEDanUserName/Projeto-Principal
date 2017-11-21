@@ -49,26 +49,30 @@ $(document).ready(function(){
 	
 		var itens = {}; 
 		itens = defItens(itens);
+		
+		var status = {};
+		status = iniciar(status);
 
 		var nome = $(this).attr("value");
 		var x = $(this).attr("id");
 		var tipo = $(this).attr("outro");
+		var metodo = $(this).attr("tipo");
+		var opcao = "";
 		
-		var proximo = $(this).closest("#titulo");
+		if(metodo == "compra") opcao = "buy";
+		else if(metodo == "venda") opcao = "sell";
 		
-		console.log("titulo");
-		console.log($(proximo));
-		
-		var valor = $("#" + nome + "Qtd").text();
-		var custo = $("#" + nome + "val").text();
+		var qtd = $("#" + nome + "Qtd" + opcao).text();
+		var custo = $("#" + nome + "val" + opcao).text();
 
-		if(x == "+"){
-			document.getElementById(nome + "Qtd").innerHTML = parseInt(valor) + 1;
-			document.getElementById(nome + "Val").innerHTML = itens[tipo][nome].buy * (parseInt(valor) + 1);
+		if(x == "+" && ((status.inventario[maiuscula(nome)] > qtd && opcao == "sell") || opcao == "buy")){	
+			document.getElementById(nome + "Qtd" + opcao).innerHTML = parseInt(qtd) + 1;
+			document.getElementById(nome + "Val" + opcao).innerHTML = itens[tipo][nome][opcao] * (parseInt(qtd) + 1);
+			
 		}
-		else if(x == "-" && parseInt(valor) > 1){
-			document.getElementById(nome + "Qtd").innerHTML = parseInt(valor) - 1;
-			document.getElementById(nome + "Val").innerHTML = itens[tipo][nome].buy * (parseInt(valor) - 1);
+		else if(x == "-" && parseInt(qtd) > 1){
+			document.getElementById(nome + "Qtd" + opcao).innerHTML = parseInt(qtd) - 1;
+			document.getElementById(nome + "Val" + opcao).innerHTML = itens[tipo][nome][opcao] * (parseInt(qtd) - 1);
 		}
 
 	})
@@ -76,23 +80,31 @@ $(document).ready(function(){
 	$('.compra').click(function(){
 
 		var nome = $(this).attr("value");
-		var valor = parseInt($("#" + nome + "Qtd").text());	
+		var valor = parseInt($("#" + nome + "Qtdbuy").text());	
 		var tipo = $(this).attr("outro");
 
-		console.log(nome + " " + valor + " " + tipo);
+		//console.log(nome + " " + valor + " " + tipo);
 
 		addInv(nome, valor, tipo);
 
 	})
 	
 	$('.venda').click(function(){
+	
+		var status = {};
+		status = iniciar(status);
+		
 		var nome = $(this).attr("value");
-		var valor = parseInt($("#" + nome + "Qtd").text());	
+		var qtd = parseInt($("#" + nome + "Qtdsell").text());	
 		var tipo = $(this).attr("outro");
 
-		console.log(nome + " " + valor + " " + tipo);
+		//console.log(nome + " " + valor + " " + tipo);
 		
-		venderInv(minuscula(nome), valor, tipo);
+		venderInv(minuscula(nome), qtd, tipo);
+		
+		console.log(status.inventario[maiuscula(nome)]);
+		
+		document.getElementById("total" + minuscula(nome)).innerHTML = (status.inventario[maiuscula(nome)] - qtd) + " / ";
 		
 	})
 	
