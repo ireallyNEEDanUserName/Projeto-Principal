@@ -18,9 +18,9 @@ var addInv = function(nome, qtd, tipo){
 	var preco = qtd * custo;
 	
 	if(status.inventario["dinheiro"] >= preco){
-		status.inventario[tipo] += qtd;
+		status.inventario[maiuscula(nome)] += qtd;
 		status.inventario["dinheiro"] -= preco;
-		textoFinalPagina("Comprou com sucesso " + qtd + " de " + maiuscula(tipo) + " por: " + preco);
+		textoFinalPagina("Comprou com sucesso " + qtd + " de " + maiuscula(nome) + " por: " + preco);
 	}
 	else textoFinalPagina("Dinheiro Insuficiente");	
 
@@ -114,15 +114,16 @@ var criarSell = function(){
 	for(var key in status.inventario){
 		if(minuscula(key) in itens.comida){
 			tipo = "comida";
+			console.log(status.inventario[key]);
 			try{
 				div += "<i>" +  maiuscula(key) + ": </i>"+
-						"<i>" +  status.inventario[key] + " / </i>" +
-						"<i id=" + minuscula(key) + "Qtd> 1 </i>" +
+						"<i id='total" + minuscula(key) + "'>" +  status.inventario[key] + " / </i>" +
+						"<i id=" + minuscula(key) + "Qtdsell> 1 </i>" +
 						" | Valor: " +
-						"<i id=" + minuscula(key) + "Val>" + itens[tipo][minuscula(key)].sell + "</i> | " +
-						"<a class='btnMaisMenos' value='" + minuscula(key) + "' id='+' outro='" + tipo + "' > + </a>" +
-						"<i class='venda' value='" + minuscula(key) + "' outro='" + tipo+ "'> VENDER </i>" +
-						"<a class='btnMaisMenos' value='" + minuscula(key) + "' id='-' outro='" + tipo + "'> - </a> <br>";
+						"<i id=" + minuscula(key) + "Valsell>" + itens[tipo][minuscula(key)].sell + "</i> | " +
+						"<a class='btnMaisMenos' value='" + minuscula(key) + "' id='+' outro='" + tipo + "' tipo='venda'> + </a>" +
+						"<i class='venda' value='" + minuscula(key) + "' outro='" + tipo + "'> VENDER </i>" +
+						"<a class='btnMaisMenos' value='" + minuscula(key) + "' id='-' outro='" + tipo + "' tipo='venda'> - </a> <br>";
 			}catch(err){
 				console.log("Erro no sell no item: " + err);
 			}
