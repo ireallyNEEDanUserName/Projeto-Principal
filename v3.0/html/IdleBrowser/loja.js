@@ -39,8 +39,8 @@ var venderInv = function(nome, qtd, tipo){
 	status.inventario.dinheiro += itens[tipo][nome].sell * qtd;
 	status.inventario[maiuscula(nome)] -= qtd;
 	
-	console.log(status.inventario.dinheiro);
-	console.log("qtd: " + status.inventario[maiuscula(nome)]);
+	textoFinalPagina("Vendeu com sucesso " + qtd + " de " + maiuscula(nome) + " por: " + itens[tipo][nome].sell * qtd);
+	
 	salvar(status);
 	materiais();
 };
