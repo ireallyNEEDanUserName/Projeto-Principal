@@ -54,6 +54,11 @@ $(document).ready(function(){
 		var x = $(this).attr("id");
 		var tipo = $(this).attr("outro");
 		
+		var proximo = $(this).closest("#titulo");
+		
+		console.log("titulo");
+		console.log($(proximo));
+		
 		var valor = $("#" + nome + "Qtd").text();
 		var custo = $("#" + nome + "val").text();
 
@@ -74,10 +79,21 @@ $(document).ready(function(){
 		var valor = parseInt($("#" + nome + "Qtd").text());	
 		var tipo = $(this).attr("outro");
 
-		console.log(nome + " " + valor);
+		console.log(nome + " " + valor + " " + tipo);
 
 		addInv(nome, valor, tipo);
 
+	})
+	
+	$('.venda').click(function(){
+		var nome = $(this).attr("value");
+		var valor = parseInt($("#" + nome + "Qtd").text());	
+		var tipo = $(this).attr("outro");
+
+		console.log(nome + " " + valor + " " + tipo);
+		
+		venderInv(minuscula(nome), valor, tipo);
+		
 	})
 	
 });
