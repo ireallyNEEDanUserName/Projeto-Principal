@@ -29,6 +29,17 @@ var addInv = function(nome, qtd, tipo){
 
 };
 
+var venderInv = function(nome, qtd, tipo){
+
+	var status = {};
+	status = iniciar(status);
+	var itens = {}; 
+	itens = defItens(itens);
+	
+	console.log(itens[tipo][nome].sell);
+	console.log(qtd);
+};
+
 var criarBuy = function(){
 	
 	var itens = {}; 
@@ -43,7 +54,6 @@ var criarBuy = function(){
 		div += "<h3> " + maiuscula(key) + " </h3>";
 		
 		for(var keys in itens[key]){
-			console.log(itens[key][keys]);
 			div += "<i>" +  maiuscula(keys) + ": </i>"+
 					"<i id=" + keys + "Qtd>  1 </i>" +
 					" | Custa: " +
@@ -69,21 +79,47 @@ var criarSell = function(){
 	itens = defItens(itens);
 	
 	var titulo = document.getElementById("sell");	
+	var tipo = "";	
 	
-	console.log(itens);
+	div = "<p id='itens'>";
 	
-	div = "<p>";
+	div += "<h3> Minerio </h3>";
 	
 	for(var key in status.inventario){
-		console.log(key);
-		if(key != "dinheiro"){
-			div += "<i>" +  maiuscula(key) + ": </i>"+
-					"<i id=" + key + "Qtd>  1 </i>" +
-					" | Valor: " +
-					"<i id=" + key + "Val>" + itens[key] + "</i> | " +
-					"<a class='btnMaisMenos' value='" + key + "' id='+' outro='" + key + "' > + </a>" +
-					"<i class='venda' value='" + key + "' outro='" + key + "'> VENDER </i>" +
-					"<a class='btnMaisMenos' value='" + key + "' id='-' outro='" + key + "'> - </a> <br>";
+		if(minuscula(key) in itens.minerio){
+			tipo = "minerio";
+			try{
+				div += "<i>" +  maiuscula(key) + ": </i>"+
+						"<i id=" + key + "Qtd> 1 </i>" +
+						" | Valor: " +
+						"<i id=" + key + "Val>" + itens[tipo][minuscula(key)].sell + "</i> | " +
+						"<a class='btnMaisMenos' value='" + key + "' id='+' outro='" + tipo + "' > + </a>" +
+						"<i class='venda' value='" + key + "' outro='" + tipo + "'> VENDER </i>" +
+						"<a class='btnMaisMenos' value='" + key + "' id='-' outro='" + tipo + "'> - </a> <br>";
+			}catch(err){
+				console.log("Erro no sell no item: " + err);
+			}
+			
+		}
+	}
+	
+	div += "<br><h3> Comida </h3>";
+	
+	for(var key in status.inventario){
+		if(minuscula(key) in itens.comida){
+			tipo = "comida";
+			try{
+				div += "<i>" +  maiuscula(key) + ": </i>"+
+						"<i id=" + key + "Qtd>" + status.inventario[key] + "</i>" +
+						" | Valor: " +
+						"<i id=" + key + "Val>" + itens[tipo][minuscula(key)].sell + "</i> | " +
+						"<a class='btnMaisMenos' value='" + key + "' id='+' outro='" + tipo + "' > + </a>" +
+						"<i class='venda' value='" + key + "' outro='" + key + "'> VENDER </i>" +
+						"<a class='btnMaisMenos' value='" + key + "' id='-' outro='" + tipo + "'> - </a> <br>";
+			}catch(err){
+				console.log("Erro no sell no item: " + err);
+			}
+			
 		}
 	}
 	
