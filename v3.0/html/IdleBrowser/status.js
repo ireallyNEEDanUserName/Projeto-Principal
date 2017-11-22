@@ -21,21 +21,28 @@ var escreverStatus = function(status){
 		}else if(key == 'empregados'){
 			tam = Object.keys(status[key]).length;
 			str += " | " + cap + ": " + tam + " | ";
-		}else if(key.includes("exp")){
-			var texto = "";
-			if(key.includes("Minerar")) texto = "Minerar";	
-			else if(key.includes("Forjar")) texto = "Forjar";
-			else if(key.includes("Caca")) texto = "Cacar";
-			else if(key.includes("Chefe")) texto = "Chefe";
-			else if(key.includes("Combate")) texto = "Combate";
-
-			var level = "lvl" + texto;
-			var experiencia = "exp" + texto; 
-			var compExp = (status[level] * status[level]) * (50 + status[level]);
-			
-			str += " | " + cap + ": " + status[key] + " / " + compExp + " | ";	
 		}else if(key.includes("combate") || key.includes("habilidades")){
 			console.log(status[key]);
+			for(var chave in status[key]){
+				cap = maiuscula(chave);
+				if(chave.includes("exp")){
+					var texto = "";
+					if(chave.includes("Minerar")) texto = "Minerar";	
+					else if(chave.includes("Forjar")) texto = "Forjar";
+					else if(chave.includes("Caca")) texto = "Cacar";
+					else if(chave.includes("Chefe")) texto = "Chefe";
+					else if(chave.includes("Combate")) texto = "Combate";
+
+					var level = "lvl" + texto;
+					var experiencia = "exp" + texto; 
+					var compExp = (status[key][level] * status[key][level]) * (50 + status[key][level]);
+					
+					str += " | " + cap + ": " + status[key][chave] + " / " + compExp + " | ";	
+				}
+				else{
+					str += " | " + cap + ": " + status[key][chave] + " | ";
+				}
+			}
 		}else{
 			str += " | " + cap + ": " + status[key] + " | ";
 		}
