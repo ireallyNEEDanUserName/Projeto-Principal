@@ -55,10 +55,14 @@ var start = function(tipo, material){
 			segundoInicialAtualizado = dataInicialAtualizada.getTime() / 1000;
 			tempoDesdeOInicio = 0;
 			status = iniciar(status);
-			status.inventario[tipoMaterial] += qtdMaterial;
+			if(tipoMaterial in status.inventario) status.inventario[tipoMaterial] += qtdMaterial;
+			else{
+				status.inventario[tipoMaterial] = 0;
+				status.inventario[tipoMaterial] += qtdMaterial;
+			}
 			status[expTexto] += exp;
 			status = upaLevel(status, texto);
-			textoFinalPagina("Você adquiriu " + maiuscula(tipoMaterial) + ": " + qtdMaterial);
+			textoFinalPagina("Você adquiriu " + maiuscula(tipoMaterial) + ": " + qtdMaterial + " e " + exp + " de experiência");
 			salvar(status);
 			qtd.innerHTML = maiuscula(tipoMaterial) + ": " + status.inventario[tipoMaterial];
 		}
