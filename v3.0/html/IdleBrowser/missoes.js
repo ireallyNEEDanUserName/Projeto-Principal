@@ -25,7 +25,7 @@ var start = function(tipo, material){
 		classeMaterial = "comida";
 	} 
 
-	qtdMaterial = 1 + (Math.floor((Math.random() * Math.round(status["lvl".concat(texto)] / 2)) +  Math.round(status["lvl".concat(texto)] / 4)));
+	qtdMaterial = 1 + (Math.floor((Math.random() * Math.round(status.habilidades["lvl".concat(texto)] / 2)) +  Math.round(status.habilidades["lvl".concat(texto)] / 4)));
 	exp = (1 + qtdMaterial) * itens[classeMaterial][minuscula(tipoMaterial)].lvl;
 	expTexto = "exp" + texto;
 	
@@ -48,7 +48,7 @@ var start = function(tipo, material){
 		
 		tempoDesdeOInicio = segundo - segundoInicialAtualizado;
 		
-		var tempo = itens[classeMaterial][minuscula(tipoMaterial)].tempo - status["lvl".concat(texto)];
+		var tempo = itens[classeMaterial][minuscula(tipoMaterial)].tempo - status.habilidades["lvl".concat(texto)];
 	
 		if(tempoDesdeOInicio.toFixed(0) >= tempo){
 			dataInicialAtualizada = new Date();
@@ -60,8 +60,8 @@ var start = function(tipo, material){
 				status.inventario[tipoMaterial] = 0;
 				status.inventario[tipoMaterial] += qtdMaterial;
 			}
-			status[expTexto] += exp;
-			status = upaLevel(status, texto);
+			status.habilidades[expTexto] += exp;
+			status.habilidades = upaLevel(status.habilidades, texto);
 			textoFinalPagina("Você adquiriu " + maiuscula(tipoMaterial) + ": " + qtdMaterial + " e " + exp + " de experiência");
 			salvar(status);
 			qtd.innerHTML = maiuscula(tipoMaterial) + ": " + status.inventario[tipoMaterial];
@@ -92,7 +92,7 @@ var criarMissoes = function(){
 	
 	for(key in itens){
 		for(keys in itens[key]){
-			if(status["lvl" + maiuscula(itens[key][keys].tipo)] >= itens[key][keys].lvl){
+			if(status.habilidades["lvl" + maiuscula(itens[key][keys].tipo)] >= itens[key][keys].lvl){
 				div += "<div id='" + itens[key][keys].tipo + "' class='" + key + "'>" +
 						"<div id='" + maiuscula(keys) + "'>" +
 						"<p id='" + key.concat(keys) + "' class='item'>" + maiuscula(keys) + "</p>" +
