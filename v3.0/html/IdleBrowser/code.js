@@ -82,20 +82,22 @@ var checar = function(status){
 
 	var estrutura = {};
 	
-	estrutura.lvlCombate = 1;
-	estrutura.expCombate = 0;
-	estrutura.atk = 1;
-	estrutura.vel = 1;
-	estrutura.precisao = 1;
-
-	estrutura.lvlMinerar = 1;
-	estrutura.expMinerar = 0;
-	estrutura.lvlForjar = 1;
-	estrutura.expForjar = 0;
-	estrutura.lvlCacar = 1;
-	estrutura.expCacar = 0;
-	estrutura.lvlChefe = 1;
-	estrutura.expChefe = 0;
+	estrutura.combate = {};
+	estrutura.combate.lvlCombate = 1;
+	estrutura.combate.expCombate = 0;
+	estrutura.combate.atk = 1;
+	estrutura.combate.vel = 1;
+	estrutura.combate.precisao = 1;
+	
+	estrutura.habilidades = {};
+	estrutura.habilidades.lvlMinerar = 1;
+	estrutura.habilidades.expMinerar = 0;
+	estrutura.habilidades.lvlForjar = 1;
+	estrutura.habilidades.expForjar = 0;
+	estrutura.habilidades.lvlCacar = 1;
+	estrutura.habilidades.expCacar = 0;
+	estrutura.habilidades.lvlChefe = 1;
+	estrutura.habilidades.expChefe = 0;
 
 	estrutura.empregados = {};
 	estrutura.empregados = iniciarEmp(estrutura.empregados);
@@ -130,7 +132,6 @@ var iniciarEmp = function(empregados){
 	var tamanho = Object.keys(empregados).length;
 	console.log("iniciarEmp - " + tamanho);
 	empregados = adicionarEmp(empregados, "minerio", tamanho);
-	
 	
 	return empregados;
 };
@@ -189,6 +190,7 @@ var clickBarraFunc = function(bool){
 		click = true;
 	}
 	else clickBarra = 0;
+	
 };
 
 var calcTempoTotal = function(segInicial, segAtual){
@@ -217,20 +219,43 @@ var calcTempoTotal = function(segInicial, segAtual){
 	
 };
 
-var materiais = function(){
-
-	var status = {};
-	status = iniciar(status);
+var materiais = function(status = ""){
+	
+	if (status == ""){
+		var status = {};
+		status = iniciar(status);
+	}
 	
 	escrever(status);
 };
 
 var escrever = function(status){
 	
+	var itens = {}; 
+	itens = defItens(itens);
+	
+	var tipo = {};
+	
+	tipo.minerio = 0;
+	tipo.comida = 0;
+	tipo.dinheiro = 0;
+	
+	for(var key in status.inventario){
+		if(key in tipo) tipo[key] += status.inventario[key];
+		else{
+			for(var keys in itens){
+				if(minuscula(key) in itens[keys]) tipo[keys] += status.inventario[key];
+			}
+		}
+	}
+	
+	console.log("Total de itens");
+	console.log(tipo);
+	
 	for(var key in status.inventario){
 		try{
 			var ele = document.getElementById(key);
-			ele.innerHTML = maiuscula(key) + ": " + status.inventario[key];
+			ele.innerHTML = maiuscula(key) + ": " + tipo[key];
 		}catch(err){
 			console.log("Erro na chamada do code.js da funcao escrever() " + err);
 		}
