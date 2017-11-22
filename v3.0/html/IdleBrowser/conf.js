@@ -90,9 +90,6 @@ $(document).ready(function(){
 	})
 	
 	$('.venda').click(function(){
-	
-		var status = {};
-		status = iniciar(status);
 		
 		var nome = $(this).attr("value");
 		var qtd = parseInt($("#" + nome + "Qtdsell").text());	
@@ -101,10 +98,6 @@ $(document).ready(function(){
 		//console.log(nome + " " + valor + " " + tipo);
 		
 		venderInv(minuscula(nome), qtd, tipo);
-		
-		console.log(status.inventario[maiuscula(nome)]);
-		
-		document.getElementById("total" + minuscula(nome)).innerHTML = (status.inventario[maiuscula(nome)] - qtd) + " / ";
 		
 	})
 	
