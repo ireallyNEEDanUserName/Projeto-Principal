@@ -18,14 +18,18 @@ var addInv = function(nome, qtd, tipo){
 	var preco = qtd * custo;
 	
 	if(status.inventario["dinheiro"] >= preco){
-		status.inventario[maiuscula(nome)] += qtd;
+		if(maiuscula(nome) in status.inventario) status.inventario[maiuscula(nome)] += qtd;
+		else{
+			status.inventario[maiuscula(nome)] = 0;
+			status.inventario[maiuscula(nome)] += qtd;
+		}
 		status.inventario["dinheiro"] -= preco;
 		textoFinalPagina("Comprou com sucesso " + qtd + " de " + maiuscula(nome) + " por: " + preco);
 	}
 	else textoFinalPagina("Dinheiro Insuficiente");	
 
 	salvar(status);
-	materiais();
+	materiais(status);
 
 };
 
@@ -36,13 +40,18 @@ var venderInv = function(nome, qtd, tipo){
 	var itens = {}; 
 	itens = defItens(itens);
 	
-	status.inventario.dinheiro += itens[tipo][nome].sell * qtd;
-	status.inventario[maiuscula(nome)] -= qtd;
+	console.log(status.inventario[maiuscula(nome)]);
 	
-	textoFinalPagina("Vendeu com sucesso " + qtd + " de " + maiuscula(nome) + " por: " + itens[tipo][nome].sell * qtd);
+	if(status.inventario[maiuscula(nome)] >= qtd){
+		status.inventario.dinheiro += itens[tipo][nome].sell * qtd;
+		status.inventario[maiuscula(nome)] -= qtd;
+		textoFinalPagina("Vendeu com sucesso " + qtd + " de " + maiuscula(nome) + " por: " + itens[tipo][nome].sell * qtd);
+		document.getElementById("total" + minuscula(nome)).innerHTML = (status.inventario[maiuscula(nome)]) + " / ";
+	}else textoFinalPagina("Itens insuficientes no seu inventario");
 	
 	salvar(status);
-	materiais();
+	materiais(status);
+	
 };
 
 var criarBuy = function(){
@@ -82,6 +91,8 @@ var criarSell = function(){
 	status = iniciar(status);
 	var itens = {}; 
 	itens = defItens(itens);
+	
+	console.log(status.inventario);
 	
 	var titulo = document.getElementById("sell");	
 	var tipo = "";	
