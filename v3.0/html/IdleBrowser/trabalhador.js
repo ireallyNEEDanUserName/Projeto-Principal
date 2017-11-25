@@ -43,7 +43,7 @@ var criarHTML = function(empregados, tamanho){
 	var ult = document.getElementById('Menu');
 	
 	//HTML DE CADA FUNCIONARIO.
-	var emp = "<div id=" + nome + " class='Empregado'>" +
+	var emp = "<br><div id=" + nome + " class='Empregado'>" +
 			"<div id=" + maiuscula(empregados[nome].tipo) + ">" +	
 			"<p id=" + maiuscula(empregados[nome].tipo) + "Item' class='item'>Empregado " + tamanho + ": " + maiuscula(tipoItem) + "</p>" +
 			"<div id='barraProgresso" + nome +"' class='progresso'>" +
