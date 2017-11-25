@@ -25,7 +25,7 @@ var start = function(tipo, material){
 		classeMaterial = "comida";
 	} 
 
-	qtdMaterial = 1 + (Math.floor((Math.random() * Math.round(status.habilidades["lvl".concat(texto)] / 2)) +  Math.round(status.habilidades["lvl".concat(texto)] / 4)));
+	qtdMaterial = 1 + Math.round(status.habilidades["lvl".concat(texto)] - itens[classeMaterial][minuscula(tipoMaterial)].lvl);
 	exp = (1 + qtdMaterial) * itens[classeMaterial][minuscula(tipoMaterial)].lvl;
 	expTexto = "exp" + texto;
 	
