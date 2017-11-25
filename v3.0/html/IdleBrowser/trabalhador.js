@@ -61,48 +61,59 @@ var criarHTML = function(empregados, tamanho){
 };
 
 var updateOffline = function(status){
+	var itens = {}; 
+	itens = defItens(itens);
+
 	//PEGA A DATA ATUAL
 	var data = new Date();
 	var atual = (data.getTime() / 1000).toFixed(0);	
 	//NUMERO DE EMPREGADOS
 	var tamanho = Object.keys(status.empregados).length;
-	var tempoNecessarioTarefa = 100;
 	var x;
 	var invTipo;
 	var qtd;
-	var totalItens;
+	var totalItens = 0;
 	//LOOP POR TODOS EMPREGADOS
 	for(x = 1; x <= tamanho; x++){
 		//TEMPO TOTAL OFFLINE
 		var tempoOffline = atual - status.empregados["n" + x].offline;
+		invTipo = verfTipo(itens, status.empregados["n" + x]);
+		var tempoNecessarioTarefa = itens[status.empregados["n" + x].tipo][invTipo].tempo;
 		//SE TEMPO FOR MAIOR QUE 6H MUDAR PARA 6H
 		if(tempoOffline > 21600) tempoOffline = 21600;
 		qtd = Math.floor(tempoOffline / tempoNecessarioTarefa) * Math.floor((status.empregados["n" + x].lvl / 3) + 1); //qtd de itens que o trabalhador pega.
-		
+
 		console.log("Tempo Atual: " + atual, "| Tempo do Empregado: " + status.empregados["n" + x].offline, "| Tempo Offline: " + tempoOffline + " | Qtd: " + qtd);
 		//Tipo item que o trabalhador pega.
-		if(status.empregados["n" + x].tipo == "caca") invTipo = "comida";
-		else invTipo = status.empregados["n" + x].tipo;
 		
+		exp = (1 + qtd) * itens[status.empregados["n" + x].tipo][invTipo].lvl;
+		console.log("Experiencia do Empregado: " + exp);
 		totalItens += qtd; //Total de itens que todos trabalhadores pegaram.
 		//SE TEMPO OFFLINE FOR MAIOR QUE 1MIN ADICIONAR NO INVENTARIO E DEFINIR TEMPO OFFLINE COMO ATUAL.
 		if(qtd >= 1){
-			status.inventario[invTipo] += qtd;
-			status.empregados["n" + x].exp += qtd;
-			status.expChefe += qtd;
+			if(maiuscula(invTipo) in status.inventario) status.inventario[maiuscula(invTipo)] += qtd;
+			else{
+				status.inventario[maiuscula(invTipo)] = 0;
+				status.inventario[maiuscula(invTipo)] += qtd;
+			}
+			status.empregados["n" + x].exp += exp;
+			status.expChefe += exp;
 			status.empregados["n" + x].offline = atual;
 			status.empregados["n" + x] = upaLevel(status.empregados["n" + x], "");
 			status = upaLevel(status, "Chefe");
 			//console.log(status.empregados["n" + x]);
 		}
-		
 	}
-	
-	textoFinalPagina("Itens Adquiridos Offline: " + totalItens);
+	console.log(totalItens);
+	if(totalItens >= 1)	textoFinalPagina("Itens Adquiridos Offline: " + totalItens);
+	else textoFinalPagina("Tempo insuficiente offline para pegar qualquer item");
 };
 
 //Funcao que roda enquanto a pagina do trabalhador estiver aberta.
 var updateEmp = function(status){
+
+	var itens = {}; 
+	itens = defItens(itens);
 
 	var tamanho = Object.keys(status.empregados).length;
 	var x;
@@ -131,13 +142,13 @@ var updateEmp = function(status){
 		
 		for(x = 1; x <= tamanho; x++){
 			nome = "n" + x; //nome do trabalhador.
+			tipo = verfTipo(itens, status.empregados[nome]);
 			tempoDesdeOInicio[x] = atual - inicial[x];
-			tempoMaterial = 100 - Math.floor((status.empregados[nome].lvl / 2)); //tempo que demora para pegar o material.
+			tempoMaterial = itens[status.empregados[nome].tipo][invTipo].tempo - Math.floor((status.empregados[nome].lvl / 2)); //tempo que demora para pegar o material.
 			
-			tipo = status.empregados[nome].tipo; //tipo do material que o empregado pega.
+			 //tipo do material que o empregado pega.
 			qtdMaterial = 1 + Math.floor((status.empregados[nome].lvl / 2)); //qtuantidade de material que o empregado pega.
-			if(status.empregados[nome].tipo == "caca") tipoMaterial = "comida"; 
-			else tipoMaterial = status.empregados[nome].tipo;
+			tipoMaterial = maiuscula(tipo);
 		
 			var barra = document.getElementById("barra" + nome);
 			var barraCheia = document.getElementById("barraProgresso" + nome);
@@ -148,7 +159,12 @@ var updateEmp = function(status){
 				inicial[x] = (dataInicial[x].getTime() / 1000).toFixed(0); //pegar novo tempo inicial para esse empregado.
 				status.empregados[nome].offline = inicial[x]; //adicionar no tempo offline o tempo atual como inicial.
 				tempoDesdeOInicio.x = 0; 
-				status.inventario[tipoMaterial] += qtdMaterial; //adicionar o material no inventario.
+				//adicionar o material no inventario.
+				if(tipoMaterial in status.inventario) status.inventario[tipoMaterial] += qtdMaterial;
+				else{
+					status.inventario[tipoMaterial] = 0;
+					status.inventario[tipoMaterial] += qtdMaterial;
+				}
 				status.empregados[nome].exp += qtdMaterial; //adicionar no exp no empregado a quantidade de material pego.
 				status.empregados[nome] = upaLevel(status.empregados[nome], ""); //chamada da função que verifica se upou de level do empregado.
 				status.expChefe += qtdMaterial; //adicionar exp na skill do jogador.
@@ -202,5 +218,19 @@ var informacoes = function(texto){
 	
 	textoFinalPagina(texto);
 	
+};
+
+var verfTipo = function(itens, emp){
 	
+	for(var key in itens){
+		if(key == emp.tipo){
+			for(var keys in itens[key]){
+				if(emp.lvl >= itens[key][keys].lvl){
+					invTipo = keys;
+				}
+			}
+		}
+	}
+	console.log("Itens que o empregado pega: " + invTipo);
+	return invTipo;
 };
