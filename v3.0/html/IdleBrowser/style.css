@@ -8,16 +8,70 @@ a:link, a:active, a:visited{
 	color: white;
 }
 
-#Menu , #statusEmpregado, #barraStatus{
+#statusEmpregado, #barraStatus {
 	background-color: #669999;
 	text-align: center;
 	font-size: 20px;
 	color: white;
 }
 
+/* MENU */
+#Menu {
+	background-color: grey;
+	margin: auto;
+	text-align: center;
+	color: white;
+	font-size: 20px;
+}
+
 .Menu:hover {
 	color: black;
 }
+
+ul {
+	list-style-type: none;
+	overflow: hidden;
+	text-align: center;
+	margin-bottom: 10px;
+}
+
+li {
+	margin: auto;
+	padding-left: 15px;
+	padding-right: 15px;
+	text-align: center;
+	display: inline;
+}
+
+
+.mOpDrop, #opDrop{
+	display: inline-block;
+}
+
+.opContent {
+	display: none;
+	position: absolute;
+	border: 3px solid black;
+}
+
+.opContent a{
+	color: white;
+    padding: 6px 8px;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+	background-color: grey;
+}
+
+.opContent a:hover {
+	color:black;
+	background-color: white;
+}
+
+.mOpDrop:hover .opContent{
+	display: block;
+}
+/* FIM DO MENU */
 
 #textoBarra{
 	width: 100px;
