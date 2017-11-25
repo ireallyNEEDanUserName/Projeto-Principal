@@ -31,9 +31,13 @@ var criarElem = function(empregados){
 
 //FUNCAO QUE CRIA O HTML DE CADA EMPREGADO.
 var criarHTML = function(empregados, tamanho){
+
+	var itens = {}; 
+	itens = defItens(itens);
 	
 	//NOME PARA ACESSAR O FUNCIONARIO EX: N1
 	var nome = "n" + tamanho; 
+	var tipoItem = verfTipo(itens, empregados[nome]);
 	
 	//ADICIONAR O FUNCIONARIO ABAIXO DO MENU
 	var ult = document.getElementById('Menu');
@@ -41,7 +45,7 @@ var criarHTML = function(empregados, tamanho){
 	//HTML DE CADA FUNCIONARIO.
 	var emp = "<div id=" + nome + " class='Empregado'>" +
 			"<div id=" + maiuscula(empregados[nome].tipo) + ">" +	
-			"<p id=" + maiuscula(empregados[nome].tipo) + "Item' class='item'>Empregado " + tamanho + ": " + maiuscula(empregados[nome].tipo) + "</p>" +
+			"<p id=" + maiuscula(empregados[nome].tipo) + "Item' class='item'>Empregado " + tamanho + ": " + maiuscula(tipoItem) + "</p>" +
 			"<div id='barraProgresso" + nome +"' class='progresso'>" +
 			"<div id='barra" + nome +"' class='barra'>0 %</div>" +
 			"</div>" +
@@ -75,18 +79,19 @@ var updateOffline = function(status){
 	var totalItens = 0;
 	//LOOP POR TODOS EMPREGADOS
 	for(x = 1; x <= tamanho; x++){
+		var nome = "n" + x;
 		//TEMPO TOTAL OFFLINE
-		var tempoOffline = atual - status.empregados["n" + x].offline;
-		invTipo = verfTipo(itens, status.empregados["n" + x]);
-		var tempoNecessarioTarefa = itens[status.empregados["n" + x].tipo][invTipo].tempo;
+		var tempoOffline = atual - status.empregados[nome].offline;
+		invTipo = verfTipo(itens, status.empregados[nome]);
+		var tempoNecessarioTarefa = itens[status.empregados[nome].tipo][invTipo].tempo;
 		//SE TEMPO FOR MAIOR QUE 6H MUDAR PARA 6H
 		if(tempoOffline > 21600) tempoOffline = 21600;
-		qtd = Math.floor(tempoOffline / tempoNecessarioTarefa) * Math.floor((status.empregados["n" + x].lvl / 3) + 1); //qtd de itens que o trabalhador pega.
+		qtd = 1 + Math.round(status.empregados[nome].lvl / itens[status.empregados[nome].tipo][invTipo].lvl); //qtd de itens que o trabalhador pega.
 
-		console.log("Tempo Atual: " + atual, "| Tempo do Empregado: " + status.empregados["n" + x].offline, "| Tempo Offline: " + tempoOffline + " | Qtd: " + qtd);
+		console.log("Tempo Atual: " + atual, "| Tempo do Empregado: " + status.empregados[nome].offline, "| Tempo Offline: " + tempoOffline + " | Qtd: " + qtd);
 		//Tipo item que o trabalhador pega.
 		
-		exp = (1 + qtd) * itens[status.empregados["n" + x].tipo][invTipo].lvl;
+		exp = (1 + qtd) * itens[status.empregados[nome].tipo][invTipo].lvl;
 		console.log("Experiencia do Empregado: " + exp);
 		totalItens += qtd; //Total de itens que todos trabalhadores pegaram.
 		//SE TEMPO OFFLINE FOR MAIOR QUE 1MIN ADICIONAR NO INVENTARIO E DEFINIR TEMPO OFFLINE COMO ATUAL.
@@ -96,10 +101,10 @@ var updateOffline = function(status){
 				status.inventario[maiuscula(invTipo)] = 0;
 				status.inventario[maiuscula(invTipo)] += qtd;
 			}
-			status.empregados["n" + x].exp += exp;
+			status.empregados[nome].exp += exp;
 			status.expChefe += exp;
-			status.empregados["n" + x].offline = atual;
-			status.empregados["n" + x] = upaLevel(status.empregados["n" + x], "");
+			status.empregados[nome].offline = atual;
+			status.empregados[nome] = upaLevel(status.empregados[nome], "");
 			status = upaLevel(status, "Chefe");
 			//console.log(status.empregados["n" + x]);
 		}
@@ -145,9 +150,9 @@ var updateEmp = function(status){
 			tipo = verfTipo(itens, status.empregados[nome]);
 			tempoDesdeOInicio[x] = atual - inicial[x];
 			tempoMaterial = itens[status.empregados[nome].tipo][invTipo].tempo - Math.floor((status.empregados[nome].lvl / 2)); //tempo que demora para pegar o material.
-			
+			if(tempoMaterial < 0) tempoMaterial = 0;
 			 //tipo do material que o empregado pega.
-			qtdMaterial = 1 + Math.floor((status.empregados[nome].lvl / 2)); //qtuantidade de material que o empregado pega.
+			qtdMaterial = 1 + Math.floor(status.empregados[nome].lvl / itens[status.empregados[nome].tipo][invTipo].lvl); //qtuantidade de material que o empregado pega.
 			tipoMaterial = maiuscula(tipo);
 		
 			var barra = document.getElementById("barra" + nome);
