@@ -62,7 +62,7 @@ var start = function(tipo, material){
 			}
 			status.habilidades[expTexto] += exp;
 			status.habilidades = upaLevel(status.habilidades, texto);
-			textoFinalPagina("Você adquiriu " + maiuscula(tipoMaterial) + ": " + qtdMaterial + " e " + exp + " de experiência");
+			textoFinalPagina("Você adquiriu " + qtdMaterial + " " + maiuscula(tipoMaterial) + " e " + exp + " de experiência");
 			salvar(status);
 			qtd.innerHTML = maiuscula(tipoMaterial) + ": " + status.inventario[tipoMaterial];
 		}
