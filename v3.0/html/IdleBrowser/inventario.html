@@ -1,0 +1,39 @@
+<html>
+
+<head>
+
+	<script type="text/javascript" src="code.js"></script>
+	<script type="text/javascript" src="inventario.js"></script>
+	<script type="text/javascript" src="jquery-3.2.1.js"></script>
+	<script type="text/javascript" src="conf.js"></script>
+	<link href="style.css" type="text/css" rel="stylesheet"/>
+	<meta charset="ISO-8859-1">
+	
+</head>
+
+<body>
+
+	<ul id="Menu">
+		<li> <a id="home" href="index.html" class="Menu"> Home </a></li>
+		<li class="mOpDrop"> <a id="opDrop" href="#" class="Menu"> Opcões </a>
+			<div class="opContent">
+				<a id="status" href="status.html" class="Menu">Status</a>
+				<a id="inventario" href="inventario.html" class="Menu">Inventario</a>
+			</div>
+		</li>
+		<li> <a id="missoes" href="missoes.html" class="Menu"> Missões </a> </li>
+		<li> <a id="combate" class="Menu"> Combate </a> </li>
+		<li> <a id="loja" href="loja.html" class="Menu"> Loja <a> </li>
+		<li> <a id="trabalhador" href="trabalhador.html" class="Menu"> Empregados <a> </li>
+	</ul>
+
+	
+	<div id="barraInvt">
+	</div>
+	
+	<script>
+		impInv();
+	</script>
+</body>
+
+</html>
