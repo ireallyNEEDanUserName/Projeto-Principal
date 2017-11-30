@@ -172,19 +172,6 @@ var inicializacaoBarras = function(tipo, classeMaterial){
 	return barras;
 };
 
-var forjarItem = function(itens, status, classeMaterial, tipo){
-	for(var key in itens[classeMaterial]){
-		if(tipo.indexOf(key) > -1){
-			for(var keys in itens[classeMaterial][key]){
-				if(tipo.indexOf(keys) > -1){
-					console.log(itens[classeMaterial][key][keys]);
-					return itens[classeMaterial][key][keys];
-				}
-			}
-		}
-	}
-};
-
 var removerItemForja = function(itens, status, item){
 	for(var key in item.req){
 		if(status.inventario[maiuscula(key)] >= item.req[key]){
