@@ -44,17 +44,36 @@
 	</div>
 	
 	<script>
-		materiais();
+		try{
+			materiais();
+		}catch(err){
+			console.log("Erro na função materiais() no missoes.html" + err);
+		}
 	</script>
 	
 	<!-- Missoes possiveis de se fazer. -->
 	<div id="todasMissoes">
 	
 		<script>
-			criarMissoes();
+			try{
+				criarMissoes();
+			}catch(err){
+				console.log("Erro na função criarMissoes() no missoes.html" + err);
+			}
+
 		</script>
 		
 	</div>
+	
+	<script>
+		
+		try{
+			start();
+		}catch(err){
+			console.log("Erro na chamada da funao start() em missoes.html " + err);
+		}
+	
+	</script>
 
 
 </body>
