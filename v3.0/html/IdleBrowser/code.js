@@ -90,6 +90,7 @@ var checar = function(status){
 	estrutura.combate.precisao = 1;
 	
 	estrutura.habilidades = {};
+	estrutura.habilidades.acao = {tipo:"", material:""};
 	estrutura.habilidades.lvlMinerar = 1;
 	estrutura.habilidades.expMinerar = 0;
 	estrutura.habilidades.lvlForjar = 1;
@@ -130,7 +131,7 @@ var iniciarInv = function(inventario){
 var iniciarEmp = function(empregados){
 	
 	var tamanho = Object.keys(empregados).length;
-	console.log("iniciarEmp - " + tamanho);
+	//console.log("iniciarEmp - " + tamanho);
 	empregados = adicionarEmp(empregados, "minerio", tamanho);
 	
 	return empregados;
@@ -138,7 +139,7 @@ var iniciarEmp = function(empregados){
 
 var adicionarEmp = function(empregados, funcao, tamanho){
 	
-	console.log("adicionarEmp - " + tamanho);
+	//console.log("adicionarEmp - " + tamanho);
 	
 	var nome = "n" + (tamanho + 1);
 	
@@ -160,20 +161,32 @@ var defItens = function(itens){
 
 	itens.minerio = {};
 	itens.comida = {};
+	itens.forja = {};
 
 	var minerio = itens.minerio;
 	var comida = itens.comida;
-
+	var forja = itens.forja;
+	
+	/* MINERIOS PARA MINERAR. */
 	minerio.pedra = {lvl: 1, tempo: 10, sell: 1, buy: 3, tipo:"minerar"};
 	minerio.cobre = {lvl: 3, tempo: 20, sell: 1, buy: 3, tipo:"minerar"};
 	minerio.ferro = {lvl: 5, tempo: 30, sell: 2, buy: 5, tipo:"minerar"};
 	minerio.prata = {lvl: 8, tempo: 40, sell: 3, buy: 7, tipo:"minerar"};
 	minerio.ouro = {lvl: 10, tempo: 70, sell: 7, buy: 10, tipo:"minerar"};
 	
+	/* ANIMAIS PARA CACAR. */
 	comida.rato = {lvl: 1, tempo: 10, sell: 1, buy: 3, tipo:"cacar"};
-
+	
+	/* ITENS PARA FORJAR. */
+	forja.espada = {};
+	forja.capacete = {};
+	
+	forja.espada.pedra = {lvl: 1, tempo: 10, sell: 5, buy: 10, req: { pedra: 4 }, tipo:"forjar", nome:"Espada de Pedra"};
+	forja.capacete.pedra = {lvl: 1, tempo: 15, sell: 5, buy: 10, req: { pedra: 5 }, tipo:"forjar",nome:"Capacete de Pedra"};
+	
 	itens.minerio = minerio;
 	itens.comida = comida;
+	itens.forja = forja;
 
 	return itens;
 
@@ -264,6 +277,7 @@ var escrever = function(status){
 
 
 var upaLevel = function(status, tipo){
+	tipo = maiuscula(tipo);
 	var level = "lvl" + tipo;
 	var experiencia = "exp" + tipo; 
 	var compExp = (status[level] * status[level]) * (50 + status[level]);
@@ -294,8 +308,14 @@ var minuscula = function(str){
 
 //FUNCAO PARA INSERIR TEXTO NA DIV DO FINAL DA PAGINA.
 var textoFinalPagina = function(texto){
-
-	var divStatus = "<div id='statusEmpregado'>" + texto + "</div>";
+	
+	try{
+		document.getElementById("statusBar").remove();
+	}catch(err){
+		console.log("Erro em remover a barra de Status em code.js em textoFinalPagina() " + err);
+	}
+	
+	var divStatus = "<div id='statusBar'>" + texto + "</div>";
 	document.body.insertAdjacentHTML('beforeend', divStatus);
 };
 
