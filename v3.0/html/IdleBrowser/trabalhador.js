@@ -77,6 +77,7 @@ var updateOffline = function(status){
 	var invTipo;
 	var qtd;
 	var totalItens = 0;
+	var exp = 0;
 	//LOOP POR TODOS EMPREGADOS
 	for(x = 1; x <= tamanho; x++){
 		var nome = "n" + x;
