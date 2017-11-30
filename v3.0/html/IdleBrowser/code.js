@@ -319,6 +319,7 @@ var textoFinalPagina = function(texto){
 	document.body.insertAdjacentHTML('beforeend', divStatus);
 };
 
+//VERIFICAR ITEM PASSADO EM tipo E RETORNAR A VARIAVEL COM DADOS DELE.
 var forjarItem = function(itens, status, classeMaterial, tipo){
 	for(var key in itens[classeMaterial]){
 		if(tipo.indexOf(key) > -1){
