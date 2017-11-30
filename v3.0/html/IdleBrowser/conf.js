@@ -22,6 +22,7 @@ $(document).ready(function(){
 		}else{
 			$('.minerio').hide();
 			$('.comida').hide();
+			$('.forja').hide();
 			
 			//$('.habilidade').show();
 			$("." + clicked).show();
@@ -36,7 +37,8 @@ $(document).ready(function(){
 		console.log(clicked, texto);
 		
 		try{
-			start(clicked, texto);
+			textoFinalPagina("Aguarde terminar a tarfa atual para mudar para " + texto);
+			definirAcao(clicked, texto);
 		}catch(err){
 			console.log("Erro na chamada do conf.js no click ('.item') " + err);
 			if(texto.includes("Empregado")) informacoes(texto);
