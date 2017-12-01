@@ -17,6 +17,7 @@ var start = function(){
 	var item;
 	var sucesssoForja = false;
 	var loop = true;
+	var fimLoop = true;
 	
 	var barra;
 	var barraCheia;
@@ -52,7 +53,9 @@ var start = function(){
 	
 	var tick = function(){
 		
-		if(!status.habilidades.acao.tipo.includes(classeMaterial)){
+		if(status.habilidades.acao.material != tipoMaterial && fimLoop){
+			//console.log("Classe: " + tipoMaterial);
+			fimLoop = false;
 			try{
 				dados = inicializacaoDados();
 				texto = dados[0];
@@ -66,11 +69,12 @@ var start = function(){
 				barra = barras[0];
 				barraCheia = barras[1];
 				qtd = barras[2];
+				console.log(barra);
 			}catch(err){
 				console.log("Erro na segunda chamada das funcões de inicializacao do missoes.js " + err);
 			}	
 		}else{
-			console.log("Dentro do loop");
+			//console.log("Dentro do loop");
 			if(classeMaterial == "forja" && possibilidadeForjar(itens, status, item)) loop = true;
 			else if(classeMaterial == "forja" && !possibilidadeForjar(itens, status, item)) loop = false;
 			else loop = true;
@@ -84,6 +88,7 @@ var start = function(){
 				var tempo = item.tempo - status.habilidades["lvl".concat(texto)];
 			
 				if(tempoDesdeOInicio.toFixed(0) >= tempo){
+					fimLoop = true;
 					dataInicialAtualizada = new Date();
 					segundoInicialAtualizado = dataInicialAtualizada.getTime() / 1000;
 					tempoDesdeOInicio = 0;
@@ -103,6 +108,8 @@ var start = function(){
 					}catch(err){
 						console.log("Erro em colocar qtd de itens total em start() em missoes.js " + err);
 					}
+					
+					console.log(barra);
 				}
 				
 				var tamanhoBarra = Math.floor(tempoDesdeOInicio.toFixed(0) / (tempo / 100));
@@ -142,7 +149,8 @@ var inicializacaoDados = function(){
 	}else if(tipo.includes("forja")){
 		texto = "Forjar";
 		classeMaterial = "forja";
-		item = forjarItem(itens, status, classeMaterial, tipo);
+		item = verificarItem(tipo);
+		console.log(item);
 		tipoMaterial = item.nome;
 	}else if(tipo.includes("comida")){
 		texto = "Cacar";
@@ -160,15 +168,17 @@ var inicializacaoDados = function(){
 };
 
 var inicializacaoBarras = function(tipo, classeMaterial){
+
+	console.log("Inicializando Barras");
 	
 	var barras = [];
 	
-	var barra = document.getElementById("barra" + tipo);
-	var barraCheia = document.getElementById("barraProgresso" + tipo);
-	if(classeMaterial != "forja") var qtd = document.getElementById(classeMaterial);
-	else var qtd = "";
+	barras[0] = document.getElementById("barra" + tipo);
+	barras[1] = document.getElementById("barraProgresso" + tipo);
+	if(classeMaterial != "forja") barras[2] = document.getElementById(classeMaterial);
+	else barras[2]  = "";
 	
-	barras = [barra, barraCheia, qtd];
+	//barras = [barra, barraCheia, qtd];
 	return barras;
 };
 
@@ -176,6 +186,7 @@ var removerItemForja = function(itens, status, item){
 	for(var key in item.req){
 		if(status.inventario[maiuscula(key)] >= item.req[key]){
 			status.inventario[maiuscula(key)] -= item.req[key];
+			materiais();
 			return status;
 		}else{
 			textoFinalPagina("Itens insuficientes para Forjar " + item.nome);
