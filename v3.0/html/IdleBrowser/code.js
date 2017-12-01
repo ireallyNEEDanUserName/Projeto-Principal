@@ -168,21 +168,21 @@ var defItens = function(itens){
 	var forja = itens.forja;
 	
 	/* MINERIOS PARA MINERAR. */
-	minerio.pedra = {lvl: 1, tempo: 10, sell: 1, buy: 3, tipo:"minerar"};
-	minerio.cobre = {lvl: 3, tempo: 20, sell: 1, buy: 3, tipo:"minerar"};
-	minerio.ferro = {lvl: 5, tempo: 30, sell: 2, buy: 5, tipo:"minerar"};
-	minerio.prata = {lvl: 8, tempo: 40, sell: 3, buy: 7, tipo:"minerar"};
-	minerio.ouro = {lvl: 10, tempo: 70, sell: 7, buy: 10, tipo:"minerar"};
+	minerio.pedra = {lvl: 1, tempo: 10, sell: 1, buy: 3, tipo:"minerar", nome:"Pedra"};
+	minerio.cobre = {lvl: 3, tempo: 20, sell: 1, buy: 3, tipo:"minerar", nome:"Cobre"};
+	minerio.ferro = {lvl: 5, tempo: 30, sell: 2, buy: 5, tipo:"minerar", nome:"Ferro"};
+	minerio.prata = {lvl: 8, tempo: 40, sell: 3, buy: 7, tipo:"minerar", nome:"Prata"};
+	minerio.ouro = {lvl: 10, tempo: 70, sell: 7, buy: 10, tipo:"minerar", nome:"Ouro"};
 	
 	/* ANIMAIS PARA CACAR. */
-	comida.rato = {lvl: 1, tempo: 10, sell: 1, buy: 3, tipo:"cacar"};
+	comida.rato = {lvl: 1, tempo: 10, sell: 1, buy: 3, tipo:"cacar", nome:"Rato"};
 	
 	/* ITENS PARA FORJAR. */
 	forja.espada = {};
 	forja.capacete = {};
 	
 	forja.espada.pedra = {lvl: 1, tempo: 10, sell: 5, buy: 10, req: { pedra: 4 }, tipo:"forjar", nome:"Espada de Pedra"};
-	forja.capacete.pedra = {lvl: 1, tempo: 15, sell: 5, buy: 10, req: { pedra: 5 }, tipo:"forjar",nome:"Capacete de Pedra"};
+	forja.capacete.pedra = {lvl: 1, tempo: 15, sell: 5, buy: 10, req: { pedra: 5 }, tipo:"forjar", nome:"Capacete de Pedra"};
 	
 	itens.minerio = minerio;
 	itens.comida = comida;
@@ -297,13 +297,37 @@ var upaLevel = function(status, tipo){
 
 //FUNCAO PARA DEIXAR A PRIMEIRA LETRA MAIUSCULA.
 var maiuscula = function(str){
-	str = str.charAt(0).toUpperCase() + str.slice(1);
-	return str;
+	var novaStr = "";
+	var proxima = false;
+	x = 0;
+	for(x = 0; x < str.length; x++){
+		if(x == 0 || proxima){
+			novaStr += str[x].toUpperCase();
+			proxima = false;
+		}
+		else{
+			novaStr += str[x];
+			if(str[x] == " " && str[x + 3] != " ") proxima = true;
+		}
+	}
+	//console.log(str+ " > " + novaStr);
+	return novaStr;
 };
 
 var minuscula = function(str){
-	str = str.charAt(0).toLowerCase() + str.slice(1);
-	return str;
+	var novaStr = "";
+	for(var char in str) novaStr += str[char].toLowerCase();
+	return novaStr;
+};
+
+var removerEspaco = function(str){
+	var novaStr = "";
+	
+	for(char in str){
+		if(str[char] != " ") novaStr+= str[char];
+	}
+	
+	return novaStr;
 };
 
 //FUNCAO PARA INSERIR TEXTO NA DIV DO FINAL DA PAGINA.
@@ -320,13 +344,28 @@ var textoFinalPagina = function(texto){
 };
 
 //VERIFICAR ITEM PASSADO EM tipo E RETORNAR A VARIAVEL COM DADOS DELE.
-var forjarItem = function(itens, status, classeMaterial, tipo){
-	for(var key in itens[classeMaterial]){
-		if(tipo.indexOf(key) > -1){
-			for(var keys in itens[classeMaterial][key]){
-				if(tipo.indexOf(keys) > -1){
-					console.log(itens[classeMaterial][key][keys]);
-					return itens[classeMaterial][key][keys];
+var verificarItem = function(nome){
+	
+	var status = {};
+	status = iniciar(status);
+	
+	var itens = {}; 
+	itens = defItens(itens);
+
+
+	for(var chave in itens){
+		for(var key in itens[chave]){
+			if(nome.indexOf(key) > -1){
+				if(!(maiuscula(nome) == itens[chave][key].nome)){
+					for(var keys in itens[chave][key]){
+						if(nome.indexOf(keys) > -1){
+							console.log(itens[chave][key][keys]);
+							return itens[chave][key][keys];
+						}
+					}
+				}else{
+					console.log(itens[chave][key]);
+					return itens[chave][key];
 				}
 			}
 		}
