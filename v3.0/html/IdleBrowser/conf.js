@@ -37,7 +37,7 @@ $(document).ready(function(){
 		console.log(clicked, texto);
 		
 		try{
-			textoFinalPagina("Aguarde terminar a tarfa atual para mudar para " + texto);
+			textoFinalPagina("Aguarde terminar a tarefa atual para mudar para " + texto);
 			definirAcao(clicked, texto);
 		}catch(err){
 			console.log("Erro na chamada do conf.js no click ('.item') " + err);
@@ -56,6 +56,7 @@ $(document).ready(function(){
 		status = iniciar(status);
 
 		var nome = $(this).attr("value");
+		var produto = $(this).attr("nome");
 		var x = $(this).attr("id");
 		var tipo = $(this).attr("outro");
 		var metodo = $(this).attr("tipo");
@@ -64,17 +65,19 @@ $(document).ready(function(){
 		if(metodo == "compra") opcao = "buy";
 		else if(metodo == "venda") opcao = "sell";
 		
-		var qtd = $("#" + nome + "Qtd" + opcao).text();
+		var qtd = $('#' + nome + 'Qtd' + opcao).text();
 		var custo = $("#" + nome + "val" + opcao).text();
-
-		if(x == "+" && ((status.inventario[maiuscula(nome)] > qtd && opcao == "sell") || opcao == "buy")){	
+		
+		item = verificarItem(nome);
+		console.log("#" + nome + "Qtd" + opcao);
+		if(x == "+" && ((status.inventario[maiuscula(produto)] > qtd && opcao == "sell") || opcao == "buy")){	
 			document.getElementById(nome + "Qtd" + opcao).innerHTML = parseInt(qtd) + 1;
-			document.getElementById(nome + "Val" + opcao).innerHTML = itens[tipo][nome][opcao] * (parseInt(qtd) + 1);
+			document.getElementById(nome + "Val" + opcao).innerHTML = item[opcao] * (parseInt(qtd) + 1);
 			
 		}
-		else if(x == "-" && parseInt(qtd) > 1){
+		else if(x == "-" && parseInt(qtd) >= 1){
 			document.getElementById(nome + "Qtd" + opcao).innerHTML = parseInt(qtd) - 1;
-			document.getElementById(nome + "Val" + opcao).innerHTML = itens[tipo][nome][opcao] * (parseInt(qtd) - 1);
+			document.getElementById(nome + "Val" + opcao).innerHTML = item[opcao] * (parseInt(qtd) - 1);
 		}
 
 	})
@@ -94,12 +97,13 @@ $(document).ready(function(){
 	$('.venda').click(function(){
 		
 		var nome = $(this).attr("value");
+		var produto = $(this).attr("nome");
 		var qtd = parseInt($("#" + nome + "Qtdsell").text());	
 		var tipo = $(this).attr("outro");
 
 		//console.log(nome + " " + valor + " " + tipo);
 		
-		venderInv(minuscula(nome), qtd, tipo);
+		venderInv(minuscula(produto), qtd, tipo);
 		
 	})
 	
