@@ -29,17 +29,22 @@
 	
 	<br>
 	<!-- Opçoes -->
-	<p id="Opcoes">
-		<a class="opcoes" value="minerio"> Minerar </a>
-		<a class="opcoes" value="forja"> Forjar </a>
-		<a class="opcoes" value="comida"> Caçar </a>
-	</p>
+	<ul id="Opcoes">
+		<li> <a class="opcoes" value="minerio"> Minerar </a> </li>
+		<li class="mOpDrop">
+			<a class="opcoes" value="forja" id="opDrop"> Forjar </a>
+			<div class="opContent">
+				<a class="opcoes" value="refinar" id="refinarDrop"> Refinar </a>
+			</div>
+		</li>
+		<li> <a class="opcoes" value="comida"> Caçar </a> </li>
+	</ul>
 
 	<div id="Materiais">
 		<p>
-			<i class="materiais" id="minerio"> Minerio: </i>
-			<i class="materiais" id="comida"> Comida:  </i>
-			<i class="materiais" id="dinheiro"> Dinheiro:  </i>
+			<i class="materiais" id="minerioQtd"> Minerio: </i>
+			<i class="materiais" id="comidaQtd"> Comida:  </i>
+			<i class="materiais" id="dinheiroQtd"> Dinheiro:  </i>
 		</p>
 	</div>
 	
@@ -60,7 +65,6 @@
 			}catch(err){
 				console.log("Erro na função criarMissoes() no missoes.html" + err);
 			}
-
 		</script>
 		
 	</div>
