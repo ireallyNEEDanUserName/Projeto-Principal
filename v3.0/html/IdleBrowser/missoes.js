@@ -18,6 +18,7 @@ var start = function(){
 	var sucesssoForja = false;
 	var loop = true;
 	var fimLoop = true;
+	var materialAddInv = "";
 	
 	var barra;
 	var barraCheia;
@@ -42,6 +43,9 @@ var start = function(){
 	}catch(err){
 		console.log("Erro na primeira chamada das funcões de inicializacao do missoes.js " + err);
 	}
+	
+	loop = chamadaPossForjar(classeMaterial, tipoMaterial, status, item, qtdMaterial);
+	var tempo = verfTempo(classeMaterial, tipoMaterial, item);
 	
 	var dataInicialAtualizada = new Date();
 	var data = new Date();
@@ -73,19 +77,17 @@ var start = function(){
 			}catch(err){
 				console.log("Erro na segunda chamada das funcões de inicializacao do missoes.js " + err);
 			}	
+			
+			loop = chamadaPossForjar(classeMaterial, tipoMaterial, status, item, qtdMaterial);
+			tempo = verfTempo(classeMaterial, tipoMaterial, item);
 		}else{
 			//console.log("Dentro do loop");
-			if(classeMaterial == "forja" && possibilidadeForjar(itens, status, item)) loop = true;
-			else if(classeMaterial == "forja" && !possibilidadeForjar(itens, status, item)) loop = false;
-			else loop = true;
-		
+			
 			if(loop){
 				data = new Date();
 				segundo = data.getTime() / 1000;
 				
 				tempoDesdeOInicio = segundo - segundoInicialAtualizado;
-				
-				var tempo = item.tempo - status.habilidades["lvl".concat(texto)];
 			
 				if(tempoDesdeOInicio.toFixed(0) >= tempo){
 					fimLoop = true;
@@ -93,23 +95,45 @@ var start = function(){
 					segundoInicialAtualizado = dataInicialAtualizada.getTime() / 1000;
 					tempoDesdeOInicio = 0;
 					status = iniciar(status);
-					if(tipoMaterial in status.inventario) status.inventario[tipoMaterial] += qtdMaterial;
-					else{
-						status.inventario[tipoMaterial] = 0;
-						status.inventario[tipoMaterial] += qtdMaterial;
+					if(classeMaterial != "refinar"){
+						materialAddInv = tipoMaterial;
+					}else{
+						itemRefino = verificarRefino(tipoMaterial);
+						var lvlRefino = 0;
+						
+						if(itemRefino[0] == ""){
+							materialAddInv = tipoMaterial + "+" + lvlRefino;
+						}else{
+							materialAddInv = itemRefino[1] + "+" + (parseInt(itemRefino[0]) + 1);
+							console.log("lvl " + parseInt(itemRefino[0]));
+						}
 					}
+					
+					console.log(materialAddInv);
+					
+					if(materialAddInv in status.inventario) status.inventario[materialAddInv] += qtdMaterial;
+					else{
+						status.inventario[materialAddInv] = 0;
+						status.inventario[materialAddInv] += qtdMaterial;
+					}
+					
 					status.habilidades[expTexto] += exp;
 					status.habilidades = upaLevel(status.habilidades, texto);
-					textoFinalPagina("Você adquiriu " + qtdMaterial + " " + maiuscula(tipoMaterial) + " e " + exp + " de experiência");
-					if(classeMaterial == "forja") status = removerItemForja(itens, status, item);
+					textoFinalPagina("Você adquiriu " + qtdMaterial + " " + maiuscula(materialAddInv) + " e " + exp + " de experiência");
+					if(classeMaterial == "forja") status = removerItemForja(status, item, qtdMaterial);
+					else if(classeMaterial == "refinar") status = removerItemRefino(status, tipoMaterial, qtdMaterial);
 					salvar(status);
+					materiais();
 					try{
 						qtd.innerHTML = maiuscula(tipoMaterial) + ": " + status.inventario[tipoMaterial];
 					}catch(err){
 						console.log("Erro em colocar qtd de itens total em start() em missoes.js " + err);
 					}
 					
-					console.log(barra);
+					//console.log(barra);
+					
+					loop = chamadaPossForjar(classeMaterial, tipoMaterial, status, item, qtdMaterial);
+					tempo = verfTempo(classeMaterial, tipoMaterial, item);
 				}
 				
 				var tamanhoBarra = Math.floor(tempoDesdeOInicio.toFixed(0) / (tempo / 100));
@@ -118,6 +142,7 @@ var start = function(){
 				
 			}else{
 				status = iniciar(status);
+				fimLoop = true;
 			}
 		}
 		requestAnimationFrame(tick);
@@ -142,6 +167,8 @@ var inicializacaoDados = function(){
 	
 	var dados = [];
 	
+	var itemRefino = [0, 0];
+	
 	if(tipo.includes("minerio")){
 		texto = "Minerar";
 		classeMaterial = "minerio";
@@ -156,14 +183,20 @@ var inicializacaoDados = function(){
 		texto = "Cacar";
 		classeMaterial = "comida";
 		item = itens[classeMaterial][minuscula(tipoMaterial)];
+	}else if(tipo.includes("refinar")){
+		texto = "Forjar";
+		classeMaterial = "refinar";
+		item = verificarItem(tipo);
+		console.log(item);
+		itemRefino = verificarRefino(tipoMaterial);
 	}
 	
 	qtdMaterial = 1 + Math.round(status.habilidades["lvl".concat(texto)] - item.lvl);
-	exp = (1 + qtdMaterial) * item.lvl;
+	exp = (1 + qtdMaterial + itemRefino[0]) * item.lvl;
 	expTexto = "exp" + texto;
 	
 	dados = [texto, classeMaterial, item, tipoMaterial, qtdMaterial, exp, expTexto];
-	//console.log(dados);
+	console.log(dados);
 	return dados;
 };
 
@@ -182,32 +215,75 @@ var inicializacaoBarras = function(tipo, classeMaterial){
 	return barras;
 };
 
-var removerItemForja = function(itens, status, item){
+var verfTempo = function(classeMaterial, tipoMaterial, item){
+	var tempo = 0;
+	var lvlItem = verificarRefino(tipoMaterial);
+	if(classeMaterial == "refinar" && parseInt(lvlItem[0]) > 0) tempo = item.tempo * parseInt(lvlItem[0]);
+	else tempo = item.tempo;
+	
+	//console.log(tempo);
+	return tempo;
+};
+
+var removerItemForja = function(status, item, qtd){
+
 	for(var key in item.req){
-		if(status.inventario[maiuscula(key)] >= item.req[key]){
-			status.inventario[maiuscula(key)] -= item.req[key];
-			materiais();
-			return status;
+		if(status.inventario[maiuscula(key)] >= (item.req[key] * qtd)){
+			status.inventario[maiuscula(key)] -= (item.req[key] * qtd);
 		}else{
 			textoFinalPagina("Itens insuficientes para Forjar " + item.nome);
-			return status;
 		}
+	}
+	return status;
+};
+
+var removerItemRefino = function(status, item, qtd){
+	
+	if(status.inventario[item] >= (2 * qtd)) status.inventario[item] -= (2 * qtd);
+	else{
+		textoFinalPagina("Itens insuficientes para Refinar " + item);
+	}
+	
+	return status;
+};
+
+var chamadaPossForjar = function(classeMaterial, tipoMaterial, status, item, qtd){
+	if(classeMaterial == "forja") return possibilidadeForjar(status, item, qtd);
+	else if(classeMaterial == "refinar") return possibilidadeRefinar(status, tipoMaterial, qtd);
+	else return true;
+};
+
+var possibilidadeRefinar = function(status, item, qtd){
+	//console.log("PossibilidadeRefinar : " + item.nome);
+	//console.log(status.inventario[item]);
+	if(status.inventario[item] >= (2 * qtd)) return true;
+	else{
+		textoFinalPagina("Quantidade de itens insuficientes para Refinar " + item);
+		return false;
 	}
 };
 
-var possibilidadeForjar = function(itens, status, item){
+var possibilidadeForjar = function(status, item, qtd){
+
+	var possibilidade = [];
 	for(var key in item.req){
-		if(status.inventario[maiuscula(key)] >= item.req[key]){
-			return true;
-		}else{
-			textoFinalPagina("Itens insuficientes para Forjar " + item.nome);
-			return false;
-		}
+		if(status.inventario[maiuscula(key)] >= (item.req[key] * qtd)) possibilidade[key] = true;
+		else possibilidade[key] = false;
+	}
+	
+	//console.log(possibilidade);
+	var verfPoss = true;
+	for(var chave in possibilidade) if(!possibilidade[key]) verfPoss = false;
+	//console.log(verfPoss);
+	if(verfPoss) return true;
+	else{
+		textoFinalPagina("Itens insuficientes para Forjar " + item.nome);
+		return false;
 	}
 }
 
-
 var criarMissoes = function(){
+
 	var status = {};
 	status = iniciar(status);
 	var itens = {}; 
@@ -229,7 +305,7 @@ var criarMissoes = function(){
 				}
 			}else{
 				for(chaveForja in itens[key][keys]){
-					console.log(keys + " de " + chaveForja);
+					//console.log(keys + " de " + chaveForja);
 					var nome = maiuscula(keys) + " de " + maiuscula(chaveForja);
 					if(status.habilidades["lvl" + maiuscula(itens[key][keys][chaveForja].tipo)] >= itens[key][keys][chaveForja].lvl){
 						div += "<div id='" + itens[key][keys][chaveForja].tipo + "' class='" + key + "'>" +
@@ -243,9 +319,37 @@ var criarMissoes = function(){
 			}
 		}		
 	}
-
-	console.log("Itens de missoes");
-	console.log(itens);
+	
+	//console.log(status.inventario);
+	var refinarItem = "";
+	for(key in status.inventario){
+		//console.log(key);
+		refinarItem = verificarItem(minuscula(key));
+		try{
+			if(refinarItem.tipo == "forjar"){
+				
+				var nome = removerEspaco(minuscula(key));
+			
+				//console.log(status.habilidades["lvl" + maiuscula(refinarItem.tipo)]);
+				//console.log(refinarItem.nome + " > " + refinarItem.lvl * 2);
+				//verificarRefino(key);
+				if(status.habilidades["lvl" + maiuscula(refinarItem.tipo)] >= (refinarItem.lvl * 2)){
+					div += "<div id='forjar' class='refinar'>" +
+							"<div id='" + nome + "'>" +
+							"<p id='" + "refinar".concat(nome) + "' class='item'>" + key + "</p>" +
+							"<div id='barraProgresso" +  "refinar".concat(nome) + "' class='progresso'> " +
+							"<div id='barra" +  "refinar".concat(nome) + "' class='barra'>0 %</div>" +
+							"</div> </div> </div>";
+				}
+			
+			}
+		}catch(err){
+			console.log("Erro em criar o refinar: " + err);
+		}
+	}
+	
+	//console.log("Itens de missoes");
+	//console.log(itens);
 	titulo.insertAdjacentHTML('beforeend', div);
 	
 };
