@@ -176,13 +176,20 @@ var defItens = function(itens){
 	
 	/* ANIMAIS PARA CACAR. */
 	comida.rato = {lvl: 1, tempo: 10, sell: 1, buy: 3, tipo:"cacar", nome:"Rato"};
+	comida.urso = {lvl: 5, tempo: 30, sell: 3, buy: 5, tipo:"cacar", nome:"Urso"};
+	comida.lobo = {lvl: 5, tempo: 25, sell: 2, buy: 4, tipo:"cacar", nome:"Lobo"};
 	
 	/* ITENS PARA FORJAR. */
 	forja.espada = {};
 	forja.capacete = {};
 	
 	forja.espada.pedra = {lvl: 1, tempo: 10, sell: 5, buy: 10, req: { pedra: 4 }, tipo:"forjar", nome:"Espada de Pedra"};
+	forja.espada.cobre = {lvl: 5, tempo: 15, sell: 6, buy: 13, req: { cobre: 4, pedra: 1 }, tipo:"forjar", nome:"Espada de Cobre"};
+	forja.espada.ferro = {lvl: 7, tempo: 35, sell: 7, buy: 18, req: { cobre: 2, pedra: 1, ferro: 2 }, tipo:"forjar", nome:"Espada de Ferro"};
+	
 	forja.capacete.pedra = {lvl: 1, tempo: 15, sell: 5, buy: 10, req: { pedra: 5 }, tipo:"forjar", nome:"Capacete de Pedra"};
+	forja.capacete.cobre = {lvl: 4, tempo: 25, sell: 15, buy: 35, req: { cobre: 5 }, tipo:"forjar", nome:"Capacete de Cobre"};
+	forja.capacete.ferro = {lvl: 7, tempo: 40, sell: 20, buy: 50, req: { ferro: 5, pedra: 2 }, tipo:"forjar", nome:"Capacete de Ferro"};
 	
 	itens.minerio = minerio;
 	itens.comida = comida;
@@ -267,7 +274,7 @@ var escrever = function(status){
 	
 	for(var key in status.inventario){
 		try{
-			var ele = document.getElementById(key);
+			var ele = document.getElementById(key + "Qtd");
 			ele.innerHTML = maiuscula(key) + ": " + tipo[key];
 		}catch(err){
 			console.log("Erro na chamada do code.js da funcao escrever() " + err);
@@ -299,7 +306,7 @@ var upaLevel = function(status, tipo){
 var maiuscula = function(str){
 	var novaStr = "";
 	var proxima = false;
-	x = 0;
+	var x = 0;
 	for(x = 0; x < str.length; x++){
 		if(x == 0 || proxima){
 			novaStr += str[x].toUpperCase();
@@ -330,6 +337,23 @@ var removerEspaco = function(str){
 	return novaStr;
 };
 
+var verificarRefino = function(str){
+	var lvlRefino = "";
+	var novaStr = "";
+	
+	var x;
+	for(x = 0; x < str.length; x++){
+		if(str[x] == "+"){
+			for(var y = x + 1; y < str.length; y++) lvlRefino += str[y];
+			novaStr = str.slice(0, x);
+		}
+	}
+	
+	//console.log(lvlRefino + " | " + novaStr + " > " + str);
+	
+	return [lvlRefino, novaStr];
+};
+
 //FUNCAO PARA INSERIR TEXTO NA DIV DO FINAL DA PAGINA.
 var textoFinalPagina = function(texto){
 	
@@ -346,6 +370,8 @@ var textoFinalPagina = function(texto){
 //VERIFICAR ITEM PASSADO EM tipo E RETORNAR A VARIAVEL COM DADOS DELE.
 var verificarItem = function(nome){
 	
+	//console.log(nome);
+	
 	var status = {};
 	status = iniciar(status);
 	
@@ -359,12 +385,12 @@ var verificarItem = function(nome){
 				if(!(maiuscula(nome) == itens[chave][key].nome)){
 					for(var keys in itens[chave][key]){
 						if(nome.indexOf(keys) > -1){
-							console.log(itens[chave][key][keys]);
+							//console.log(itens[chave][key][keys]);
 							return itens[chave][key][keys];
 						}
 					}
 				}else{
-					console.log(itens[chave][key]);
+					//console.log(itens[chave][key]);
 					return itens[chave][key];
 				}
 			}
