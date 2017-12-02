@@ -162,11 +162,15 @@ li {
 	font-size: 20px;
 }
 
-.minerio, .comida, .forja{
+.minerio, .comida, .forja, .refinar{
 	display: none;
 	background-color: #6796a0;
 	width: 150px;
 	margin: auto;
+}
+
+.opContent #refinarDrop {
+	background-color: #16c5b0;
 }
 
 
