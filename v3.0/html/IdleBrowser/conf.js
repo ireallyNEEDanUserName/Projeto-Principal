@@ -23,6 +23,7 @@ $(document).ready(function(){
 			$('.minerio').hide();
 			$('.comida').hide();
 			$('.forja').hide();
+			$('.refinar').hide();
 			
 			//$('.habilidade').show();
 			$("." + clicked).show();
