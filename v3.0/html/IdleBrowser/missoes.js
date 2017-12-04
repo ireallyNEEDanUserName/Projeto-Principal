@@ -73,13 +73,18 @@ var start = function(){
 				barra = barras[0];
 				barraCheia = barras[1];
 				qtd = barras[2];
-				console.log(barra);
+				//console.log(barra);
 			}catch(err){
 				console.log("Erro na segunda chamada das funcões de inicializacao do missoes.js " + err);
 			}	
 			
 			loop = chamadaPossForjar(classeMaterial, tipoMaterial, status, item, qtdMaterial);
 			tempo = verfTempo(classeMaterial, tipoMaterial, item);
+			
+			dataInicialAtualizada = new Date();
+			segundoInicialAtualizado = dataInicialAtualizada.getTime() / 1000;
+			tempoDesdeOInicio = 0;
+			
 		}else{
 			//console.log("Dentro do loop");
 			
@@ -133,6 +138,8 @@ var start = function(){
 					//console.log(barra);
 					
 					loop = chamadaPossForjar(classeMaterial, tipoMaterial, status, item, qtdMaterial);
+					//console.log("Tem itens para fazer: " + loop);
+					//console.log(item.req);
 					tempo = verfTempo(classeMaterial, tipoMaterial, item);
 				}
 				
@@ -177,7 +184,7 @@ var inicializacaoDados = function(){
 		texto = "Forjar";
 		classeMaterial = "forja";
 		item = verificarItem(tipo);
-		console.log(item);
+		//console.log(item);
 		tipoMaterial = item.nome;
 	}else if(tipo.includes("comida")){
 		texto = "Cacar";
@@ -196,7 +203,7 @@ var inicializacaoDados = function(){
 	expTexto = "exp" + texto;
 	
 	dados = [texto, classeMaterial, item, tipoMaterial, qtdMaterial, exp, expTexto];
-	console.log(dados);
+	//console.log(dados);
 	return dados;
 };
 
@@ -248,6 +255,7 @@ var removerItemRefino = function(status, item, qtd){
 };
 
 var chamadaPossForjar = function(classeMaterial, tipoMaterial, status, item, qtd){
+	
 	if(classeMaterial == "forja") return possibilidadeForjar(status, item, qtd);
 	else if(classeMaterial == "refinar") return possibilidadeRefinar(status, tipoMaterial, qtd);
 	else return true;
@@ -267,13 +275,16 @@ var possibilidadeForjar = function(status, item, qtd){
 
 	var possibilidade = [];
 	for(var key in item.req){
+		//console.log(status.inventario[maiuscula(key)] + " " + item.req[key] * qtd);
 		if(status.inventario[maiuscula(key)] >= (item.req[key] * qtd)) possibilidade[key] = true;
 		else possibilidade[key] = false;
 	}
 	
 	//console.log(possibilidade);
+	
 	var verfPoss = true;
-	for(var chave in possibilidade) if(!possibilidade[key]) verfPoss = false;
+	for(var chave in possibilidade) if(!possibilidade[chave]) verfPoss = false;
+
 	//console.log(verfPoss);
 	if(verfPoss) return true;
 	else{
