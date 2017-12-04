@@ -87,7 +87,7 @@ var updateOffline = function(status){
 		var tempoNecessarioTarefa = itens[status.empregados[nome].tipo][invTipo].tempo;
 		//SE TEMPO FOR MAIOR QUE 6H MUDAR PARA 6H
 		if(tempoOffline > 21600) tempoOffline = 21600;
-		qtd = 1 + Math.round(status.empregados[nome].lvl / itens[status.empregados[nome].tipo][invTipo].lvl); //qtd de itens que o trabalhador pega.
+		qtd = 1 + Math.round(status.empregados[nome].lvl / itens[status.empregados[nome].tipo][invTipo].lvl) * Math.floor(tempoOffline / tempoNecessarioTarefa); //qtd de itens que o trabalhador pega.
 
 		console.log("Tempo Atual: " + atual, "| Tempo do Empregado: " + status.empregados[nome].offline, "| Tempo Offline: " + tempoOffline + " | Qtd: " + qtd);
 		//Tipo item que o trabalhador pega.
@@ -103,10 +103,10 @@ var updateOffline = function(status){
 				status.inventario[maiuscula(invTipo)] += qtd;
 			}
 			status.empregados[nome].exp += exp;
-			status.expChefe += exp;
+			status.habilidades.expChefe += exp;
 			status.empregados[nome].offline = atual;
 			status.empregados[nome] = upaLevel(status.empregados[nome], "");
-			status = upaLevel(status, "Chefe");
+			status.habilidades = upaLevel(status.habilidades, "Chefe");
 			//console.log(status.empregados["n" + x]);
 		}
 	}
@@ -151,7 +151,7 @@ var updateEmp = function(status){
 			tipo = verfTipo(itens, status.empregados[nome]);
 			tempoDesdeOInicio[x] = atual - inicial[x];
 			tempoMaterial = itens[status.empregados[nome].tipo][invTipo].tempo - Math.floor((status.empregados[nome].lvl / 2)); //tempo que demora para pegar o material.
-			if(tempoMaterial < 0) tempoMaterial = 0;
+			if(tempoMaterial < 0) tempoMaterial = 1;
 			 //tipo do material que o empregado pega.
 			qtdMaterial = 1 + Math.floor(status.empregados[nome].lvl / itens[status.empregados[nome].tipo][invTipo].lvl); //qtuantidade de material que o empregado pega.
 			tipoMaterial = maiuscula(tipo);
@@ -173,8 +173,8 @@ var updateEmp = function(status){
 				}
 				status.empregados[nome].exp += qtdMaterial; //adicionar no exp no empregado a quantidade de material pego.
 				status.empregados[nome] = upaLevel(status.empregados[nome], ""); //chamada da função que verifica se upou de level do empregado.
-				status.expChefe += qtdMaterial; //adicionar exp na skill do jogador.
-				status = upaLevel(status, "Chefe"); //chamada da função que verifica se upou de level do jogador.
+				status.habilidades.expChefe += qtdMaterial; //adicionar exp na skill do jogador.
+				status.habilidades = upaLevel(status.habilidades, "Chefe"); //chamada da função que verifica se upou de level do jogador.
 				salvar(status); //save do jogo.
 				textoFinalPagina("Você adquiriu " + maiuscula(tipoMaterial) + ": " + qtdMaterial); //barra final da tela com informações.
 			}
@@ -237,6 +237,6 @@ var verfTipo = function(itens, emp){
 			}
 		}
 	}
-	console.log("Itens que o empregado pega: " + invTipo);
+	//console.log("Itens que o empregado pega: " + invTipo);
 	return invTipo;
 };
