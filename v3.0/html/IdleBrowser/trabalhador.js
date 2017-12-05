@@ -86,13 +86,12 @@ var updateOffline = function(status){
 		invTipo = verfTipo(itens, status.empregados[nome]);
 		var tempoNecessarioTarefa = itens[status.empregados[nome].tipo][invTipo].tempo;
 		//SE TEMPO FOR MAIOR QUE 6H MUDAR PARA 6H
-		if(tempoOffline > 21600) tempoOffline = 21600;
+		if(tempoOffline > (21600 + status.empregados[nome].lvl)) tempoOffline = 21600 + status.empregados[nome].lvl;
 		qtd = 1 + Math.round(status.empregados[nome].lvl / itens[status.empregados[nome].tipo][invTipo].lvl) * Math.floor(tempoOffline / tempoNecessarioTarefa); //qtd de itens que o trabalhador pega.
 
 		console.log("Tempo Atual: " + atual, "| Tempo do Empregado: " + status.empregados[nome].offline, "| Tempo Offline: " + tempoOffline + " | Qtd: " + qtd);
-		//Tipo item que o trabalhador pega.
 		
-		exp = (1 + qtd) * itens[status.empregados[nome].tipo][invTipo].lvl;
+		exp = Math.round((1 + qtd) * itens[status.empregados[nome].tipo][invTipo].lvl);
 		console.log("Experiencia do Empregado: " + exp);
 		totalItens += qtd; //Total de itens que todos trabalhadores pegaram.
 		//SE TEMPO OFFLINE FOR MAIOR QUE 1MIN ADICIONAR NO INVENTARIO E DEFINIR TEMPO OFFLINE COMO ATUAL.
