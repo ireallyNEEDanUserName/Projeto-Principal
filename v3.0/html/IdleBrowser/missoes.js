@@ -376,3 +376,70 @@ var definirAcao = function(tipo, material){
 	
 };
 
+
+var popUpItens = function(nome){
+	
+	var refino = verificarRefino(nome);
+
+	if(refino[0] != ""){
+		if(parseInt(refino[0]) == 0) var texto = "Necessario 2: " + refino[1];
+		else var texto = "Necessario 2: " + refino[1].concat(" +".concat(parseInt(refino[0]) - 1));
+	}
+	else{
+	
+		var item = verificarItem(minuscula(nome));
+		var req = "";
+		var x = 0;
+		console.log(Object.keys(item.req).length);
+		
+		for(var chave in item.req){
+			if(x >= 1) req += ", ";
+			req += item.req[chave] + " " + chave;
+			x++;
+		}
+		var texto = "Sao necessario para fazer o item: " + req;
+	}
+	textoFinalPagina(texto);
+	
+	/*
+	var span = "";
+	var refino = verificarRefino(nome);
+	if(refino[0] != "") var id = removerEspaco(refino[1].concat(refino[0]));
+	else var id = removerEspaco(nome);
+	
+	deletePopUp(nome);
+	
+	span += "<span class='popUp' id='popup" + id + "' > " + nome + "</span>"
+	
+	local = document.getElementById(removerEspaco(minuscula(nome)));
+	local.insertAdjacentHTML('afterend', span);
+	
+	//console.log(local);
+	
+	*/
+};
+
+var deletePopUp = function(nome){
+
+	try{
+		document.getElementById("statusBar").remove();
+	}catch(err){
+		console.log("Erro em remover o popUp em missoes.js em deletePopUp() " + err);
+	}
+	
+	
+	/*
+	
+	var refino = verificarRefino(nome);
+	if(refino[0] != "") var id = removerEspaco(refino[1].concat(refino[0]));
+	else var id = removerEspaco(nome);
+	
+	try{
+		document.getElementById("popup".concat(id)).remove();
+	}catch(err){
+		console.log("Erro em remover o popUp em missoes.js em deletePopUp() " + err);
+	}
+	
+	*/
+
+};
