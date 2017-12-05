@@ -18,7 +18,7 @@ a:link, a:active, a:visited{
 #statusBar {
 	width: 100%;
 	bottom: 0;
-	position: absolute;
+	position: fixed;
 }
 
 /* MENU */
@@ -155,6 +155,11 @@ li {
 	background-color: #a2ebe9;
 	color: white;
 	margin: auto;
+	
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .opcoes:hover, .item:hover {
@@ -186,6 +191,31 @@ li {
 	font-size: 18px;
 }
 
+/* POPUP DAS MISSOES */
+
+.item .popUp {
+	visibility: hidden;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    z-index: 1;
+}
+
+.item .show {
+    visibility: visible;
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s;
+}
+
+@-webkit-keyframes fadeIn {
+    from {opacity: 0;} 
+    to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity:1 ;}
+}
 
 
 /* PAGINA LOJA.HTML */
