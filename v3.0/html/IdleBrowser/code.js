@@ -285,6 +285,7 @@ var escrever = function(status){
 
 var upaLevel = function(status, tipo){
 	tipo = maiuscula(tipo);
+	if(tipo == "") tipo = status;
 	var level = "lvl" + tipo;
 	var experiencia = "exp" + tipo; 
 	var compExp = (status[level] * status[level]) * (50 + status[level]);
@@ -295,8 +296,8 @@ var upaLevel = function(status, tipo){
 			console.log("Funcao upaLevel - " + Object.keys(status.empregados).length);
 		}
     	status[experiencia] -= compExp;
-    	}
-		textoFinalPagina("PARABÉNSS!! VOCÊ UPOU UM LEVEL DE " + tipo + "! : " + status[level]);
+    }
+	textoFinalPagina("PARABÉNSS!! VOCÊ UPOU UM LEVEL DE " + tipo + "! : " + status[level]);
 		
     console.log("Exp Necessario: " + compExp + " Exp Atual: " + status[experiencia]);
     return status;
@@ -377,7 +378,6 @@ var verificarItem = function(nome){
 	
 	var itens = {}; 
 	itens = defItens(itens);
-
 
 	for(var chave in itens){
 		for(var key in itens[chave]){
