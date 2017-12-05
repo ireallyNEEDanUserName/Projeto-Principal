@@ -47,19 +47,26 @@ var venderInv = function(nome, qtd, tipo){
 	var itens = {}; 
 	itens = defItens(itens);
 	
-	if(tipo == "forja"){
-		item = verificarItem(nome);
-		nome = item.nome;
-	}
-	else item = itens[tipo][nome];
+	multiplicador = 1;
 	
-	console.log(item.buy);
+	if(tipo == "forja"){
+		refino = verificarRefino(nome);
+		item = verificarItem(nome);
+		if(refino[0] != ""){
+			multiplicador = parseInt(refino[0]) + 1;
+			nomeElemento = refino[1].concat(refino[0]);
+		}else nomeElemento = item.nome;
+	}
+	else {
+		item = itens[tipo][nome];
+		nomeElemento = nome;
+	}
 	
 	if(status.inventario[maiuscula(nome)] >= qtd){
-		status.inventario.dinheiro += item.sell * qtd;
+		status.inventario.dinheiro += (item.sell * multiplicador) * qtd;
 		status.inventario[maiuscula(nome)] -= qtd;
-		textoFinalPagina("Vendeu com sucesso " + qtd + " de " + maiuscula(nome) + " por: " + item.sell * qtd);
-		document.getElementById("total" + removerEspaco(minuscula(nome))).innerHTML = (status.inventario[maiuscula(nome)]) + " / ";
+		textoFinalPagina("Vendeu com sucesso " + qtd + " de " + maiuscula(nome) + " por: " + (item.sell * multiplicador) * qtd);
+		document.getElementById("total" + removerEspaco(minuscula(nomeElemento))).innerHTML = (status.inventario[maiuscula(nome)]) + " / ";
 	}else textoFinalPagina("Itens insuficientes no seu inventario");
 	
 	salvar(status);
@@ -134,16 +141,19 @@ var criarSell = function(){
 			if(chave != "forja"){
 				try{
 					console.log(" Nome: " + itens[chave][minuscula(key)].nome + " nome chave: " + maiuscula(key));
-					if(itens[chave][minuscula(key)].nome == maiuscula(key)) div = sellDiv(status, div, item, chave);		
+					if(itens[chave][minuscula(key)].nome == maiuscula(key)) div = sellDiv(status, div, item, chave, key);		
 				}catch(err){
 					console.log("Erro na criacao do Div de Sell: " + err);
 				}
 			}else{
+				refino = verificarRefino(key);
+				//console.log(refino);
+				if(refino[1] == "") nome = key;
+				else nome = refino[1];
 				for(keys in itens[chave]){
 					for(var ultimaChave in itens[chave][keys]){
-						if(maiuscula(key) == itens[chave][keys][ultimaChave].nome){
-							console.log(ultimaChave);
-							div = sellDiv(status, div, item, chave);
+						if(maiuscula(nome) == itens[chave][keys][ultimaChave].nome){
+							div = sellDiv(status, div, item, chave, key);
 						}
 					}
 				}
@@ -157,17 +167,37 @@ var criarSell = function(){
 	titulo.insertAdjacentHTML('beforeend', div);
 };
 
-var sellDiv = function(status, div, item, tipo){
-	key = removerEspaco(item.nome);
+var sellDiv = function(status, div, item, tipo, keyInv){
+	
+	refino = "";
+	
+	if(tipo == "forja"){
+		nome = keyInv
+		refino = verificarRefino(keyInv);
+		key = removerEspaco(refino[1].concat(refino[0]))
+		valor = item.sell * (parseInt(refino[0]) + 1);
+		if(refino[0] == ""){
+			nome = item.nome;
+			valor = item.sell;
+			key = removerEspaco(item.nome);
+		}
+	}else{
+		nome = item.nome;
+		key = removerEspaco(item.nome);
+		valor = item.sell;
+	}
+	
+	//console.log(refino);
+	
 	try{
-		div += "<i>" +  item.nome + ": </i>"+
-				"<i id='total" + minuscula(key) + "'>" +  status.inventario[item.nome] + " / </i>" +
+		div += "<i>" +  nome + ": </i>"+
+				"<i id='total" + minuscula(key) + "'>" +  status.inventario[nome] + " / </i>" +
 				"<i id='" + minuscula(key) + "Qtdsell'> 1 </i>" +
 				" | Valor: " +
-				"<i id='" + minuscula(key) + "Valsell'>" + item.sell + "</i> | " +
-				"<a class='btnMaisMenos' value='" + minuscula(key) + "' id='+' outro='" + tipo + "' tipo='venda' nome='" + minuscula(item.nome) +"'> + </a>" +
-				"<i class='venda' value='" + minuscula(key) + "' outro='" + tipo + "'  nome='" + minuscula(item.nome) +"'> VENDER </i>" +
-				"<a class='btnMaisMenos' value='" + minuscula(key) + "' id='-' outro='" + tipo + "' tipo='venda'  nome='" + minuscula(item.nome) +"'> - </a> <br>";
+				"<i id='" + minuscula(key) + "Valsell'>" + valor + "</i> | " +
+				"<a class='btnMaisMenos' value='" + minuscula(key) + "' id='+' outro='" + tipo + "' tipo='venda' nome='" + nome +"'> + </a>" +
+				"<i class='venda' value='" + minuscula(key) + "' outro='" + tipo + "'  nome='" + nome +"'> VENDER </i>" +
+				"<a class='btnMaisMenos' value='" + minuscula(key) + "' id='-' outro='" + tipo + "' tipo='venda'  nome='" + nome +"'> - </a> <br>";
 	}catch(err){
 		console.log("Erro no sell no item: " + err);
 	}
