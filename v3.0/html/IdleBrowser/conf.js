@@ -46,6 +46,27 @@ $(document).ready(function(){
 		}
 		
 	})
+	
+	$('.item').mouseover(function(){
+	
+		//console.log($(this).position());
+	
+		//var refino = verificarRefino($(this).text());
+		popUpItens($(this).text());
+		/*
+		if(refino[0] != ""){
+			var id = removerEspaco(refino[1].concat(refino[0]));
+		}else var id = removerEspaco($(this).text());
+		
+		var popup = document.getElementById("popup".concat(id));
+		
+		popup.classList.toggle("show");
+		*/
+	})
+	
+	$('.item').mouseout(function(){
+		deletePopUp($(this).text());
+	})
 
 	//OPCOES DA PAGINA LOJA.HTML
 	$('.btnMaisMenos').click(function(){
@@ -62,6 +83,7 @@ $(document).ready(function(){
 		var tipo = $(this).attr("outro");
 		var metodo = $(this).attr("tipo");
 		var opcao = "";
+		var multiplicador = 1;
 		
 		if(metodo == "compra") opcao = "buy";
 		else if(metodo == "venda") opcao = "sell";
@@ -70,15 +92,19 @@ $(document).ready(function(){
 		var custo = $("#" + nome + "val" + opcao).text();
 		
 		item = verificarItem(nome);
+		refino = verificarRefino(produto);
+		
+		if(refino[0] != "") multiplicador = parseInt(refino[0]) + 1;
+		
 		console.log("#" + nome + "Qtd" + opcao);
 		if(x == "+" && ((status.inventario[maiuscula(produto)] > qtd && opcao == "sell") || opcao == "buy")){	
 			document.getElementById(nome + "Qtd" + opcao).innerHTML = parseInt(qtd) + 1;
-			document.getElementById(nome + "Val" + opcao).innerHTML = item[opcao] * (parseInt(qtd) + 1);
+			document.getElementById(nome + "Val" + opcao).innerHTML = (item[opcao] * multiplicador) * (parseInt(qtd) + 1);
 			
 		}
 		else if(x == "-" && parseInt(qtd) >= 1){
 			document.getElementById(nome + "Qtd" + opcao).innerHTML = parseInt(qtd) - 1;
-			document.getElementById(nome + "Val" + opcao).innerHTML = item[opcao] * (parseInt(qtd) - 1);
+			document.getElementById(nome + "Val" + opcao).innerHTML = (item[opcao] * multiplicador) * (parseInt(qtd) - 1);
 		}
 
 	})
