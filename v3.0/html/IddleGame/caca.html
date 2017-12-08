@@ -1,0 +1,46 @@
+<html>
+<head>
+	<title>DeadDungeon Iddle - Caça</title>
+	<script type="text/javascript" src="scripts/main.js"></script>
+	<link href="style.css" type="text/css" rel="stylesheet" />
+
+<script type="text/javascript">
+	
+
+var teste = localStorage.getItem("srMorto")
+
+alert(teste);
+
+</script>
+
+</head>
+
+<body>
+
+	<div id='Topo'>
+		<h1>Vamos a Caça!</h1>
+	</div>
+
+	<div id='Centro'>
+		Selecione a criatura para caçar: </br></br>
+		
+		<div id='ratoSt'>
+			<a id='rt' href="#" onclick="morteRato()"> rato</a> </br>
+			Total de ratos mortos: <li id='rmorto' onclick="contaRatoMorto()"></li> </br>
+		</div>
+		
+		<div id='macacoSt'>
+			<a id='mc' href="#" onclick="morteMacaco()">macaco</a> </br>
+			Total de macacos mortos: <li id='mmorto' onclick="contaMacacoMorto()"></li> </br> </br>
+		</div>
+
+		<div id='javaliSt'>
+			<a id='jv' href="#" onclick="morteJavali()">javali</a></br></br>
+			Total de javalis mortos: <li id='jmorto' onclick="contaJavaliMorto()"></li>
+		</div>
+
+	</div>
+
+</body>
+
+</html>
