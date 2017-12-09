@@ -56,7 +56,7 @@ var Idle = function(){
 	tick();
 	
 	window.addEventListener("beforeunload", function(){
-		localStorage.setItem("Jogador", JSON.stringify(status));
+		salvar(status);
 	});
 	
 };
@@ -64,6 +64,9 @@ var Idle = function(){
 var iniciar = function(status){
 	
 	var txt = localStorage.getItem("Jogador");
+	
+	var data = new Date();
+	var agora = (data.getTime() / 1000).toFixed(0);
 	
 	if(JSON.parse(txt) == null){
 		status = checar(status);
@@ -74,7 +77,9 @@ var iniciar = function(status){
 		status = checar(status);
 		//console.log(status);
 	}
-		
+	
+	status.tempoInicial = agora;
+	
 	return status;
 };
 
@@ -107,14 +112,30 @@ var checar = function(status){
 	estrutura.inventario = iniciarInv(estrutura.inventario);
 
 	estrutura.clicks = 0;
-	estrutura.tempoJogador = 0;
+	estrutura.tempoJogado = 0;
+	estrutura.tempoInicial = 0;
 	
 	for(var key in estrutura){
 		if(!(key in status)){
 			status[key] = estrutura[key];
-			console.log(status[key]);
+			console.log("Adicionada: " + key);
 		}
 	}
+	for(var key in status){
+		if(!(key in estrutura)){
+			console.log("Deletada: " + key);
+			delete status[key];
+		}
+	}
+	for(key in status){
+		if(typeof status[key] == 'number') status[key] = Math.floor(status[key]);
+		else if(typeof status[key] == 'object'){
+			for(chave in status[key]){
+				if(typeof status[key][chave] == 'number') status[key][chave]  = Math.floor(status[key][chave]);
+			}
+		}
+	}
+	
 	return status;
 	
 };
@@ -200,6 +221,14 @@ var defItens = function(itens){
 };
 
 var salvar = function(status){
+
+	var data = new Date();
+	var agora = (data.getTime() / 1000).toFixed(0);
+	
+	status.tempoJogado += parseInt(calcTempo(status.tempoInicial, agora));
+	console.log(calcTempo(status.tempoInicial, agora));
+	console.log(formatarTotal(status.tempoJogado));
+
 	localStorage.setItem("Jogador", JSON.stringify(status));
 };
 
@@ -213,9 +242,13 @@ var clickBarraFunc = function(bool){
 	
 };
 
-var calcTempoTotal = function(segInicial, segAtual){
+var calcTempo = function(segInicial, segAtual){
+	return segAtual - segInicial;
+};
+
+var formatarTotal = function(seg){
 	
-	var segundo = segAtual - segInicial;
+	var segundo = seg;
 	var minuto = 0;
 	var hora = 0;
 	
@@ -233,7 +266,7 @@ var calcTempoTotal = function(segInicial, segAtual){
 		}
 	}
 		
-	var tempoFormatado = "Tempo Jogado  " + hora.toFixed(0) + ":" + minuto.toFixed(0) + ":" + segundo.toFixed(0);
+	var tempoFormatado = hora.toFixed(0) + ":" + minuto.toFixed(0) + ":" + segundo.toFixed(0);
 		
 	return tempoFormatado;
 	
@@ -396,5 +429,83 @@ var verificarItem = function(nome){
 			}
 		}
 	}
+};
+
+var popUpItens = function(nome){
+	
+	var refino = verificarRefino(nome);
+	
+	//console.log(nome);
+
+	if(refino[0] != ""){
+		if(parseInt(refino[0]) == 0) var texto = "Necessario 2: " + refino[1];
+		else var texto = "Necessario 2: " + refino[1].concat(" +".concat(parseInt(refino[0]) - 1));
+	}
+	else{
+		
+		var item = verificarItem(minuscula(nome));
+	
+		if(item != null){
+			var req = "";
+			var x = 0;
+			if(item.req != null){
+				console.log(Object.keys(item.req).length);
+			
+				for(var chave in item.req){
+					if(x >= 1) req += ", ";
+					req += item.req[chave] + " " + chave;
+					x++;
+				}
+				var texto = "É necessario para fazer o item: " + req;
+			}
+			else{
+				var texto = "Item a adquirir: " + nome;
+			}
+		}
+	}
+	//console.log(texto);
+	if(texto != null) textoFinalPagina(texto);
+	
+	/*
+	var span = "";
+	var refino = verificarRefino(nome);
+	if(refino[0] != "") var id = removerEspaco(refino[1].concat(refino[0]));
+	else var id = removerEspaco(nome);
+	
+	deletePopUp(nome);
+	
+	span += "<span class='popUp' id='popup" + id + "' > " + nome + "</span>"
+	
+	local = document.getElementById(removerEspaco(minuscula(nome)));
+	local.insertAdjacentHTML('afterend', span);
+	
+	//console.log(local);
+	
+	*/
+};
+
+var deletePopUp = function(nome){
+
+	try{
+		document.getElementById("statusBar").remove();
+	}catch(err){
+		console.log("Erro em remover o popUp em missoes.js em deletePopUp() " + err);
+	}
+	
+	
+	/*
+	
+	var refino = verificarRefino(nome);
+	if(refino[0] != "") var id = removerEspaco(refino[1].concat(refino[0]));
+	else var id = removerEspaco(nome);
+	
+	try{
+		document.getElementById("popup".concat(id)).remove();
+	}catch(err){
+		console.log("Erro em remover o popUp em missoes.js em deletePopUp() " + err);
+	}
+	
+	*/
+
 };
 
