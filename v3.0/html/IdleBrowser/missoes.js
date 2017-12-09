@@ -150,7 +150,7 @@ var start = function(){
 					tempo = verfTempo(classeMaterial, tipoMaterial, item);
 				}
 				
-				var tamanhoBarra = Math.floor(tempoDesdeOInicio.toFixed(0) / (tempo / 85));
+				var tamanhoBarra = Math.floor(tempoDesdeOInicio.toFixed(0) / (tempo / 100));
 				barra.innerHTML = tamanhoBarra + " %";
 				if(tamanhoBarra <= 3) barra.style.width= '3%';
 				else barra.style.width = tamanhoBarra + '%'
