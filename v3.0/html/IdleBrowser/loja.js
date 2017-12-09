@@ -131,32 +131,50 @@ var criarSell = function(){
 	var titulo = document.getElementById("sell");	
 	
 	var item;
+	var tituloTipo = "";
+	var tituloSecundario = {espada: false, capacete: false};
+	
 	div = "<p id='itens'>";
 	
-	for(chave in itens){
+	for(var chave in itens){
 		div += "<h3>" + maiuscula(chave) + "</h3>";
-		for(key in status.inventario){
+		
+		if(chave == "minerio") tituloTipo = "minerar";
+		else if(chave == "forja") tituloTipo = "forjar";
+		else if(chave == "comida") tituloTipo = "cacar";
+		
+		for(var key in status.inventario){
+		
 			item = verificarItem(minuscula(key));
-
-			if(chave != "forja"){
-				try{
-					console.log(" Nome: " + itens[chave][minuscula(key)].nome + " nome chave: " + maiuscula(key));
-					if(itens[chave][minuscula(key)].nome == maiuscula(key)) div = sellDiv(status, div, item, chave, key);		
-				}catch(err){
-					console.log("Erro na criacao do Div de Sell: " + err);
-				}
-			}else{
-				refino = verificarRefino(key);
-				//console.log(refino);
-				if(refino[1] == "") nome = key;
-				else nome = refino[1];
-				for(keys in itens[chave]){
-					for(var ultimaChave in itens[chave][keys]){
-						if(maiuscula(nome) == itens[chave][keys][ultimaChave].nome){
-							div = sellDiv(status, div, item, chave, key);
+			
+			try{
+				if(item.tipo == tituloTipo){
+				
+					if(chave != "forja"){
+						try{
+							//console.log(" Nome: " + item.nome + " nome chave: " + maiuscula(key));
+							if(item.nome == maiuscula(key)) div = sellDiv(status, div, item, chave, key);		
+						}catch(err){
+							console.log("Erro na criacao do Div de Sell: " + err);
+						}
+					}else{
+						refino = verificarRefino(key);
+						//console.log(refino);
+						if(refino[1] == "") nome = key;
+						else nome = refino[1];
+						for(var keys in itens[chave]){
+							for(var ultimaChave in itens[chave][keys]){
+								if(maiuscula(nome) == itens[chave][keys][ultimaChave].nome){
+									div = sellDiv(status, div, item, chave, key);
+								}
+							}
 						}
 					}
+					
 				}
+			}catch(err){
+				console.log("Erro no loja.js linha 176");
+				console.log(err);
 			}
 			
 		}
