@@ -5,6 +5,8 @@ var start = function(){
 	var status = {};
 	status = iniciar(status);
 	
+	var tempoUltimo = status.tempoInicial; 
+	
 	var itens = {}; 
 	itens = defItens(itens);
 
@@ -24,7 +26,6 @@ var start = function(){
 	
 	var barra;
 	var barraCheia;
-	var qtd;
 	
 	var dados = [];
 	var barras = [];
@@ -41,7 +42,6 @@ var start = function(){
 		barras = inicializacaoBarras(status.habilidades.acao.tipo, classeMaterial);
 		barra = barras[0];
 		barraCheia = barras[1];
-		qtd = barras[2];
 	}catch(err){
 		console.log("Erro na primeira chamada das funcões de inicializacao do missoes.js " + err);
 	}
@@ -61,7 +61,7 @@ var start = function(){
 	
 	var tick = function(){
 		
-		if(status.habilidades.acao.material != tipoMaterial && fimLoop){
+		if((status.habilidades.acao.material != tipoMaterial || status.habilidades.acao.tipo != classeMaterial) && fimLoop){
 			//console.log("Classe: " + tipoMaterial);
 			fimLoop = false;
 			try{
@@ -73,10 +73,9 @@ var start = function(){
 				qtdMaterial = dados[4]; 
 				exp = dados[5]; 
 				expTexto = dados[6];
-				barras = inicializacaoBarras(status.habilidades.acao.tipo, classeMaterial);
+				barras = inicializacaoBarras();
 				barra = barras[0];
 				barraCheia = barras[1];
-				qtd = barras[2];
 				//console.log(barra);
 			}catch(err){
 				console.log("Erro na segunda chamada das funcões de inicializacao do missoes.js " + err);
@@ -105,14 +104,20 @@ var start = function(){
 					dataInicialAtualizada = new Date();
 					segundoInicialAtualizado = dataInicialAtualizada.getTime() / 1000;
 					tempoDesdeOInicio = 0;
-					var tempoUltimo = status.tempoInicial; //Salva o tempo inicial da ultima inicialização para não iniciar novamente.
+					
+					//tempoUltimo salva o tempo quando a funcao é chamada a primeira vez e para para o tempoInicial do status depois de iniciada.
+					//antes de passar o tempo salva o tempo que iniciou agora em tempoNovo para depois de passada para status salvar em tempoUltimo.
 					status = iniciar(status);
-					status.tempoInicial = tempoUltimo; //Passa para o status iniciado atual para contar o tempo corretamente.
+					var tempoNovo = status.tempoInicial;
+					status.tempoInicial = tempoUltimo; 
+					tempoUltimo = tempoNovo;
+					/////////////////////////////////////////////////
+					
 					if(classeMaterial != "refinar"){
 						materialAddInv = tipoMaterial;
 					}else{
 						itemRefino = verificarRefino(tipoMaterial);
-						var lvlRefino = 0;
+						var lvlRefino = 1;
 						
 						if(itemRefino[0] == ""){
 							materialAddInv = tipoMaterial + "+" + lvlRefino;
@@ -137,13 +142,6 @@ var start = function(){
 					else if(classeMaterial == "refinar") status = removerItemRefino(status, tipoMaterial, qtdMaterial);
 					salvar(status);
 					materiais();
-					try{
-						qtd.innerHTML = maiuscula(tipoMaterial) + ": " + status.inventario[tipoMaterial];
-					}catch(err){
-						console.log("Erro em colocar qtd de itens total em start() em missoes.js " + err);
-					}
-					
-					//console.log(barra);
 					
 					loop = chamadaPossForjar(classeMaterial, tipoMaterial, status, item, qtdMaterial);
 					//console.log("Tem itens para fazer: " + loop);
@@ -216,7 +214,7 @@ var inicializacaoDados = function(){
 	return dados;
 };
 
-var inicializacaoBarras = function(tipo, classeMaterial){
+var inicializacaoBarras = function(){
 
 	console.log("Inicializando Barras");
 	
@@ -224,8 +222,7 @@ var inicializacaoBarras = function(tipo, classeMaterial){
 	
 	barras[0] = document.getElementById("barra");
 	barras[1] = document.getElementById("barraProgresso");
-	if(classeMaterial != "forja") barras[2] = document.getElementById(classeMaterial);
-	else barras[2]  = "";
+	barras[2]  = "";
 	
 	//console.log(barras);
 	return barras;
