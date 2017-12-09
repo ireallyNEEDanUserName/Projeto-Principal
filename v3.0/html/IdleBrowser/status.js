@@ -4,6 +4,11 @@ var start = function(){
 	status = iniciar(status);
 	escreverStatus(status);
 	
+	
+	window.addEventListener("beforeunload", function(){
+		salvar(status);
+	});
+	
 };
 
 var escreverStatus = function(status){
@@ -22,7 +27,7 @@ var escreverStatus = function(status){
 			tam = Object.keys(status[key]).length;
 			str += " | " + cap + ": " + tam + " | ";
 		}else if(key.includes("combate") || key.includes("habilidades")){
-			console.log(status[key]);
+			//console.log(status[key]);
 			for(var chave in status[key]){
 				cap = maiuscula(chave);
 				if(chave.includes("exp")){
@@ -43,7 +48,9 @@ var escreverStatus = function(status){
 					str += " | " + cap + ": " + status[key][chave] + " | ";
 				}
 			}
-		}else{
+		}else if(key == "tempoJogado") str += " | " + cap + ": " + formatarTotal(status[key]) + " | ";
+		else if(key == "tempoInicial" || key == "acao") ;
+		else{
 			str += " | " + cap + ": " + status[key] + " | ";
 		}
 		
