@@ -44,12 +44,13 @@ var escreverStatus = function(status){
 					
 					str += " | " + cap + ": " + status[key][chave] + " / " + compExp + " | ";	
 				}
+				else if(chave == "acao") ;
 				else{
 					str += " | " + cap + ": " + status[key][chave] + " | ";
 				}
 			}
 		}else if(key == "tempoJogado") str += " | " + cap + ": " + formatarTotal(status[key]) + " | ";
-		else if(key == "tempoInicial" || key == "acao") ;
+		else if(key == "tempoInicial") ;
 		else{
 			str += " | " + cap + ": " + status[key] + " | ";
 		}
