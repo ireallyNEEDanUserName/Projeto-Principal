@@ -105,8 +105,9 @@ var start = function(){
 					dataInicialAtualizada = new Date();
 					segundoInicialAtualizado = dataInicialAtualizada.getTime() / 1000;
 					tempoDesdeOInicio = 0;
-					salvar(status);
+					var tempoUltimo = status.tempoInicial; //Salva o tempo inicial da ultima inicialização para não iniciar novamente.
 					status = iniciar(status);
+					status.tempoInicial = tempoUltimo; //Passa para o status iniciado atual para contar o tempo corretamente.
 					if(classeMaterial != "refinar"){
 						materialAddInv = tipoMaterial;
 					}else{
