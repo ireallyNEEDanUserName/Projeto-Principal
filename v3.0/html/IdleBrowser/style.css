@@ -91,23 +91,28 @@ li {
 }
 
 #barraProgresso, .progresso{
-	margin-left: 18px;
-	width: 0%;
-	height: 30px;
-	padding: 4px 7px 4px 7px;
-	background-color: grey;
+	margin-left: 5%;
+	margin-right: 5%;
+	width: 90%;
+	height: 25px;
+	margin-top: 1%;
+	background-color: white;
 	color: white;
 	text-align: center;
+	border-style: solid;
+	border-color: black;
+	z-index: 0;
 }
 
 #barra , .barra{
-	width: 50px;
-	margin-left: 25px;
-	height: 30px;
-	background-color: white;
+	width: 5%;
+	margin: auto;
+	height: 25px;
+	background-color: blue;
 	text-align: center;
 	line-height: 30px;
-	color: black;
+	color: white;
+	z-index: 1;
 }
 
 #CaixaLvlXP {
@@ -253,8 +258,9 @@ li {
 
 .Empregado {
 	background-color: #6796a0;
-	width: 150px;
+	width: 50%;
 	margin: auto;
+	padding-bottom: 0.5%;
 	text-align: center;
 }
 
