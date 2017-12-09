@@ -12,16 +12,16 @@ var impInv = function(){
 	
 	var div = "<div id='inventario'>";
 	
-	for(key in itens){
-		div += "<h3>" + key + "</h3>";
-		for(chave in itens[key]){
+	for(var key in itens){
+		div += "<h3>" + maiuscula(key) + "</h3>";
+		for(var chave in itens[key]){
 			if(maiuscula(chave) in status.inventario) div += "<p>" + maiuscula(chave) + " : " + status.inventario[maiuscula(chave)]  + " </p>";
 		}
 	}
 	
 	for(var key in status.inventario){
 	
-		if(status.inventario[key] == 0) delete status.inventario[key];
+		if(status.inventario[key] == 0 || key.includes("+0")) delete status.inventario[key];
 		else{
 			item = verificarItem(minuscula(key));
 			try{
