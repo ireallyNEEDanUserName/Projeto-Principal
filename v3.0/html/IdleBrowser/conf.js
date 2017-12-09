@@ -52,7 +52,10 @@ $(document).ready(function(){
 		//console.log($(this).position());
 	
 		//var refino = verificarRefino($(this).text());
-		popUpItens($(this).text());
+		var texto = $(this).text();
+		var tipo = $(this).attr("id");
+
+		popUpItens(texto, tipo);
 		/*
 		if(refino[0] != ""){
 			var id = removerEspaco(refino[1].concat(refino[0]));
