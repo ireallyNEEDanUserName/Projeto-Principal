@@ -109,7 +109,7 @@ var updateOffline = function(status){
 			//console.log(status.empregados["n" + x]);
 		}
 	}
-	console.log(totalItens);
+	//console.log(totalItens);
 	if(totalItens >= 1)	textoFinalPagina("Itens Adquiridos Offline: " + totalItens);
 	else textoFinalPagina("Tempo insuficiente offline para pegar qualquer item");
 };
@@ -178,11 +178,12 @@ var updateEmp = function(status){
 				textoFinalPagina("Você adquiriu " + maiuscula(tipoMaterial) + ": " + qtdMaterial); //barra final da tela com informações.
 			}
 			//calcular o quanto a barra tem que aumentar para dar os 100%.
-			var tamanhoBarra = Math.floor(tempoDesdeOInicio[x].toFixed(0) / (tempoMaterial / 100)); 
+			var tamanhoBarra = Math.floor(tempoDesdeOInicio[x].toFixed(0) / (tempoMaterial / 85)); 
 			
 			try{
 				barra.innerHTML = tamanhoBarra + " %";
-				barraCheia.style.width = tamanhoBarra + 'px'
+				if(tamanhoBarra <= 3) barra.style.width= '3%';
+				else barra.style.width = tamanhoBarra + '%'
 			}
 			catch(err){
 				console.log("Erro em Trabalhador.js " + err);
