@@ -20,6 +20,8 @@ var start = function(){
 	var fimLoop = true;
 	var materialAddInv = "";
 	
+	var textoItem = document.getElementById("tipoItem");
+	
 	var barra;
 	var barraCheia;
 	var qtd;
@@ -43,6 +45,8 @@ var start = function(){
 	}catch(err){
 		console.log("Erro na primeira chamada das funcões de inicializacao do missoes.js " + err);
 	}
+	
+	textoItem.innerHTML = "Fazendo: " + tipoMaterial;
 	
 	loop = chamadaPossForjar(classeMaterial, tipoMaterial, status, item, qtdMaterial);
 	var tempo = verfTempo(classeMaterial, tipoMaterial, item);
@@ -81,6 +85,8 @@ var start = function(){
 			loop = chamadaPossForjar(classeMaterial, tipoMaterial, status, item, qtdMaterial);
 			tempo = verfTempo(classeMaterial, tipoMaterial, item);
 			
+			textoItem.innerHTML = "Fazendo: " + tipoMaterial;
+			
 			dataInicialAtualizada = new Date();
 			segundoInicialAtualizado = dataInicialAtualizada.getTime() / 1000;
 			tempoDesdeOInicio = 0;
@@ -99,6 +105,7 @@ var start = function(){
 					dataInicialAtualizada = new Date();
 					segundoInicialAtualizado = dataInicialAtualizada.getTime() / 1000;
 					tempoDesdeOInicio = 0;
+					salvar(status);
 					status = iniciar(status);
 					if(classeMaterial != "refinar"){
 						materialAddInv = tipoMaterial;
@@ -143,9 +150,10 @@ var start = function(){
 					tempo = verfTempo(classeMaterial, tipoMaterial, item);
 				}
 				
-				var tamanhoBarra = Math.floor(tempoDesdeOInicio.toFixed(0) / (tempo / 100));
+				var tamanhoBarra = Math.floor(tempoDesdeOInicio.toFixed(0) / (tempo / 85));
 				barra.innerHTML = tamanhoBarra + " %";
-				barraCheia.style.width = tamanhoBarra + 'px'
+				if(tamanhoBarra <= 3) barra.style.width= '3%';
+				else barra.style.width = tamanhoBarra + '%'
 				
 			}else{
 				status = iniciar(status);
@@ -194,7 +202,7 @@ var inicializacaoDados = function(){
 		texto = "Forjar";
 		classeMaterial = "refinar";
 		item = verificarItem(tipo);
-		console.log(item);
+		//console.log(item);
 		itemRefino = verificarRefino(tipoMaterial);
 	}
 	
@@ -213,12 +221,12 @@ var inicializacaoBarras = function(tipo, classeMaterial){
 	
 	var barras = [];
 	
-	barras[0] = document.getElementById("barra" + tipo);
-	barras[1] = document.getElementById("barraProgresso" + tipo);
+	barras[0] = document.getElementById("barra");
+	barras[1] = document.getElementById("barraProgresso");
 	if(classeMaterial != "forja") barras[2] = document.getElementById(classeMaterial);
 	else barras[2]  = "";
 	
-	//barras = [barra, barraCheia, qtd];
+	//console.log(barras);
 	return barras;
 };
 
@@ -310,9 +318,7 @@ var criarMissoes = function(){
 					div += "<div id='" + itens[key][keys].tipo + "' class='" + key + "'>" +
 							"<div id='" + maiuscula(keys) + "'>" +
 							"<p id='" + key.concat(keys) + "' class='item'>" + maiuscula(keys) + "</p>" +
-							"<div id='barraProgresso" + key.concat(keys) + "' class='progresso'> " +
-							"<div id='barra" + key.concat(keys) + "' class='barra'>0 %</div>" +
-							"</div> </div> </div>";
+							"</div> </div>";
 				}
 			}else{
 				for(chaveForja in itens[key][keys]){
@@ -322,9 +328,7 @@ var criarMissoes = function(){
 						div += "<div id='" + itens[key][keys][chaveForja].tipo + "' class='" + key + "'>" +
 								"<div id='" + keys.concat(chaveForja) + "'>" +
 								"<p id='" + key.concat(keys.concat(chaveForja)) + "' class='item'>" + nome + "</p>" +
-								"<div id='barraProgresso" +  key.concat(keys.concat(chaveForja)) + "' class='progresso'> " +
-								"<div id='barra" +  key.concat(keys.concat(chaveForja)) + "' class='barra'>0 %</div>" +
-								"</div> </div> </div>";
+								"</div> </div>";
 					}
 				}
 			}
@@ -348,9 +352,7 @@ var criarMissoes = function(){
 					div += "<div id='forjar' class='refinar'>" +
 							"<div id='" + nome + "'>" +
 							"<p id='" + "refinar".concat(nome) + "' class='item'>" + key + "</p>" +
-							"<div id='barraProgresso" +  "refinar".concat(nome) + "' class='progresso'> " +
-							"<div id='barra" +  "refinar".concat(nome) + "' class='barra'>0 %</div>" +
-							"</div> </div> </div>";
+							"</div> </div>";
 				}
 			
 			}
@@ -377,69 +379,4 @@ var definirAcao = function(tipo, material){
 };
 
 
-var popUpItens = function(nome){
-	
-	var refino = verificarRefino(nome);
 
-	if(refino[0] != ""){
-		if(parseInt(refino[0]) == 0) var texto = "Necessario 2: " + refino[1];
-		else var texto = "Necessario 2: " + refino[1].concat(" +".concat(parseInt(refino[0]) - 1));
-	}
-	else{
-	
-		var item = verificarItem(minuscula(nome));
-		var req = "";
-		var x = 0;
-		console.log(Object.keys(item.req).length);
-		
-		for(var chave in item.req){
-			if(x >= 1) req += ", ";
-			req += item.req[chave] + " " + chave;
-			x++;
-		}
-		var texto = "Sao necessario para fazer o item: " + req;
-	}
-	textoFinalPagina(texto);
-	
-	/*
-	var span = "";
-	var refino = verificarRefino(nome);
-	if(refino[0] != "") var id = removerEspaco(refino[1].concat(refino[0]));
-	else var id = removerEspaco(nome);
-	
-	deletePopUp(nome);
-	
-	span += "<span class='popUp' id='popup" + id + "' > " + nome + "</span>"
-	
-	local = document.getElementById(removerEspaco(minuscula(nome)));
-	local.insertAdjacentHTML('afterend', span);
-	
-	//console.log(local);
-	
-	*/
-};
-
-var deletePopUp = function(nome){
-
-	try{
-		document.getElementById("statusBar").remove();
-	}catch(err){
-		console.log("Erro em remover o popUp em missoes.js em deletePopUp() " + err);
-	}
-	
-	
-	/*
-	
-	var refino = verificarRefino(nome);
-	if(refino[0] != "") var id = removerEspaco(refino[1].concat(refino[0]));
-	else var id = removerEspaco(nome);
-	
-	try{
-		document.getElementById("popup".concat(id)).remove();
-	}catch(err){
-		console.log("Erro em remover o popUp em missoes.js em deletePopUp() " + err);
-	}
-	
-	*/
-
-};
