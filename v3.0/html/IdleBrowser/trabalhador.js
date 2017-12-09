@@ -178,11 +178,11 @@ var updateEmp = function(status){
 				textoFinalPagina("Você adquiriu " + maiuscula(tipoMaterial) + ": " + qtdMaterial); //barra final da tela com informações.
 			}
 			//calcular o quanto a barra tem que aumentar para dar os 100%.
-			var tamanhoBarra = Math.floor(tempoDesdeOInicio[x].toFixed(0) / (tempoMaterial / 85)); 
+			var tamanhoBarra = Math.floor(tempoDesdeOInicio[x].toFixed(0) / (tempoMaterial / 100)); 
 			
 			try{
 				barra.innerHTML = tamanhoBarra + " %";
-				if(tamanhoBarra <= 3) barra.style.width= '3%';
+				if(tamanhoBarra <= 5) barra.style.width= '5%';
 				else barra.style.width = tamanhoBarra + '%'
 			}
 			catch(err){
