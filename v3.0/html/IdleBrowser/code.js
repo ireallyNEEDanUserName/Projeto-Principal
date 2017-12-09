@@ -66,7 +66,7 @@ var iniciar = function(status){
 	var txt = localStorage.getItem("Jogador");
 	
 	var data = new Date();
-	var agora = (data.getTime() / 1000).toFixed(0);
+	var agora = data.getTime() / 1000;
 	
 	if(JSON.parse(txt) == null){
 		status = checar(status);
@@ -223,7 +223,7 @@ var defItens = function(itens){
 var salvar = function(status){
 
 	var data = new Date();
-	var agora = (data.getTime() / 1000).toFixed(0);
+	var agora = data.getTime() / 1000;
 	
 	status.tempoJogado += parseInt(calcTempo(status.tempoInicial, agora));
 	console.log(calcTempo(status.tempoInicial, agora));
@@ -305,7 +305,7 @@ var escrever = function(status){
 	console.log("Total de itens");
 	console.log(tipo);
 	
-	for(var key in status.inventario){
+	for(var key in tipo){
 		try{
 			var ele = document.getElementById(key + "Qtd");
 			ele.innerHTML = maiuscula(key) + ": " + tipo[key];
@@ -334,6 +334,23 @@ var upaLevel = function(status, tipo){
 		
     console.log("Exp Necessario: " + compExp + " Exp Atual: " + status[experiencia]);
     return status;
+};
+
+var verificarRefino = function(str){
+	var lvlRefino = "";
+	var novaStr = "";
+	
+	var x;
+	for(x = 0; x < str.length; x++){
+		if(str[x] == "+"){
+			for(var y = x + 1; y < str.length; y++) lvlRefino += str[y];
+			novaStr = str.slice(0, x);
+		}
+	}
+	
+	//console.log(lvlRefino + " | " + novaStr + " > " + str);
+	
+	return [lvlRefino, novaStr];
 };
 
 //FUNCAO PARA DEIXAR A PRIMEIRA LETRA MAIUSCULA.
@@ -371,36 +388,6 @@ var removerEspaco = function(str){
 	return novaStr;
 };
 
-var verificarRefino = function(str){
-	var lvlRefino = "";
-	var novaStr = "";
-	
-	var x;
-	for(x = 0; x < str.length; x++){
-		if(str[x] == "+"){
-			for(var y = x + 1; y < str.length; y++) lvlRefino += str[y];
-			novaStr = str.slice(0, x);
-		}
-	}
-	
-	//console.log(lvlRefino + " | " + novaStr + " > " + str);
-	
-	return [lvlRefino, novaStr];
-};
-
-//FUNCAO PARA INSERIR TEXTO NA DIV DO FINAL DA PAGINA.
-var textoFinalPagina = function(texto){
-	
-	try{
-		document.getElementById("statusBar").remove();
-	}catch(err){
-		console.log("Erro em remover a barra de Status em code.js em textoFinalPagina() " + err);
-	}
-	
-	var divStatus = "<div id='statusBar'>" + texto + "</div>";
-	document.body.insertAdjacentHTML('beforeend', divStatus);
-};
-
 //VERIFICAR ITEM PASSADO EM tipo E RETORNAR A VARIAVEL COM DADOS DELE.
 var verificarItem = function(nome){
 	
@@ -431,15 +418,34 @@ var verificarItem = function(nome){
 	}
 };
 
-var popUpItens = function(nome){
+//FUNCAO PARA INSERIR TEXTO NA DIV DO FINAL DA PAGINA.
+var textoFinalPagina = function(texto){
 	
-	var refino = verificarRefino(nome);
+	try{
+		document.getElementById("statusBar").remove();
+	}catch(err){
+		console.log("Erro em remover a barra de Status em code.js em textoFinalPagina() " + err);
+	}
 	
-	//console.log(nome);
+	var divStatus = "<div id='statusBar'>" + texto + "</div>";
+	document.body.insertAdjacentHTML('beforeend', divStatus);
+	
+};
 
-	if(refino[0] != ""){
-		if(parseInt(refino[0]) == 0) var texto = "Necessario 2: " + refino[1];
-		else var texto = "Necessario 2: " + refino[1].concat(" +".concat(parseInt(refino[0]) - 1));
+var popUpItens = function(nome, tipo){
+
+	var status = {};
+	status = iniciar(status);
+
+	var refino = verificarRefino(nome);
+
+	if(refino[0] != "" || tipo.includes("refinar")){
+		if(refino[0] != ""){
+			if(parseInt(refino[0]) == 0) var texto = "Req 2 - " + refino[1] + "+0" + " | Possui: " + status.inventario[nome];
+			else var texto = "Req 2 - " + refino[1].concat(" +".concat(parseInt(refino[0]))) + " | Possui: " + status.inventario[nome];
+		}else{
+			var texto = "Req 2 - " + nome + " | Possui: " + status.inventario[nome];
+		}
 	}
 	else{
 		
@@ -452,14 +458,14 @@ var popUpItens = function(nome){
 				console.log(Object.keys(item.req).length);
 			
 				for(var chave in item.req){
-					if(x >= 1) req += ", ";
+					if(x >= 1) req += " | ";
 					req += item.req[chave] + " " + chave;
 					x++;
 				}
-				var texto = "É necessario para fazer o item: " + req;
+				var texto = "Item lvl: " + item.lvl + " | Req: " + req + " | Possui: " + status.inventario[nome];
 			}
 			else{
-				var texto = "Item a adquirir: " + nome;
+				var texto = "Item a adquirir: " + nome + " | Possui: " + status.inventario[nome];
 			}
 		}
 	}
@@ -485,6 +491,8 @@ var popUpItens = function(nome){
 };
 
 var deletePopUp = function(nome){
+
+	/*
 
 	try{
 		document.getElementById("statusBar").remove();
