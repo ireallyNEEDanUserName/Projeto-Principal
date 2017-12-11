@@ -4,10 +4,12 @@ var startTrab = function(){
 	var status = {};
 	status = iniciar(status);
 	
-	//CHAMADA DE FUNCAO QUE CRIA OS ELEMENTOS NA PAGINA.
-	criarElem(status.empregados);
 	//CHAMADA DE FUNCAO QUE RODA O TEMPO OFFLINE DOS EMPREGADOS.
 	updateOffline(status);
+	
+	//CHAMADA DE FUNCAO QUE CRIA OS ELEMENTOS NA PAGINA.
+	criarElem(status.empregados);
+	
 	//CHAMADA DE FUNCAO QUE ATUALIZA O TRABALHO DOS EMPREGADOS.
 	updateEmp(status);
 	
@@ -79,8 +81,9 @@ var updateOffline = function(status){
 	var totalItens = 0;
 	var exp = 0;
 	//LOOP POR TODOS EMPREGADOS
-	for(x = 1; x <= tamanho; x++){
-		var nome = "n" + x;
+	for(x = 0; x < tamanho; x++){
+		var nome = "n" + (x + 1);
+		console.log(nome);
 		//TEMPO TOTAL OFFLINE
 		var tempoOffline = atual - status.empregados[nome].offline;
 		invTipo = verfTipo(itens, status.empregados[nome]);
@@ -105,8 +108,8 @@ var updateOffline = function(status){
 			status.habilidades.expChefe += exp;
 			status.empregados[nome].offline = atual;
 			status.empregados[nome] = upaLevel(status.empregados[nome], "");
-			status.habilidades = upaLevel(status.habilidades, "Chefe");
-			//console.log(status.empregados["n" + x]);
+			console.log("upou emp - " + nome);
+			status = upaLevel(status, "Chefe");
 		}
 	}
 	//console.log(totalItens);
@@ -186,7 +189,8 @@ var updateEmp = function(status){
 				else barra.style.width = tamanhoBarra + '%'
 			}
 			catch(err){
-				console.log("Erro em Trabalhador.js " + err);
+				console.log("Erro em Trabalhador.js");
+				console.log(err);
 			}
 		
 		}
