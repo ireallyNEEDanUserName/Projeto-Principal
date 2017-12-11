@@ -349,7 +349,9 @@ var upaLevel = function(status, tipo){
 		
     console.log("Exp Necessario: " + compExp + " Exp Atual: " + habilidades[experiencia]);
 	
-	status.habilidades = habilidades;
+	if(tipo != "") status.habilidades = habilidades;
+	else status = habilidades;
+	
     return status;
 };
 
