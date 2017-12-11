@@ -136,7 +136,7 @@ var start = function(){
 					}
 					
 					status.habilidades[expTexto] += exp;
-					status.habilidades = upaLevel(status.habilidades, texto);
+					status = upaLevel(status, texto);
 					textoFinalPagina("Você adquiriu " + qtdMaterial + " " + maiuscula(materialAddInv) + " e " + exp + " de experiência");
 					if(classeMaterial == "forja") status = removerItemForja(status, item, qtdMaterial);
 					else if(classeMaterial == "refinar") status = removerItemRefino(status, tipoMaterial, qtdMaterial);
@@ -308,8 +308,12 @@ var criarMissoes = function(){
 	
 	var div = "";
 	var titulo = document.getElementById("todasMissoes");	
+	
+	var objetos = "";
+	for(key in status.inventario) objetos += key;
 
 	for(key in itens){
+		if(key != "forja") div += "<h4 class='" + key + "'>" + maiuscula(key) + "</h4>";
 		for(keys in itens[key]){
 			if(key != "forja"){
 				if(status.habilidades["lvl" + maiuscula(itens[key][keys].tipo)] >= itens[key][keys].lvl){
@@ -319,48 +323,45 @@ var criarMissoes = function(){
 							"</div> </div>";
 				}
 			}else{
+				div += "<div class='" + key + "' id='" + keys + "'>"
+				div += maiuscula(keys);
 				for(chaveForja in itens[key][keys]){
-					//console.log(keys + " de " + chaveForja);
-					var nome = maiuscula(keys) + " de " + maiuscula(chaveForja);
+					var nome = itens[key][keys][chaveForja].nome;
 					if(status.habilidades["lvl" + maiuscula(itens[key][keys][chaveForja].tipo)] >= itens[key][keys][chaveForja].lvl){
-						div += "<div id='" + itens[key][keys][chaveForja].tipo + "' class='" + key + "'>" +
+						div += "<div id='" + itens[key][keys][chaveForja].tipo + "'>" +
 								"<div id='" + keys.concat(chaveForja) + "'>" +
 								"<p id='" + key.concat(keys.concat(chaveForja)) + "' class='item'>" + nome + "</p>" +
 								"</div> </div>";
 					}
 				}
+				div += "</div>";
 			}
 		}		
 	}
 	
-	//console.log(status.inventario);
-	var refinarItem = "";
-	for(key in status.inventario){
-		//console.log(key);
-		refinarItem = verificarItem(minuscula(key));
-		try{
-			if(refinarItem.tipo == "forjar"){
-				
-				var nome = removerEspaco(minuscula(key));
-			
-				//console.log(status.habilidades["lvl" + maiuscula(refinarItem.tipo)]);
-				//console.log(refinarItem.nome + " > " + refinarItem.lvl * 2);
-				//verificarRefino(key);
-				if(status.habilidades["lvl" + maiuscula(refinarItem.tipo)] >= (refinarItem.lvl * 2)){
-					div += "<div id='forjar' class='refinar'>" +
-							"<div id='" + nome + "'>" +
-							"<p id='" + "refinar".concat(nome) + "' class='item'>" + key + "</p>" +
-							"</div> </div>";
+	for(var chave in itens.forja){
+		
+		if(objetos.indexOf(maiuscula(chave)) > -1){ //Verifica se a chave existe no inventario.
+			div += "<div class='refinar' id='" + chave + "'>";
+			div += maiuscula(chave);
+			for(var key in status.inventario){
+				if(key.includes(maiuscula(chave))){
+					var refinarItem = verificarItem(minuscula(key));
+					var nome = removerEspaco(minuscula(key));
+					if(status.habilidades["lvl" + maiuscula(refinarItem.tipo)] >= (refinarItem.lvl * 2)){
+						div += "<div id='forjar'>" +
+								"<div id='" + nome + "'>" +
+								"<p id='" + "refinar".concat(nome) + "' class='item'>" + key + "</p>" +
+								"</div> </div>";
+					}
 				}
-			
 			}
-		}catch(err){
-			console.log("Erro em criar o refinar: " + err);
+			div += "</div>";
 		}
 	}
 	
-	//console.log("Itens de missoes");
-	//console.log(itens);
+	div += "<br><br>";
+	
 	titulo.insertAdjacentHTML('beforeend', div);
 	
 };
