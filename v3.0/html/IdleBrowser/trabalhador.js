@@ -6,13 +6,16 @@ var startTrab = function(){
 	
 	//CHAMADA DE FUNCAO QUE RODA O TEMPO OFFLINE DOS EMPREGADOS.
 	status = updateOffline(status);
-	
+
 	//CHAMADA DE FUNCAO QUE CRIA OS ELEMENTOS NA PAGINA.
 	criarElem(status.empregados);
 	
-	//CHAMADA DE FUNCAO QUE ATUALIZA O TRABALHO DOS EMPREGADOS.
-	updateEmp(status);
-	
+	try{
+		//CHAMADA DE FUNCAO QUE ATUALIZA O TRABALHO DOS EMPREGADOS.
+		updateEmp(status);
+	}catch(err){
+		console.log(err);
+	}
 	
 	window.addEventListener("beforeunload", function(){
 		salvar(status);
@@ -105,11 +108,13 @@ var updateOffline = function(status){
 				status.inventario[maiuscula(invTipo)] += qtd;
 			}
 			status.empregados[nome].exp += exp;
-			status.habilidades.expChefe += exp;
 			status.empregados[nome].offline = atual;
 			status.empregados[nome] = upaLevel(status.empregados[nome], "");
-			console.log("upou emp - " + nome);
+			
+			status.habilidades.expChefe += exp;
 			status = upaLevel(status, "Chefe");
+			
+			console.log("upou emp - " + nome);
 		}
 	}
 	//console.log(totalItens);
@@ -176,10 +181,13 @@ var updateEmp = function(status){
 					status.inventario[tipoMaterial] = 0;
 					status.inventario[tipoMaterial] += qtdMaterial;
 				}
+				
 				status.empregados[nome].exp += qtdMaterial; //adicionar no exp no empregado a quantidade de material pego.
 				status.empregados[nome] = upaLevel(status.empregados[nome], ""); //chamada da função que verifica se upou de level do empregado.
+				
 				status.habilidades.expChefe += qtdMaterial; //adicionar exp na skill do jogador.
-				status.habilidades = upaLevel(status.habilidades, "Chefe"); //chamada da função que verifica se upou de level do jogador.
+				status = upaLevel(status, "Chefe"); //chamada da função que verifica se upou de level do jogador.
+				
 				salvar(status); //save do jogo.
 				textoFinalPagina("Você adquiriu " + maiuscula(tipoMaterial) + ": " + qtdMaterial); //barra final da tela com informações.
 			}
