@@ -138,8 +138,12 @@ li {
 /* PAGINA MISSOES.HTML */
 
 #todasMissoes {
+	clear: both;
 	font-size: 20px;
 	text-align: center;
+	margin: auto;
+	width: 100%;
+	height: 100%;
 }
 
 #Opcoes{
@@ -175,8 +179,16 @@ li {
 .minerio, .comida, .forja, .refinar{
 	display: none;
 	background-color: #6796a0;
-	width: 150px;
+	width: 20%;
 	margin: auto;
+	position: relative;
+}
+
+#espada, #capacete, #bota, #escudo, #luva{
+	float: left;
+	margin-left: 5%;
+	margin-right: 5%;
+	margin-bottom: 2%;
 }
 
 .opContent #refinarDrop {
