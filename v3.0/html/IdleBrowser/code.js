@@ -203,6 +203,9 @@ var defItens = function(itens){
 	/* ITENS PARA FORJAR. */
 	forja.espada = {};
 	forja.capacete = {};
+	forja.bota = {};
+	forja.escudo = {};
+	forja.luva = {};
 	
 	forja.espada.pedra = {lvl: 1, tempo: 10, sell: 5, buy: 10, req: { pedra: 4 }, tipo:"forjar", nome:"Espada de Pedra"};
 	forja.espada.cobre = {lvl: 5, tempo: 15, sell: 6, buy: 13, req: { cobre: 4, pedra: 1 }, tipo:"forjar", nome:"Espada de Cobre"};
@@ -211,6 +214,15 @@ var defItens = function(itens){
 	forja.capacete.pedra = {lvl: 1, tempo: 15, sell: 5, buy: 10, req: { pedra: 5 }, tipo:"forjar", nome:"Capacete de Pedra"};
 	forja.capacete.cobre = {lvl: 4, tempo: 25, sell: 15, buy: 35, req: { cobre: 5 }, tipo:"forjar", nome:"Capacete de Cobre"};
 	forja.capacete.ferro = {lvl: 7, tempo: 40, sell: 20, buy: 50, req: { ferro: 5, pedra: 2 }, tipo:"forjar", nome:"Capacete de Ferro"};
+	
+	forja.bota.pedra = {lvl: 1, tempo: 5, sell: 2, buy: 10, req: { pedra: 2 }, tipo:"forjar", nome:"Bota de Pedra"};
+	forja.bota.cobre = {lvl: 3, tempo: 10, sell: 5, buy: 20, req: { cobre: 3 }, tipo:"forjar", nome:"Bota de Cobre"};
+	forja.bota.ferro = {lvl: 5, tempo: 20, sell: 10, buy: 30, req: { ferro: 3 }, tipo:"forjar", nome:"Bota de Ferro"};
+	
+	forja.escudo.pedra = {lvl: 2, tempo: 10, sell: 2, buy: 10, req: { pedra: 2, rato: 1 }, tipo:"forjar", nome:"Escudo de Pedra"};
+	
+	forja.luva.rato = {lvl: 1, tempo: 15, sell: 2, buy: 3, req: { rato: 2 }, tipo:"forjar", nome:"Luva de Couro de Rato"};
+	
 	
 	itens.minerio = minerio;
 	itens.comida = comida;
@@ -317,22 +329,27 @@ var escrever = function(status){
 
 
 var upaLevel = function(status, tipo){
+	console.log(status);
+	console.log(tipo);
 	tipo = maiuscula(tipo);
-	if(tipo == "") tipo = status;
+	if(tipo != "") var habilidades = status.habilidades;
+	else var habilidades = status;
 	var level = "lvl" + tipo;
 	var experiencia = "exp" + tipo; 
-	var compExp = (status[level] * status[level]) * (50 + status[level]);
-    if (status[experiencia] >= compExp ) {
-    	status[level] += 1; 
-		if(tipo == "Chefe" && (status[level] % 5) == 0){
+	var compExp = (habilidades[level] * habilidades[level]) * (50 + habilidades[level]);
+    if (habilidades[experiencia] >= compExp ) {
+    	habilidades[level] += 1; 
+		if(tipo == "Chefe" && (habilidades[level] % 5) == 0){
 			status.empregados = adicionarEmp(status.empregados, "minerio", Object.keys(status.empregados).length);
 			console.log("Funcao upaLevel - " + Object.keys(status.empregados).length);
 		}
-    	status[experiencia] -= compExp;
+    	habilidades[experiencia] -= compExp;
     }
-	textoFinalPagina("PARABÉNSS!! VOCÊ UPOU UM LEVEL DE " + tipo + "! : " + status[level]);
+	textoFinalPagina("PARABÉNSS!! VOCÊ UPOU UM LEVEL DE " + tipo + "! : " + habilidades[level]);
 		
-    console.log("Exp Necessario: " + compExp + " Exp Atual: " + status[experiencia]);
+    console.log("Exp Necessario: " + compExp + " Exp Atual: " + habilidades[experiencia]);
+	
+	status.habilidades = habilidades;
     return status;
 };
 
@@ -438,34 +455,39 @@ var popUpItens = function(nome, tipo){
 	status = iniciar(status);
 
 	var refino = verificarRefino(nome);
+	var texto = "";
 
 	if(refino[0] != "" || tipo.includes("refinar")){
+
 		if(refino[0] != ""){
-			if(parseInt(refino[0]) == 0) var texto = "Req 2 - " + refino[1] + "+0" + " | Possui: " + status.inventario[nome];
-			else var texto = "Req 2 - " + refino[1].concat(" +".concat(parseInt(refino[0]))) + " | Possui: " + status.inventario[nome];
+			var item = verificarItem(minuscula(refino[1]));
+			texto = "Item lvl: " + item.lvl * parseInt(refino[0]) + " | Req 2 - " + refino[1].concat(" +".concat(parseInt(refino[0]))) + " | Possui: " + status.inventario[nome];
 		}else{
-			var texto = "Req 2 - " + nome + " | Possui: " + status.inventario[nome];
+			var item = verificarItem(minuscula(nome)); 
+			texto = "Item lvl: " + item.lvl + "| Req 2 - " + nome + " | Possui: " + status.inventario[nome];
 		}
+
 	}
 	else{
 		
 		var item = verificarItem(minuscula(nome));
-	
+		
+		var possui = 0;
+		if(nome in status.inventario) possui = status.inventario[nome];
+
 		if(item != null){
 			var req = "";
 			var x = 0;
-			if(item.req != null){
-				console.log(Object.keys(item.req).length);
-			
+			if(item.req != null){			
 				for(var chave in item.req){
 					if(x >= 1) req += " | ";
 					req += item.req[chave] + " " + chave;
 					x++;
 				}
-				var texto = "Item lvl: " + item.lvl + " | Req: " + req + " | Possui: " + status.inventario[nome];
+				texto = "Item lvl: " + item.lvl + " | Req: " + req + " | Possui: " + possui;
 			}
 			else{
-				var texto = "Item a adquirir: " + nome + " | Possui: " + status.inventario[nome];
+				texto = "Item lvl: " + item.lvl + " | " + nome + " | Possui: " + possui;
 			}
 		}
 	}
