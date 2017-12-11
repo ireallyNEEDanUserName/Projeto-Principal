@@ -5,7 +5,7 @@ var startTrab = function(){
 	status = iniciar(status);
 	
 	//CHAMADA DE FUNCAO QUE RODA O TEMPO OFFLINE DOS EMPREGADOS.
-	updateOffline(status);
+	status = updateOffline(status);
 	
 	//CHAMADA DE FUNCAO QUE CRIA OS ELEMENTOS NA PAGINA.
 	criarElem(status.empregados);
@@ -115,6 +115,9 @@ var updateOffline = function(status){
 	//console.log(totalItens);
 	if(totalItens >= 1)	textoFinalPagina("Itens Adquiridos Offline: " + totalItens);
 	else textoFinalPagina("Tempo insuficiente offline para pegar qualquer item");
+	
+	
+	return status;
 };
 
 //Funcao que roda enquanto a pagina do trabalhador estiver aberta.
