@@ -15,6 +15,7 @@ var start = function(){
 	var texto = "";
 	var expTexto = "";
 	var qtdMaterial = 1;
+	var itemRefino = [1, ""];
 	var exp = 1;
 	var item;
 	var sucesssoForja = false;
@@ -42,6 +43,9 @@ var start = function(){
 		barras = inicializacaoBarras(status.habilidades.acao.tipo, classeMaterial);
 		barra = barras[0];
 		barraCheia = barras[1];
+		
+		itemRefino = verificarRefino(tipoMaterial);
+		if(itemRefino[0] == "") itemRefino[0] = 1;
 	}catch(err){
 		console.log("Erro na primeira chamada das funcões de inicializacao do missoes.js " + err);
 	}
@@ -49,7 +53,7 @@ var start = function(){
 	textoItem.innerHTML = "Fazendo: " + tipoMaterial;
 	
 	loop = chamadaPossForjar(classeMaterial, tipoMaterial, status, item, qtdMaterial);
-	var tempo = verfTempo(classeMaterial, tipoMaterial, item);
+	var tempo = verfTempo(classeMaterial, tipoMaterial, item, status);
 	
 	var dataInicialAtualizada = new Date();
 	var data = new Date();
@@ -73,16 +77,29 @@ var start = function(){
 				qtdMaterial = dados[4]; 
 				exp = dados[5]; 
 				expTexto = dados[6];
-				barras = inicializacaoBarras();
-				barra = barras[0];
-				barraCheia = barras[1];
+				
+				itemRefino = verificarRefino(tipoMaterial);
+				if(itemRefino[0] == "") itemRefino[0] = 1;
+				
 				//console.log(barra);
 			}catch(err){
 				console.log("Erro na segunda chamada das funcões de inicializacao do missoes.js " + err);
 			}	
 			
 			loop = chamadaPossForjar(classeMaterial, tipoMaterial, status, item, qtdMaterial);
-			tempo = verfTempo(classeMaterial, tipoMaterial, item);
+			if(!loop){
+				if((status.inventario[tipoMaterial] / 2) >= 1){
+					
+					qtdMaterial = Math.floor(status.inventario[tipoMaterial] / 2);
+					console.log("Mudou a qtd: " + qtdMaterial);
+					exp = (1 + qtdMaterial) * (parseInt(itemRefino[0]) * item.lvl);
+					
+					textoFinalPagina("Fazendo " + tipoMaterial + " - " + qtdMaterial);
+					loop = chamadaPossForjar(classeMaterial, tipoMaterial, status, item, qtdMaterial);
+					
+				}
+			}
+			tempo = verfTempo(classeMaterial, tipoMaterial, item, status);
 			
 			textoItem.innerHTML = "Fazendo: " + tipoMaterial;
 			
@@ -144,9 +161,17 @@ var start = function(){
 					materiais();
 					
 					loop = chamadaPossForjar(classeMaterial, tipoMaterial, status, item, qtdMaterial);
+					if(!loop){
+						if((status.inventario[tipoMaterial] / 2) >= 1){
+							qtdMaterial = Math.floor(status.inventario[tipoMaterial] / 2)
+							exp = (1 + qtdMaterial) * (parseInt(itemRefino[0]) * item.lvl);
+							textoFinalPagina("Fazendo " + materialAddInv + " - " + qtdMaterial);
+							loop = chamadaPossForjar(classeMaterial, tipoMaterial, status, item, qtdMaterial);
+						}
+					}
 					//console.log("Tem itens para fazer: " + loop);
 					//console.log(item.req);
-					tempo = verfTempo(classeMaterial, tipoMaterial, item);
+					tempo = verfTempo(classeMaterial, tipoMaterial, item, status);
 				}
 				
 				var tamanhoBarra = Math.floor(tempoDesdeOInicio.toFixed(0) / (tempo / 100));
@@ -181,7 +206,7 @@ var inicializacaoDados = function(){
 	
 	var dados = [];
 	
-	var itemRefino = [0, 0];
+	var itemRefino = [1, ""];
 	
 	if(tipo.includes("minerio")){
 		texto = "Minerar";
@@ -203,10 +228,12 @@ var inicializacaoDados = function(){
 		item = verificarItem(tipo);
 		//console.log(item);
 		itemRefino = verificarRefino(tipoMaterial);
+		if(itemRefino[0] == "") itemRefino[0] = 1;
 	}
 	
-	qtdMaterial = 1 + Math.round(status.habilidades["lvl".concat(texto)] - item.lvl);
-	exp = (1 + qtdMaterial + itemRefino[0]) * item.lvl;
+	qtdMaterial = 1 + (Math.round(status.habilidades["lvl".concat(texto)] - item.lvl) - parseInt(itemRefino[0]));
+	if(qtdMaterial <= 0) qtdMaterial = 1;
+	exp = (1 + qtdMaterial) * (parseInt(itemRefino[0]) * item.lvl);
 	expTexto = "exp" + texto;
 	
 	dados = [texto, classeMaterial, item, tipoMaterial, qtdMaterial, exp, expTexto];
@@ -228,11 +255,23 @@ var inicializacaoBarras = function(){
 	return barras;
 };
 
-var verfTempo = function(classeMaterial, tipoMaterial, item){
+var verfTempo = function(classeMaterial, tipoMaterial, item, status){
+	
+	var hab = "lvl";
+	
+	if(classeMaterial == "minerio") hab = hab.concat("Minerar");
+	else if(classeMaterial == "comida") hab = hab.concat("Cacar");
+	else if(classeMaterial == "forja") hab = hab.concat("Forjar");
+	
+	var diminuir = Math.floor(status.habilidades[hab] / 2);
 	var tempo = 0;
 	var lvlItem = verificarRefino(tipoMaterial);
-	if(classeMaterial == "refinar" && parseInt(lvlItem[0]) > 0) tempo = item.tempo * parseInt(lvlItem[0]);
-	else tempo = item.tempo;
+	if(classeMaterial == "refinar" && parseInt(lvlItem[0]) > 0) tempo = (item.tempo * parseInt(lvlItem[0])) - diminuir;
+	else tempo = item.tempo - diminuir;
+	
+	console.log("Tempo para realizar a tarefa: " + tempo);
+	
+	if(tempo <= 0) tempo = 1;
 	
 	//console.log(tempo);
 	return tempo;
@@ -265,6 +304,7 @@ var chamadaPossForjar = function(classeMaterial, tipoMaterial, status, item, qtd
 	if(classeMaterial == "forja") return possibilidadeForjar(status, item, qtd);
 	else if(classeMaterial == "refinar") return possibilidadeRefinar(status, tipoMaterial, qtd);
 	else return true;
+	
 };
 
 var possibilidadeRefinar = function(status, item, qtd){
