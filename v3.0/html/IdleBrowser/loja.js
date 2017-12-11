@@ -157,29 +157,33 @@ var criarSell = function(){
 						}catch(err){
 							console.log("Erro na criacao do Div de Sell: " + err);
 						}
-					}else{
-						refino = verificarRefino(key);
-						//console.log(refino);
-						if(refino[1] == "") nome = key;
-						else nome = refino[1];
-						for(var keys in itens[chave]){
-							for(var ultimaChave in itens[chave][keys]){
-								if(maiuscula(nome) == itens[chave][keys][ultimaChave].nome){
-									div = sellDiv(status, div, item, chave, key);
-								}
-							}
-						}
 					}
-					
 				}
 			}catch(err){
 				console.log("Erro no loja.js linha 176");
 				console.log(err);
 			}
-			
 		}
-		
 	}
+	
+	var objetos = "";
+	for(key in status.inventario) objetos += key;
+	
+	for(var chave in itens.forja){
+	
+		if(objetos.indexOf(maiuscula(chave)) > -1){ //Verifica se a chave existe no inventario.
+			console.log("Possui: " + chave);
+			div += "<h4>" + maiuscula(chave) + "</h4>";
+
+			for(var key in status.inventario){
+				item = verificarItem(minuscula(key)); //Verifica qual é o item que está no inventario.
+				if(key.includes(maiuscula(chave))){ //Verifica se o item é do tipo certo para por na ordem.
+					div = sellDiv(status, div, item, "forja", key); //chama a função que cria a div com os itens e preços e etc.
+				}
+			}
+		}
+	}
+	
 	div += "<\p>";
 	
 	titulo.insertAdjacentHTML('beforeend', div);
