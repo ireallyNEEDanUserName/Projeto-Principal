@@ -4,7 +4,6 @@ var start = function(){
 	status = iniciar(status);
 	escreverStatus(status);
 	
-	
 	window.addEventListener("beforeunload", function(){
 		salvar(status);
 	});
