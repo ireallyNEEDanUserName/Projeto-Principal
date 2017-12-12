@@ -49,7 +49,7 @@ var escreverStatus = function(status){
 				}
 			}
 		}else if(key == "tempoJogado") str += " | " + cap + ": " + formatarTotal(status[key]) + " | ";
-		else if(key == "tempoInicial") ;
+		else if(key == "tempoInicial" || key == "equipamentos") ;
 		else{
 			str += " | " + cap + ": " + status[key] + " | ";
 		}
