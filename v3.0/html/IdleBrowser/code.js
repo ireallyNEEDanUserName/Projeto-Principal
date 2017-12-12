@@ -104,6 +104,22 @@ var checar = function(status){
 	estrutura.habilidades.expCacar = 0;
 	estrutura.habilidades.lvlChefe = 1;
 	estrutura.habilidades.expChefe = 0;
+	
+	estrutura.equipamentos = {};
+	estrutura.equipamentos.luva = "";
+	estrutura.equipamentos.bota = "";
+	estrutura.equipamentos.cabeca = "";
+	estrutura.equipamentos.peito = "";
+	estrutura.equipamentos.pernas = "";
+	estrutura.equipamentos.cinto = "";
+	estrutura.equipamentos.anel1 = "";
+	estrutura.equipamentos.anel2 = "";
+	estrutura.equipamentos.anel3 = "";
+	estrutura.equipamentos.anel4 = "";
+	estrutura.equipamentos.anel5 = "";
+	estrutura.equipamentos.colar1 = "";
+	estrutura.equipamentos.colar2 = "";
+	estrutura.equipamentos.colar3 = "";
 
 	estrutura.empregados = {};
 	estrutura.empregados = iniciarEmp(estrutura.empregados);
