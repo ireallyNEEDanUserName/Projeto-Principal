@@ -1,0 +1,50 @@
+#Topo {
+	width: 99%;
+    height: 20%;
+    position: relative;
+    float: left;
+    text-align: center;
+	border: 5px solid pink;
+}
+
+#Menu {
+	width: 20%;
+	height: 100%;
+    position: relative;
+    float: left;
+	border: 5px solid black;
+	top: 16%;
+}
+
+#Centro {
+	top: 16%;
+	width: 77%;
+    left: 21%;
+    height: 100%;
+    position: absolute;
+    float: left;
+    text-align: center;
+	border: 5px solid yellow;
+}
+
+#Islandia{
+    width: 20%;
+    height: 15%;
+    background-image: url('imgs/islandia.jpg');
+    background-size: 100% 100%;
+    position: absolute;
+    border: 1px solid black;
+    /*border: 5px solid blue;*/
+}
+
+
+#Japao{
+    width: 20%;
+    height: 15%;
+    background-image: url('imgs/japao.jpg');
+    background-size: 100% 100%;
+    position: relative;
+    float: left;
+    left:21%;
+    border: 1px solid black;
+}

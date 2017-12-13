@@ -1,0 +1,13 @@
+Jogo em Javascript, tipo cliquer
+
+ideias -
+
+fazer varias civilizações (pra teste: japao, dinamarca)
+
+dentro das civilizacoes:
+plantacao (coisas que soh o povo podia colher)
+mineracao (ver que tipo de minerios podia)
+caça 
+forja (armas e armaduras)
+criar exercitos (tem q ter arma armadura pra isso)
+navegacao (se tinham ou n)
