@@ -1,8 +1,6 @@
-//var pName = aaa;
-
-$('#nomeNovo').click(function(){
-
-	var name = $(this).text();
-	//return pName;
-});
-console.log(name);
+$(document).ready(function(){
+	$("enviar").click(function(){
+		var nome = $("#nomeNovo").val();
+		var pais = $("pais").val();
+	})
+})

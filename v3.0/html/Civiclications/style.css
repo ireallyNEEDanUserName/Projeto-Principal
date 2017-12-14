@@ -37,14 +37,19 @@
     /*border: 5px solid blue;*/
 }
 
+#Islandia:hover{
+    border: 10px solid pink;
+}
 
+#Islandia:active{
+    border: 10px solid blue;
+}
 #Japao{
-    width: 20%;
-    height: 15%;
+    width: 15%;
+    height: 100%;
     background-image: url('imgs/japao.jpg');
     background-size: 100% 100%;
-    position: relative;
+    position: absolute;
     float: left;
-    left:21%;
     border: 1px solid black;
 }
