@@ -16,13 +16,15 @@
 
 	<div id='Centro'>
 		<h2> Digite o nome do jogador. </h2>
-		<form action="principal.html">
-  			Nome: <input type="text" name="nomeNovo"><br>
+		<form>
+  			Nome: <input type="text" id="nomeNovo"/><br>
   			<h3> Escolha o pais: </h3>
-  			<div id='Islandia'></div></p>
-  			<div id='Japao'></div></br></br></br></br></br></br></br>
-
-  			<input type="submit" value="Submit">
+  			<select id='pais'> 
+  				<option value="#"></option>
+  				<option value="islandia">Islandia</option>
+  				<option value="japao">Japão</option>
+  			</select></br></br></br>
+  			<button type="submit" id="enviar"> Enviar </button>
 		</form>
 
 
@@ -34,7 +36,6 @@
 		<li><a href='index.html'>Home</li>
 	</div>
 
-	
 
 </body>
 </html>
