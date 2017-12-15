@@ -67,6 +67,7 @@ var venderInv = function(nome, qtd, tipo){
 		status.inventario[maiuscula(nome)] -= qtd;
 		textoFinalPagina("Vendeu com sucesso " + qtd + " de " + maiuscula(nome) + " por: " + (item.sell * multiplicador) * qtd);
 		document.getElementById("total" + removerEspaco(minuscula(nomeElemento))).innerHTML = (status.inventario[maiuscula(nome)]) + " / ";
+		if(status.inventario[maiuscula(nome)] <= 0) delete status.inventario[maiuscula(nome)];
 	}else textoFinalPagina("Itens insuficientes no seu inventario");
 	
 	salvar(status);
