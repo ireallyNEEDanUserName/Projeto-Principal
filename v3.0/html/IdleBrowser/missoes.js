@@ -257,22 +257,24 @@ var inicializacaoBarras = function(){
 
 var verfTempo = function(classeMaterial, tipoMaterial, item, status){
 	
+	console.log(item);
+	
 	var hab = "lvl";
 	
 	if(classeMaterial == "minerio") hab = hab.concat("Minerar");
 	else if(classeMaterial == "comida") hab = hab.concat("Cacar");
 	else if(classeMaterial == "forja") hab = hab.concat("Forjar");
+	else if(classeMaterial == "refinar") hab = hab.concat("Forjar");
 	
 	var diminuir = Math.floor(status.habilidades[hab] / 2);
 	var tempo = 0;
 	var lvlItem = verificarRefino(tipoMaterial);
-	if(classeMaterial == "refinar" && parseInt(lvlItem[0]) > 0) tempo = (item.tempo * parseInt(lvlItem[0])) - diminuir;
+	if(classeMaterial == "refinar" && parseInt(lvlItem[0]) > 0 && lvlItem[0] != "") tempo = (item.tempo * parseInt(lvlItem[0])) - diminuir;
 	else tempo = item.tempo - diminuir;
-	
-	console.log("Tempo para realizar a tarefa: " + tempo);
 	
 	if(tempo <= 0) tempo = 1;
 	
+	console.log("Tempo para realizar a tarefa: " + tempo);	
 	//console.log(tempo);
 	return tempo;
 };
@@ -388,7 +390,11 @@ var criarMissoes = function(){
 				if(key.includes(maiuscula(chave))){
 					var refinarItem = verificarItem(minuscula(key));
 					var nome = removerEspaco(minuscula(key));
-					if(status.habilidades["lvl" + maiuscula(refinarItem.tipo)] >= (refinarItem.lvl * 2)){
+					var refino = verificarRefino(key);
+					var val = 0;
+					if(refino[0] != "") val = parseInt(refino[0]);
+					console.log((refinarItem.lvl * 2) + val);
+					if(status.habilidades["lvl" + maiuscula(refinarItem.tipo)] >= (refinarItem.lvl * 2) + val){
 						div += "<div id='forjar'>" +
 								"<div id='" + nome + "'>" +
 								"<p id='" + "refinar".concat(nome) + "' class='item'>" + key + "</p>" +
