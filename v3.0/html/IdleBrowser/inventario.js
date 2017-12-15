@@ -13,7 +13,7 @@ var impInv = function(){
 	var div = "<div id='inventario'>";
 	
 	for(var key in itens){
-		div += "<h3>" + maiuscula(key) + "</h3>";
+		div += "<h2>" + maiuscula(key) + "</h2>";
 		div += "<p>";
 		for(var chave in itens[key]){		
 			if(maiuscula(chave) in status.inventario) div += maiuscula(chave) + " : " + status.inventario[maiuscula(chave)] + " | ";	
@@ -21,10 +21,8 @@ var impInv = function(){
 		div += " </p>";
 	}
 	
-	
-	
 	for(var chave in itens.forja){
-		div += "<p>" ;
+		div += "<h3>" + maiuscula(chave) + "</h3><p>";
 		for(var key in status.inventario){
 			if(key.includes(maiuscula(chave))){
 				if(status.inventario[key] == 0 || key.includes("+0")) delete status.inventario[key]; //Deleta os itens +0, somente item normal e +1 depois do primeiro refino.
