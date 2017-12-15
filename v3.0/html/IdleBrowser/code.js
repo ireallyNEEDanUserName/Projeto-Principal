@@ -90,9 +90,16 @@ var checar = function(status){
 	estrutura.combate = {};
 	estrutura.combate.lvlCombate = 1;
 	estrutura.combate.expCombate = 0;
+	estrutura.combate.atkBase = 1;
 	estrutura.combate.atk = 1;
+	estrutura.combate.defFisicaBase = 15;
+	estrutura.combate.defFisica = 15;
+	estrutura.combate.defMagicaBase = 15;
+	estrutura.combate.defMagica = 15;
+	estrutura.combate.velBase = 1;
 	estrutura.combate.vel = 1;
-	estrutura.combate.precisao = 1;
+	estrutura.combate.precisaoBase = 20;
+	estrutura.combate.precisao = 20;
 	
 	estrutura.habilidades = {};
 	estrutura.habilidades.acao = {tipo:"", material:""};
@@ -106,9 +113,11 @@ var checar = function(status){
 	estrutura.habilidades.expChefe = 0;
 	
 	estrutura.equipamentos = {};
+	estrutura.equipamentos.espada = "";
+	estrutura.equipamentos.escudo = "";
 	estrutura.equipamentos.luva = "";
 	estrutura.equipamentos.bota = "";
-	estrutura.equipamentos.cabeca = "";
+	estrutura.equipamentos.capacete = "";
 	estrutura.equipamentos.peito = "";
 	estrutura.equipamentos.pernas = "";
 	estrutura.equipamentos.cinto = "";
@@ -132,13 +141,36 @@ var checar = function(status){
 	estrutura.tempoInicial = 0;
 	
 	for(var key in estrutura){
-		if(!(key in status)){
+		if(typeof estrutura[key] == 'object' && key != "inventario" && key != "empregados" && (key in status)){
+			for(var chave in estrutura[key]){
+				if(!(chave in status[key])){
+					console.log("Adicionada: " + chave);
+					status[key][chave] = estrutura[key][chave];
+				}else if(key == "combate"){
+					if(chave.includes("Base")){
+						if(status[key][chave] != estrutura[key][chave]){
+							console.log("Alterado o valor Base " + chave + " de " + status[key][chave] + " para " + estrutura[key][chave]);
+							status[key][chave] = estrutura[key][chave];
+						}
+					}
+				}
+			}
+		}
+		else if(!(key in status)){
 			status[key] = estrutura[key];
 			console.log("Adicionada: " + key);
 		}
 	}
 	for(var key in status){
-		if(!(key in estrutura)){
+		if(typeof status[key] == 'object' && key != "inventario" && key != "empregados"){
+			for(var chave in status[key]){
+				if(!(chave in estrutura[key])){
+					console.log("Deletada: " + chave);
+					delete status[key][chave];
+				}
+			}
+		}
+		else if(!(key in estrutura)){
 			console.log("Deletada: " + key);
 			delete status[key];
 		}
@@ -223,11 +255,11 @@ var defItens = function(itens){
 	forja.escudo = {};
 	forja.luva = {};
 	
-	forja.espada.pedra = {lvl: 1, tempo: 10, sell: 5, buy: 10, req: { pedra: 4 }, tipo:"forjar", nome:"Espada de Pedra"};
-	forja.espada.cobre = {lvl: 5, tempo: 15, sell: 6, buy: 13, req: { cobre: 4, pedra: 1 }, tipo:"forjar", nome:"Espada de Cobre"};
-	forja.espada.ferro = {lvl: 7, tempo: 35, sell: 7, buy: 18, req: { cobre: 2, pedra: 1, ferro: 2 }, tipo:"forjar", nome:"Espada de Ferro"};
+	forja.espada.pedra = {lvl: 1, tempo: 10, sell: 5, buy: 10, req: { pedra: 4 }, tipo:"forjar", nome:"Espada de Pedra", estatisticas: {atk: 1, precisao: 20, vel: 1}};
+	forja.espada.cobre = {lvl: 5, tempo: 15, sell: 6, buy: 13, req: { cobre: 4, pedra: 1 }, tipo:"forjar", nome:"Espada de Cobre", estatisticas: {atk: 2, precisao: 25, vel: 2}};
+	forja.espada.ferro = {lvl: 7, tempo: 35, sell: 7, buy: 18, req: { cobre: 2, pedra: 1, ferro: 2 }, tipo:"forjar", nome:"Espada de Ferro", estatisticas: {atk: 5, precisao: 25, vel: 3}};
 	
-	forja.capacete.pedra = {lvl: 1, tempo: 15, sell: 5, buy: 10, req: { pedra: 5 }, tipo:"forjar", nome:"Capacete de Pedra"};
+	forja.capacete.pedra = {lvl: 1, tempo: 15, sell: 5, buy: 10, req: { pedra: 5 }, tipo:"forjar", nome:"Capacete de Pedra", estatisticas: {defFisica: 10, vel: -1}};
 	forja.capacete.cobre = {lvl: 4, tempo: 25, sell: 15, buy: 35, req: { cobre: 5 }, tipo:"forjar", nome:"Capacete de Cobre"};
 	forja.capacete.ferro = {lvl: 7, tempo: 40, sell: 20, buy: 50, req: { ferro: 5, pedra: 2 }, tipo:"forjar", nome:"Capacete de Ferro"};
 	
@@ -254,7 +286,7 @@ var salvar = function(status){
 	var agora = data.getTime() / 1000;
 	
 	status.tempoJogado += parseInt(calcTempo(status.tempoInicial, agora));
-	console.log(calcTempo(status.tempoInicial, agora));
+	//console.log(calcTempo(status.tempoInicial, agora));
 	console.log(formatarTotal(status.tempoJogado));
 
 	localStorage.setItem("Jogador", JSON.stringify(status));
