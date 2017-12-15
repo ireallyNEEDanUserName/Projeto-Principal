@@ -1,4 +1,4 @@
-$(document).ready(function(){
+$(document).ready(function(event){
 
 	$('#barra').click(function(){
 		clickBarraFunc(true);
@@ -49,7 +49,7 @@ $(document).ready(function(){
 	
 	$('.item').mouseover(function(){
 	
-		//console.log($(this).position());
+		//console.log("Encima");
 	
 		//var refino = verificarRefino($(this).text());
 		var texto = $(this).text();
@@ -135,6 +135,22 @@ $(document).ready(function(){
 		
 		venderInv(minuscula(produto), qtd, tipo);
 		
+	})
+	
+	
+	$('.ButtonEquip').click(function(){
+		var select = "Select" + $(this).attr("id");
+		
+		//console.log($("#" + select).attr("value"));
+		equipar($("#" + select).val(), $("#" + select).attr("value"));
+	})
+	
+	$('.ButtonDesequipar').click(function(){
+	
+		var select = "Select" + $(this).attr("id");
+		
+		//console.log($("#" + select).attr("value"));
+		desequipar($("#" + select).val(), $("#" + select).attr("value"));
 	})
 	
 });
