@@ -50,7 +50,7 @@ var start = function(){
 		console.log("Erro na primeira chamada das funcões de inicializacao do missoes.js " + err);
 	}
 	
-	textoItem.innerHTML = "Fazendo: " + tipoMaterial;
+	textoItem.innerHTML = tipoMaterial;
 	
 	loop = chamadaPossForjar(classeMaterial, tipoMaterial, status, item, qtdMaterial);
 	var tempo = verfTempo(classeMaterial, tipoMaterial, item, status);
@@ -101,7 +101,7 @@ var start = function(){
 			}
 			tempo = verfTempo(classeMaterial, tipoMaterial, item, status);
 			
-			textoItem.innerHTML = "Fazendo: " + tipoMaterial;
+			textoItem.innerHTML = tipoMaterial;
 			
 			dataInicialAtualizada = new Date();
 			segundoInicialAtualizado = dataInicialAtualizada.getTime() / 1000;
