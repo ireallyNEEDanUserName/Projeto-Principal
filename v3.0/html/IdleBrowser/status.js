@@ -43,7 +43,7 @@ var escreverStatus = function(status){
 					
 					str += " | " + cap + ": " + status[key][chave] + " / " + compExp + " | ";	
 				}
-				else if(chave == "acao" || chave.includes("Base")) ;
+				else if(chave == "acao" || chave.includes("Base") || chave.includes("Pontos")) ;
 				else{
 					str += " | " + cap + ": " + status[key][chave] + " | ";
 				}
