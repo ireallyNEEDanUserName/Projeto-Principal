@@ -25,7 +25,7 @@ var impInv = function(){
 		div += "<h3>" + maiuscula(chave) + "</h3><p>";
 		for(var key in status.inventario){
 			if(key.includes(maiuscula(chave))){
-				if(status.inventario[key] == 0 || key.includes("+0")) delete status.inventario[key]; //Deleta os itens +0, somente item normal e +1 depois do primeiro refino.
+				if(status.inventario[key] <= 0 || key.includes("+0")) delete status.inventario[key]; //Deleta os itens +0, somente item normal e +1 depois do primeiro refino.
 				else{
 					item = verificarItem(minuscula(key));
 					try{
