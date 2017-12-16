@@ -49,62 +49,69 @@ var option = function(key, itens, status){
 
 
 var equipar = function(item, tipo){
-
+	
+	console.log(item);
 	var status = iniciar(status);
 	
-	if(status.equipamentos[tipo] != "") status = removerItemAtr(status.equipamentos[tipo], status);
-	if(item != "#")	status = atributos(item, status);
-	else item = "";
+	if(item == "#") item = "";
 	
 	//console.log("Antes: " + status.equipamentos[tipo]);
-	if(status.equipamentos[tipo] in status.inventario) status.inventario[status.equipamentos[tipo]] += 1;
-	else{
-		status.inventario[status.equipamentos[tipo]] = 0;
-		status.inventario[status.equipamentos[tipo]] += 1;
+	if(item != ""){
+		if(status.equipamentos[tipo] in status.inventario) status.inventario[status.equipamentos[tipo]] += 1;
+		else{
+			status.inventario[status.equipamentos[tipo]] = 0;
+			status.inventario[status.equipamentos[tipo]] += 1;
+		}
 	}
 	
 	status.equipamentos[tipo] = item;
-	if(item != "") status.inventario[item] -= 1;
+	if(item != "#" && item != "") status.inventario[item] -= 1;
 	
 	//console.log("Depois: " + status.equipamentos[tipo]);
 	
-	textoFinalPagina("Atk: " + status.combate.atk + " | Vel: " + status.combate.vel + " | Precisao: " + status.combate.precisao);
+	if(status.equipamentos[tipo] != "" || item != "#") status = atributos(item, status);
+	
+	var textAtr = "";
+	for(var atr in status.combate){
+		if(!(atr.includes("Base")) && !(atr.includes("lvl")) && !(atr.includes("exp")) && !(atr.includes("ontos"))) textAtr += " " + maiuscula(atr) + " : " + status.combate[atr];
+	}
+	textoFinalPagina(textAtr);
 	
 	salvar(status);
 	
 };
 
 var atributos = function(item, status){
-		
-	var refino = verificarRefino(item);
-	if(refino[0] != "")	var lvlRef = parseInt(refino[0]);
-	else var lvlRef = 0;
 	
-	var iten = verificarItem(minuscula(item));
-	
-	for(var key in iten.estatisticas){
-		if(key != "precisao") status.combate[key] = status.combate[key] + (iten.estatisticas[key] + (lvlRef * iten.lvl));
-		else status.combate[key] = status.combate[key] + (iten.estatisticas[key] + Math.floor((iten.lvl * lvlRef) / 10));
+	var valor = {};
+	for(var atr in status.combate){
+		if(!(atr.includes("Base")) && !(atr.includes("lvl")) && !(atr.includes("exp")) && !(atr.includes("ontos"))) valor[atr] = 0;
 	}
 	
+	for(var chave in status.equipamentos){
+		if(status.equipamentos[chave] != ""){
+			var refino = verificarRefino(status.equipamentos[chave]);
+			if(refino[0] != "") var lvlRef = parseInt(refino[0]);
+			else var lvlRef = 0;
+			
+			var iten = verificarItem(minuscula(status.equipamentos[chave]));
+			
+			for(var key in iten.estatisticas){
+				if(key != "precisao") valor[key] += (iten.estatisticas[key] + (lvlRef * iten.lvl));
+				else valor[key] += (iten.estatisticas[key] + Math.floor((iten.lvl * lvlRef) / 10));
+			}
+		}
+	}
+	
+	console.log(valor);
+	
+	for(var atr in status.combate){
+		if(!(atr.includes("Base")) && !(atr.includes("lvl")) && !(atr.includes("exp")) && !(atr.includes("ontos"))){
+			console.log(atr + " > " + valor[atr]);
+			status.combate[atr] = status.combate[atr + "Base"] + status.combate[atr + "Pontos"] + valor[atr];
+		}
+	}
+	
+	console.log(status.combate);
 	return status;
 };
-
-var removerItemAtr = function(itemAnterior, status){
-	
-	var refino = verificarRefino(itemAnterior);
-	if(refino[0] != "")	var lvlRef = parseInt(refino[0]);
-	else var lvlRef = 0;
-	console.log(refino);
-	
-	var iten = verificarItem(minuscula(itemAnterior));
-	
-	for(var key in iten.estatisticas){
-		if(key != "precisao") var soma = (iten.estatisticas[key] + (lvlRef * iten.lvl));
-		else var soma = (iten.estatisticas[key] + Math.floor((iten.lvl * lvlRef) / 10));
-		console.log(key + " :> " + soma);
-		status.combate[key] -= soma;
-	}
-	
-	return status;
-}
