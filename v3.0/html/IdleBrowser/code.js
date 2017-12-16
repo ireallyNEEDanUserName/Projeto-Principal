@@ -88,18 +88,30 @@ var checar = function(status){
 	var estrutura = {};
 	
 	estrutura.combate = {};
+	estrutura.combate.pontos = 0;
 	estrutura.combate.lvlCombate = 1;
 	estrutura.combate.expCombate = 0;
 	estrutura.combate.atkBase = 1;
+	estrutura.combate.atkPontos = 0;
 	estrutura.combate.atk = 1;
 	estrutura.combate.defFisicaBase = 15;
+	estrutura.combate.defFisicaPontos = 0;
 	estrutura.combate.defFisica = 15;
 	estrutura.combate.defMagicaBase = 15;
+	estrutura.combate.defMagicaPontos = 0;
 	estrutura.combate.defMagica = 15;
 	estrutura.combate.velBase = 1;
+	estrutura.combate.velPontos = 0;
 	estrutura.combate.vel = 1;
 	estrutura.combate.precisaoBase = 20;
+	estrutura.combate.precisaoPontos = 0;
 	estrutura.combate.precisao = 20;
+	estrutura.combate.critBase = 5;
+	estrutura.combate.critPontos = 0;
+	estrutura.combate.crit = 5;
+	estrutura.combate.danoCritBase = 20;
+	estrutura.combate.danoCritPontos = 0;
+	estrutura.combate.danoCrit = 20;
 	
 	estrutura.habilidades = {};
 	estrutura.habilidades.acao = {tipo:"", material:""};
@@ -247,6 +259,7 @@ var defItens = function(itens){
 	comida.rato = {lvl: 1, tempo: 10, sell: 1, buy: 3, tipo:"cacar", nome:"Rato"};
 	comida.urso = {lvl: 5, tempo: 30, sell: 3, buy: 5, tipo:"cacar", nome:"Urso"};
 	comida.lobo = {lvl: 5, tempo: 25, sell: 2, buy: 4, tipo:"cacar", nome:"Lobo"};
+	comida.jacare = {lvl: 8, tempo: 25, sell: 5, buy: 10, tipo:"cacar", nome:"Jacaré"};
 	
 	/* ITENS PARA FORJAR. */
 	forja.espada = {};
@@ -260,16 +273,19 @@ var defItens = function(itens){
 	forja.espada.ferro = {lvl: 7, tempo: 35, sell: 7, buy: 18, req: { cobre: 2, pedra: 1, ferro: 2 }, tipo:"forjar", nome:"Espada de Ferro", estatisticas: {atk: 5, precisao: 25, vel: 3}};
 	
 	forja.capacete.pedra = {lvl: 1, tempo: 15, sell: 5, buy: 10, req: { pedra: 5 }, tipo:"forjar", nome:"Capacete de Pedra", estatisticas: {defFisica: 10, vel: -1}};
-	forja.capacete.cobre = {lvl: 4, tempo: 25, sell: 15, buy: 35, req: { cobre: 5 }, tipo:"forjar", nome:"Capacete de Cobre"};
-	forja.capacete.ferro = {lvl: 7, tempo: 40, sell: 20, buy: 50, req: { ferro: 5, pedra: 2 }, tipo:"forjar", nome:"Capacete de Ferro"};
+	forja.capacete.cobre = {lvl: 4, tempo: 25, sell: 15, buy: 35, req: { cobre: 5 }, tipo:"forjar", nome:"Capacete de Cobre", estatisticas: {defFisica: 20, vel: -3}};
+	forja.capacete.ferro = {lvl: 7, tempo: 40, sell: 20, buy: 50, req: { ferro: 5, pedra: 2 }, tipo:"forjar", nome:"Capacete de Ferro", estatisticas: {defFisica: 25, vel: -3}};
 	
-	forja.bota.pedra = {lvl: 1, tempo: 5, sell: 2, buy: 10, req: { pedra: 2 }, tipo:"forjar", nome:"Bota de Pedra"};
-	forja.bota.cobre = {lvl: 3, tempo: 10, sell: 5, buy: 20, req: { cobre: 3 }, tipo:"forjar", nome:"Bota de Cobre"};
-	forja.bota.ferro = {lvl: 5, tempo: 20, sell: 10, buy: 30, req: { ferro: 3 }, tipo:"forjar", nome:"Bota de Ferro"};
+	forja.bota.pedra = {lvl: 1, tempo: 5, sell: 2, buy: 10, req: { pedra: 2 }, tipo:"forjar", nome:"Bota de Pedra", estatisticas: {defFisica: 10, vel: -1}};
+	forja.bota.cobre = {lvl: 3, tempo: 10, sell: 5, buy: 20, req: { cobre: 3 }, tipo:"forjar", nome:"Bota de Cobre", estatisticas: {defFisica: 15, vel: -1}};
+	forja.bota.ferro = {lvl: 5, tempo: 20, sell: 10, buy: 30, req: { ferro: 3 }, tipo:"forjar", nome:"Bota de Ferro", estatisticas: {defFisica: 20, vel: -3}};
 	
-	forja.escudo.pedra = {lvl: 2, tempo: 10, sell: 2, buy: 10, req: { pedra: 2, rato: 1 }, tipo:"forjar", nome:"Escudo de Pedra"};
+	forja.escudo.pedra = {lvl: 2, tempo: 10, sell: 2, buy: 10, req: { pedra: 2, rato: 1 }, tipo:"forjar", nome:"Escudo de Pedra", estatisticas: {defFisica: 30, vel: -2}};
+	forja.escudo.rato = {lvl: 2, tempo: 7, sell: 2, buy: 7, req: { rato: 5 }, tipo:"forjar", nome:"Escudo de Couro de Rato", estatisticas: {defFisica: 7, defMagica: 7, vel: 2}};
+	forja.escudo.urso = {lvl: 5, tempo: 15, sell: 7, buy: 20, req: { urso: 3 }, tipo:"forjar", nome:"Escudo de Couro de Urso", estatisticas: {defFisica: 15, defMagica: 10, vel: 4}};
 	
-	forja.luva.rato = {lvl: 1, tempo: 15, sell: 2, buy: 3, req: { rato: 2 }, tipo:"forjar", nome:"Luva de Couro de Rato"};
+	forja.luva.rato = {lvl: 1, tempo: 15, sell: 2, buy: 3, req: { rato: 2 }, tipo:"forjar", nome:"Luva de Couro de Rato", estatisticas: {defMagica: 5, vel: 2}};
+	forja.luva.pedra = {lvl: 1, tempo: 20, sell: 2, buy: 3, req: { pedra: 2 }, tipo:"forjar", nome:"Luva de Pedra", estatisticas: {defFisica: 5, vel: 1}};
 	
 	
 	itens.minerio = minerio;
@@ -388,7 +404,12 @@ var upaLevel = function(status, tipo){
     if (habilidades[experiencia] >= compExp ) {
     	habilidades[level] += 1; 
 		if(tipo == "Chefe" && (habilidades[level] % 5) == 0){
-			status.empregados = adicionarEmp(status.empregados, "minerio", Object.keys(status.empregados).length);
+			var random = (Math.round(Math.random() * 10) + 1);
+			var emp = "";
+			if(random <= 5) emp = "minerio";
+			else emp = "comida";
+			console.log("Empregado Ganho: " + emp);
+			status.empregados = adicionarEmp(status.empregados, emp, Object.keys(status.empregados).length);
 			console.log("Funcao upaLevel - " + Object.keys(status.empregados).length);
 		}
     	habilidades[experiencia] -= compExp;
