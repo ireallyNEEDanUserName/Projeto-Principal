@@ -5,8 +5,8 @@ var iniciarExp = function(){
 	var canvas = document.getElementById("mapa");
 	var screen = canvas.getContext("2d");
 	
-	canvas.width = window.innerWidth;
-	canvas.height = window.innerHeight;
+	canvas.width = window.innerWidth - ((window.innerWidth / 100) * 7);
+	canvas.height = window.innerHeight - ((window.innerHeight / 100) * 7);
 	
 	var size = {x: canvas.width, y: canvas.height};
 	
