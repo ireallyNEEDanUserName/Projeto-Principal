@@ -28,8 +28,8 @@
 }
 
 #Islandia{
-    width: 20%;
-    height: 15%;
+    width: 15%;
+    height: 100%;
     background-image: url('imgs/islandia.jpg');
     background-size: 100% 100%;
     position: absolute;
@@ -37,13 +37,6 @@
     /*border: 5px solid blue;*/
 }
 
-#Islandia:hover{
-    border: 10px solid pink;
-}
-
-#Islandia:active{
-    border: 10px solid blue;
-}
 #Japao{
     width: 15%;
     height: 100%;
