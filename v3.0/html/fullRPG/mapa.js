@@ -13,12 +13,14 @@ var inicar = function(){
 	var ret;
 	ret = criarMapa(screen, size);
 	
+	console.log(ret[0]);
+	
 	var teclado = new Keyboarder();
 	var keys = teclado.KEYS;
 	
 	var tick = function(){
 		
-		jogador = mover(teclado, keys, jogador, size, mapa);
+		jogador = mover(teclado, keys, jogador, size, ret[0]);
 		screen.clearRect(0, 0, size.x, size.y);
 		desenharMapa(screen, ret[0], ret[1]);
 		screen.drawImage(jogador.img, jogador.pos.x, jogador.pos.y);
@@ -31,21 +33,19 @@ var inicar = function(){
 
 var mover = function(teclado, keys, jogador, size, mapa){
 	
-	if(teclado.isDown(keys.LEFT) && jogador.pos.x >= 2){
+	if(teclado.isDown(keys.LEFT) && jogador.pos.x >= 2 && verfColisao(jogador, mapa, "E")){
 		jogador.direcao = "E";
-		if(jogador.contador >= 2) jogador.contador = 0;
-		else jogador.contador++;
 		jogador.pos.x -= 2;
 	}
-	else if(teclado.isDown(keys.RIGHT) && jogador.pos.x <= size.x - 2){
+	else if(teclado.isDown(keys.RIGHT) && jogador.pos.x <= size.x - 2 && verfColisao(jogador, mapa, "D")){
 		jogador.direcao = "D";
 		jogador.pos.x += 2;
 	}
-	else if(teclado.isDown(keys.UP) && jogador.pos.y >= 2){
+	else if(teclado.isDown(keys.UP) && jogador.pos.y >= 2 && verfColisao(jogador, mapa, "C")){
 		jogador.direcao = "c";
 		jogador.pos.y -= 2;
 	}
-	else if(teclado.isDown(keys.DOWN) && jogador.pos.y <= size.y - 2){
+	else if(teclado.isDown(keys.DOWN) && jogador.pos.y <= size.y - 2 && verfColisao(jogador, mapa, "B")){
 		jogador.direcao = "";
 		jogador.pos.y += 2;
 	}
@@ -57,6 +57,31 @@ var mover = function(teclado, keys, jogador, size, mapa){
 	jogador.img.src = "sprites/jogador/eusprite" + jogador.direcao.concat(jogador.contador) + ".png";
 	
 	return jogador;
+};
+
+var verfColisao = function(jogador, mapa, direcao){
+	
+	
+	var posY = 1;
+	var posX = 1;
+	if(jogador.pos.y != 0) posY = jogador.pos.y;
+	if(jogador.pos.x != 0) posX = jogador.pos.x;
+	
+	console.log(Math.round((posX * posY) / 40));
+	console.log("X: " + jogador.pos.x + " | Y: " + jogador.pos.y);
+	console.log(((jogador.pos.y / 32) * 40) + (jogador.pos.x / 40));
+	
+	if(direcao == "D" || direcao == "E"){
+		if(direcao == "D") var x = Math.floor(((posX + 2) * posY) / 20);
+		else var x = Math.floor(((posX - 2) * posY) / 20);
+		return !(x in mapa[2] || x in mapa[5] || x in mapa[6]);
+	}else{
+		if(direcao == "C") var y = Math.floor((posX * (posY - 2)) / 20);
+		else var y = Math.floor((posX * (posY + 2)) / 20);
+		return !(y in mapa[2] || y in mapa[5] || y in mapa[6]);
+	}
+
+	
 };
 
 
