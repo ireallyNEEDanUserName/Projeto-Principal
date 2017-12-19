@@ -33,54 +33,64 @@ var inicar = function(){
 
 var mover = function(teclado, keys, jogador, size, mapa){
 	
-	if(teclado.isDown(keys.LEFT) && jogador.pos.x >= 2 && verfColisao(jogador, mapa, "E")){
+	if(teclado.isDown(keys.LEFT) && jogador.pos.x >= 2){
 		jogador.direcao = "E";
-		jogador.pos.x -= 2;
+		if(verfColisao(jogador, mapa, "E")) jogador.pos.x -= 2;
 	}
-	else if(teclado.isDown(keys.RIGHT) && jogador.pos.x <= size.x - 2 && verfColisao(jogador, mapa, "D")){
+	else if(teclado.isDown(keys.RIGHT) && jogador.pos.x <= size.x - 2){
 		jogador.direcao = "D";
-		jogador.pos.x += 2;
+		if(verfColisao(jogador, mapa, "D")) jogador.pos.x += 2;
 	}
-	else if(teclado.isDown(keys.UP) && jogador.pos.y >= 2 && verfColisao(jogador, mapa, "C")){
+	else if(teclado.isDown(keys.UP) && jogador.pos.y >= 2){
 		jogador.direcao = "c";
-		jogador.pos.y -= 2;
+		if(verfColisao(jogador, mapa, "C")) jogador.pos.y -= 2;
 	}
-	else if(teclado.isDown(keys.DOWN) && jogador.pos.y <= size.y - 2 && verfColisao(jogador, mapa, "B")){
+	else if(teclado.isDown(keys.DOWN) && jogador.pos.y <= size.y - 2){
 		jogador.direcao = "";
-		jogador.pos.y += 2;
+		if(verfColisao(jogador, mapa, "B")) jogador.pos.y += 2;
 	}
-	
+	var cont = 0;
 	if(teclado.isDown(keys.DOWN) || teclado.isDown(keys.UP) || teclado.isDown(keys.RIGHT) || teclado.isDown(keys.LEFT)){
-		if(jogador.contador >= 2) jogador.contador = 0;
-		else jogador.contador++;
+		if(jogador.contador >= 9){
+			jogador.contador = 0;
+			cont = 0;
+		}
+		else{
+			jogador.contador++;
+			cont = Math.round(jogador.contador / 3) - 1;
+			if(cont < 0) cont = 2;
+		}
 	}
-	jogador.img.src = "sprites/jogador/eusprite" + jogador.direcao.concat(jogador.contador) + ".png";
+	jogador.img.src = "sprites/jogador/eusprite" + jogador.direcao.concat(cont) + ".png";
 	
 	return jogador;
 };
 
 var verfColisao = function(jogador, mapa, direcao){
 	
+	var variavelX = 16;
+	var variavelY = 16;
+	if(direcao == "D") variavelX = 32;
+	else if(direcao == "E") variavelX = 0;
+	else if(direcao == "C") variavelY = 0;
+	else if(direcao == "B") variavelY = 32;
+	posY = jogador.pos.y + variavelY;
+	posX = jogador.pos.x + variavelX;
 	
-	var posY = 1;
-	var posX = 1;
-	if(jogador.pos.y != 0) posY = jogador.pos.y;
-	if(jogador.pos.x != 0) posX = jogador.pos.x;
-	
-	console.log(Math.round((posX * posY) / 40));
-	console.log("X: " + jogador.pos.x + " | Y: " + jogador.pos.y);
-	console.log(((jogador.pos.y / 32) * 40) + (jogador.pos.x / 40));
+	console.log(posY / 32);
+	console.log("X: " + posX + " | Y: " + posY);
+	//console.log(Math.round((Math.floor(posY / 32) * 40) + Math.floor(posX / 32)));
 	
 	if(direcao == "D" || direcao == "E"){
-		if(direcao == "D") var x = Math.floor(((posX + 2) * posY) / 20);
-		else var x = Math.floor(((posX - 2) * posY) / 20);
-		return !(x in mapa[2] || x in mapa[5] || x in mapa[6]);
+		if(direcao == "D") var x = Math.round((Math.floor(posY / 32) * 40) + (Math.floor((posX + 2) / 32)));
+		else var x = Math.round((Math.floor(posY / 32) * 40) + (Math.floor((posX - 2) / 32)));
 	}else{
-		if(direcao == "C") var y = Math.floor((posX * (posY - 2)) / 20);
-		else var y = Math.floor((posX * (posY + 2)) / 20);
-		return !(y in mapa[2] || y in mapa[5] || y in mapa[6]);
+		if(direcao == "C") var x = Math.round(((Math.floor((posY - 2) / 32)) * 40) + Math.floor(posX / 32));
+		else var x = Math.round(((Math.floor((posY + 2) / 32)) * 40) + Math.floor(posX / 32));
 	}
-
+	
+	console.log("Quadro: " + x);
+	return !(x in mapa[2] || x in mapa[5] || x in mapa[6]);
 	
 };
 
