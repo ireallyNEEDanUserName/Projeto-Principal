@@ -35,19 +35,19 @@ var mover = function(teclado, keys, jogador, size, mapa){
 	
 	if(teclado.isDown(keys.LEFT) && jogador.pos.x >= 2){
 		jogador.direcao = "E";
-		if(verfColisao(jogador, mapa, "E", "tudo")) jogador.pos.x -= 2;
+		if(verfColisao(jogador, mapa, jogador.direcao, "tudo")) jogador.pos.x -= 2;
 	}
 	else if(teclado.isDown(keys.RIGHT) && jogador.pos.x <= size.x - 2){
 		jogador.direcao = "D";
-		if(verfColisao(jogador, mapa, "D", "tudo")) jogador.pos.x += 2;
+		if(verfColisao(jogador, mapa, jogador.direcao, "tudo")) jogador.pos.x += 2;
 	}
 	else if(teclado.isDown(keys.UP) && jogador.pos.y >= 2){
 		jogador.direcao = "C";
-		if(verfColisao(jogador, mapa, "C", "tudo")) jogador.pos.y -= 2;
+		if(verfColisao(jogador, mapa, jogador.direcao, "tudo")) jogador.pos.y -= 2;
 	}
 	else if(teclado.isDown(keys.DOWN) && jogador.pos.y <= size.y - 2){
 		jogador.direcao = "";
-		if(verfColisao(jogador, mapa, "B", "tudo")) jogador.pos.y += 2;
+		if(verfColisao(jogador, mapa, jogador.direcao, "tudo")) jogador.pos.y += 2;
 	}
 	
 	if(teclado.isDown(keys.SPACE)){
