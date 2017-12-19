@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>CiviliClications</title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+		<script src="../jquery-3.2.1.js"></script>
+		<script type="text/javascript" src="../scripts/main.js"></script>
+		<link href="../style.css" type="text/css" rel="stylesheet" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<script type="text/javascript" src="japao.js"></script>
+		
+	</head>
+	<body>
+		<div id='Topo'>
+			<div id='Japao'></div> <h1 id='nJogador'></h1>
+		</div>
+
+		<div id='Menu'> 
+			<li><a href='../japao.html'>Home</a></li>
+			<li><a href='povoar.html'>Povoar</a></li>
+			<li><a href='#'>Minerar</a></li>
+			<li><a href='cacar.html'>Caçar</a></li>
+			<li><a href='forjar.html'>Forjar</a></li>
+
+		</div>
+
+		<div id='Centro'>
+			<h2>Senhor, aqui estão disponiveis os recursos das suas minas. </h2>
+			<p id='pop2' onload="testaMining();"></p></br>
+			
+			<form action="" method="post" >
+				Adicionar mineradores: </br>
+				<input type="text" name="quantidade" id="quantidade2" value="0" size="1" readonly="readonly" />
+				<input type="button" value="-" onclick="menos( 'quantidade2' )">
+				<input type="button" value="+" onclick="mais( 'quantidade2' )">
+				<button type="submit" id="enviar2"> Enviar </button>
+			</form>
+	
+			<p> Total de minerios que você possui: 0 </p>
+
+			<p id='mineradoresCarvao' onload="mineradorCarvao();"> </p>
+
+			<p id='mineradoresFerro' onload="mineradorFerro();"> Minerando Ferro: 0 </p>
+
+			<p id='mineradoresOuro' onload="mineradorOuro();"> Minerando Ouro : 0 </p>
+
+			<p id='mineradoresPrata' onload="mineradorPrata();"> Minerando Prata : 0 </p>
+
+			<p id='mineradoresCobre' onload="mineradorCobre();"> Minerando Cobre : 0 </p>
+
+			</div>
+
+		</div>
+
+
+
+<script type="text/javascript">
+	testaMining();
+	mineradorCarvao();
+	mineradorFerro();
+	mineradorOuro();
+	mineradorPrata();
+	mineradorCobre();
+</script>
+	</body>
+</html>

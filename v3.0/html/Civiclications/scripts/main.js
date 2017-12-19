@@ -53,7 +53,7 @@ function miningJapao(){
 };
 
 function samurais(){
-	var samurais = 0
+	var samurais = localStorage.getItem('nsamu');
 	document.getElementById("samuraiJp").innerHTML = "Total de samurais: " + samurais;
 };
 
