@@ -3,7 +3,7 @@ var inicar = function(){
 	var canvas = document.getElementById("mapa");
 	var screen = canvas.getContext('2d');
 	
-	canvas.width = 1290;
+	canvas.width = 1280;
 	canvas.height = 640;
 	
 	var size = {x: canvas.width, y: canvas.height};
@@ -45,7 +45,7 @@ var mover = function(teclado, keys, jogador, size, mapa){
 		jogador.direcao = "C";
 		if(verfColisao(jogador, mapa, jogador.direcao, "tudo")) jogador.pos.y -= 2;
 	}
-	else if(teclado.isDown(keys.DOWN) && jogador.pos.y <= size.y - 2){
+	else if(teclado.isDown(keys.DOWN) && jogador.pos.y <= size.y - 34){
 		jogador.direcao = "";
 		if(verfColisao(jogador, mapa, jogador.direcao, "tudo")) jogador.pos.y += 2;
 	}
