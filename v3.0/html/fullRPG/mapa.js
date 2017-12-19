@@ -20,7 +20,7 @@ var inicar = function(){
 	
 	var tick = function(){
 		
-		jogador = mover(teclado, keys, jogador, size, ret[0]);
+		[jogador, mapa] = mover(teclado, keys, jogador, size, ret[0]);
 		screen.clearRect(0, 0, size.x, size.y);
 		desenharMapa(screen, ret[0], ret[1]);
 		screen.drawImage(jogador.img, jogador.pos.x, jogador.pos.y);
@@ -35,20 +35,27 @@ var mover = function(teclado, keys, jogador, size, mapa){
 	
 	if(teclado.isDown(keys.LEFT) && jogador.pos.x >= 2){
 		jogador.direcao = "E";
-		if(verfColisao(jogador, mapa, "E")) jogador.pos.x -= 2;
+		if(verfColisao(jogador, mapa, "E", "tudo")) jogador.pos.x -= 2;
 	}
 	else if(teclado.isDown(keys.RIGHT) && jogador.pos.x <= size.x - 2){
 		jogador.direcao = "D";
-		if(verfColisao(jogador, mapa, "D")) jogador.pos.x += 2;
+		if(verfColisao(jogador, mapa, "D", "tudo")) jogador.pos.x += 2;
 	}
 	else if(teclado.isDown(keys.UP) && jogador.pos.y >= 2){
-		jogador.direcao = "c";
-		if(verfColisao(jogador, mapa, "C")) jogador.pos.y -= 2;
+		jogador.direcao = "C";
+		if(verfColisao(jogador, mapa, "C", "tudo")) jogador.pos.y -= 2;
 	}
 	else if(teclado.isDown(keys.DOWN) && jogador.pos.y <= size.y - 2){
 		jogador.direcao = "";
-		if(verfColisao(jogador, mapa, "B")) jogador.pos.y += 2;
+		if(verfColisao(jogador, mapa, "B", "tudo")) jogador.pos.y += 2;
 	}
+	
+	if(teclado.isDown(keys.SPACE)){
+		var ret = verfColisao(jogador, mapa, jogador.direcao, "tarefa");
+		if(ret[1] in mapa[5]) delete mapa[5][ret[1]];
+		else if(ret[1] in mapa[6]) delete mapa[6][ret[1]];
+	}
+	
 	var cont = 0;
 	if(teclado.isDown(keys.DOWN) || teclado.isDown(keys.UP) || teclado.isDown(keys.RIGHT) || teclado.isDown(keys.LEFT)){
 		if(jogador.contador >= 9){
@@ -63,17 +70,17 @@ var mover = function(teclado, keys, jogador, size, mapa){
 	}
 	jogador.img.src = "sprites/jogador/eusprite" + jogador.direcao.concat(cont) + ".png";
 	
-	return jogador;
+	return [jogador, mapa];
 };
 
-var verfColisao = function(jogador, mapa, direcao){
+var verfColisao = function(jogador, mapa, direcao, tipo){
 	
 	var variavelX = 16;
 	var variavelY = 16;
 	if(direcao == "D") variavelX = 32;
 	else if(direcao == "E") variavelX = 0;
 	else if(direcao == "C") variavelY = 0;
-	else if(direcao == "B") variavelY = 32;
+	else if(direcao == "") variavelY = 32;
 	posY = jogador.pos.y + variavelY;
 	posX = jogador.pos.x + variavelX;
 	
@@ -90,10 +97,10 @@ var verfColisao = function(jogador, mapa, direcao){
 	}
 	
 	console.log("Quadro: " + x);
-	return !(x in mapa[2] || x in mapa[5] || x in mapa[6]);
+	if(tipo == "tudo") return !(x in mapa[2] || x in mapa[5] || x in mapa[6]);
+	else return [!(x in mapa[5] || x in mapa[6]), x];
 	
 };
-
 
 var criarMapa = function(){
 	
@@ -175,7 +182,6 @@ var desenharMapa = function(screen, mapa, local){
 
 var Keyboarder = function(){
 	var keyState = {};
-	var codeX = 0;
 	
 	window.onkeydown = function(e) {
 		keyState[e.keyCode] = true;
