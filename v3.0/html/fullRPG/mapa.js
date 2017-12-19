@@ -1,3 +1,9 @@
+/*
+
+	FAZER UMA FUNCAO DE ENCONTRAR ROTA PARA OS NPCS SEMPRE TENTAREM ALCANÇAR O PLAYER.
+
+*/
+
 var inicar = function(){
 
 	var canvas = document.getElementById("mapa");
@@ -52,14 +58,14 @@ var desenharNPC = function(screen, npc){
 
 var moverNPC = function(npc){
 	
-	var dado = Math.floor((Math.random() * 8) + 1);
+	var dado = Math.floor((Math.random() * 11) + 1);
 	
 	var npcSelecionado = 0;
 	var direcaoTexto = {1: "E", 2: "D", 3: "C", 4: ""};
 	
-	if(dado <= 3) npcSelecionado = 1;
-	else if(dado <= 6) npcSelecionado = 2;
-	else if(dado <= 9) npcSelecionado = 3;
+	if(dado <= 4) npcSelecionado = 1;
+	else if(dado <= 8) npcSelecionado = 2;
+	else if(dado <= 12) npcSelecionado = 3;
 	
 	npcSelecionado = dado;
 	
@@ -93,8 +99,9 @@ var mover = function(teclado, keys, jogador, size, mapa, direcao = "."){
 	
 	if(teclado.isDown(keys.SPACE)){
 		var ret = verfColisao(jogador, mapa, jogador.direcao, "tarefa");
-		if(ret[1] in mapa[6]) delete mapa[6][ret[1]];
-		else if(ret[1] in mapa[7]) delete mapa[7][ret[1]];
+		console.log(ret);
+		if(ret in mapa[6]) delete mapa[6][ret];
+		else if(ret in mapa[7]) delete mapa[7][ret];
 	}
 	
 	var cont = 0;
@@ -139,7 +146,7 @@ var verfColisao = function(jogador, mapa, direcao, tipo){
 	
 	//console.log("Quadro: " + x);
 	if(tipo == "tudo") return !(x in mapa[2] || x in mapa[6] || x in mapa[7]);
-	else return [!(x in mapa[6] || x in mapa[7]), x];
+	else return x;
 	
 };
 
