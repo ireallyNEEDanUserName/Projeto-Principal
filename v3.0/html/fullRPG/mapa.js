@@ -10,6 +10,12 @@ var inicar = function(){
 	
 	var jogador = {img: document.getElementById("jogador"), pos: {x: 0, y: 0}, direcao: "", contador: 0};
 	
+	var npc = {1: {img: document.getElementById("npc1"), pos: {x: size.x - 32, y: 0}, direcao: "", contador: 0},
+				2: {img: document.getElementById("npc2"), pos: {x: size.x - 32, y: size.y - 32}, direcao: "", contador: 0},
+				3: {img: document.getElementById("npc3"), pos: {x: 0, y: size.y - 32}, direcao: "", contador: 0}}
+	
+	console.log(npc);
+	
 	var ret;
 	ret = criarMapa(screen, size);
 	
@@ -25,39 +31,74 @@ var inicar = function(){
 		desenharMapa(screen, ret[0], ret[1]);
 		screen.drawImage(jogador.img, jogador.pos.x, jogador.pos.y);
 		
+		npc = moverNPC(npc);
+		desenharNPC(screen, npc);
+		
+		for(var chave in npc){
+			mover(teclado, keys, npc[chave], size, ret[0], npc[chave].direcao);
+		}
+		
 		requestAnimationFrame(tick);
 	};
 	
 	tick();
 };
 
-var mover = function(teclado, keys, jogador, size, mapa){
+var desenharNPC = function(screen, npc){
+	for(var key in npc){
+		screen.drawImage(npc[key].img, npc[key].pos.x, npc[key].pos.y);
+	}
+};
+
+var moverNPC = function(npc){
 	
-	if(teclado.isDown(keys.LEFT) && jogador.pos.x >= 2){
+	var dado = Math.floor((Math.random() * 8) + 1);
+	
+	var npcSelecionado = 0;
+	var direcaoTexto = {1: "E", 2: "D", 3: "C", 4: ""};
+	
+	if(dado <= 3) npcSelecionado = 1;
+	else if(dado <= 6) npcSelecionado = 2;
+	else if(dado <= 9) npcSelecionado = 3;
+	
+	npcSelecionado = dado;
+	
+	if(npcSelecionado >= 1 && npcSelecionado <= 3){
+		var direcao = Math.round((Math.random() * 39));
+		var sentido = Math.floor(direcao / 10) + 1;
+		npc[npcSelecionado].direcao = direcaoTexto[sentido];
+	}
+	
+	return npc;
+};
+
+var mover = function(teclado, keys, jogador, size, mapa, direcao = "."){
+	
+	if((teclado.isDown(keys.LEFT) || direcao == "E") && jogador.pos.x >= 2){
 		jogador.direcao = "E";
 		if(verfColisao(jogador, mapa, jogador.direcao, "tudo")) jogador.pos.x -= 2;
 	}
-	else if(teclado.isDown(keys.RIGHT) && jogador.pos.x <= size.x - 2){
+	else if((teclado.isDown(keys.RIGHT) || direcao == "D") && jogador.pos.x <= size.x - 34){
 		jogador.direcao = "D";
 		if(verfColisao(jogador, mapa, jogador.direcao, "tudo")) jogador.pos.x += 2;
 	}
-	else if(teclado.isDown(keys.UP) && jogador.pos.y >= 2){
+	else if((teclado.isDown(keys.UP) || direcao == "C") && jogador.pos.y >= 2){
 		jogador.direcao = "C";
 		if(verfColisao(jogador, mapa, jogador.direcao, "tudo")) jogador.pos.y -= 2;
 	}
-	else if(teclado.isDown(keys.DOWN) && jogador.pos.y <= size.y - 34){
+	else if((teclado.isDown(keys.DOWN) || direcao == "") && jogador.pos.y <= size.y - 34){
 		jogador.direcao = "";
 		if(verfColisao(jogador, mapa, jogador.direcao, "tudo")) jogador.pos.y += 2;
 	}
 	
 	if(teclado.isDown(keys.SPACE)){
 		var ret = verfColisao(jogador, mapa, jogador.direcao, "tarefa");
-		if(ret[1] in mapa[5]) delete mapa[5][ret[1]];
-		else if(ret[1] in mapa[6]) delete mapa[6][ret[1]];
+		if(ret[1] in mapa[6]) delete mapa[6][ret[1]];
+		else if(ret[1] in mapa[7]) delete mapa[7][ret[1]];
 	}
 	
 	var cont = 0;
-	if(teclado.isDown(keys.DOWN) || teclado.isDown(keys.UP) || teclado.isDown(keys.RIGHT) || teclado.isDown(keys.LEFT)){
+	if((teclado.isDown(keys.DOWN) || teclado.isDown(keys.UP) || teclado.isDown(keys.RIGHT) || teclado.isDown(keys.LEFT)) && direcao == "."){
 		if(jogador.contador >= 9){
 			jogador.contador = 0;
 			cont = 0;
@@ -68,7 +109,7 @@ var mover = function(teclado, keys, jogador, size, mapa){
 			if(cont < 0) cont = 2;
 		}
 	}
-	jogador.img.src = "sprites/jogador/eusprite" + jogador.direcao.concat(cont) + ".png";
+	if(direcao == ".") jogador.img.src = "sprites/jogador/eusprite" + jogador.direcao.concat(cont) + ".png";
 	
 	return [jogador, mapa];
 };
@@ -84,8 +125,8 @@ var verfColisao = function(jogador, mapa, direcao, tipo){
 	posY = jogador.pos.y + variavelY;
 	posX = jogador.pos.x + variavelX;
 	
-	console.log(posY / 32);
-	console.log("X: " + posX + " | Y: " + posY);
+	//console.log(posY / 32);
+	//console.log("X: " + posX + " | Y: " + posY);
 	//console.log(Math.round((Math.floor(posY / 32) * 40) + Math.floor(posX / 32)));
 	
 	if(direcao == "D" || direcao == "E"){
@@ -96,9 +137,9 @@ var verfColisao = function(jogador, mapa, direcao, tipo){
 		else var x = Math.round(((Math.floor((posY + 2) / 32)) * 40) + Math.floor(posX / 32));
 	}
 	
-	console.log("Quadro: " + x);
-	if(tipo == "tudo") return !(x in mapa[2] || x in mapa[5] || x in mapa[6]);
-	else return [!(x in mapa[5] || x in mapa[6]), x];
+	//console.log("Quadro: " + x);
+	if(tipo == "tudo") return !(x in mapa[2] || x in mapa[6] || x in mapa[7]);
+	else return [!(x in mapa[6] || x in mapa[7]), x];
 	
 };
 
@@ -107,15 +148,16 @@ var criarMapa = function(){
 	var pos = {x: 0, y: 0};
 	var loop = {x: 0, y: 0};
 	
-	var mapa = {1: {}, 2: {}, 3: {}, 4: {}, 5: {}, 6: {}};
-	var qtd = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0};
+	var mapa = {1: {}, 2: {}, 3: {}, 4: {}, 5: {}, 6: {}, 7: {}};
+	var qtd = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0};
 	
 	var local = {1: document.getElementById("grama"),
 				2: document.getElementById("agua"),
 				3: document.getElementById("calcada"),
 				4: document.getElementById("areia"),
-				5: document.getElementById("arvore"),
-				6: document.getElementById("pedra")};
+				5: document.getElementById("terra"),
+				6: document.getElementById("arvore"),
+				7: document.getElementById("pedra")};
 	
 	for(var x = 0; x < 800; x++){
 		var rand = Math.floor(Math.random() * 4) + 1;
@@ -156,11 +198,11 @@ var criarMapa = function(){
 		loop.x += 1;
 		
 		if(rand == 1 && x in mapa[1]){
-			mapa[5][x] = {x: pos.x, y: pos.y};
-			qtd[5]++;
-		}else if(rand == 5 && x in mapa[3]){
 			mapa[6][x] = {x: pos.x, y: pos.y};
 			qtd[6]++;
+		}else if(rand == 5 && x in mapa[3]){
+			mapa[7][x] = {x: pos.x, y: pos.y};
+			qtd[7]++;
 		}
 		
 	}
