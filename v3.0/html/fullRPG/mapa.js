@@ -18,36 +18,130 @@ var inicar = function(){
 	
 	var npc = {1: {img: document.getElementById("npc1"), pos: {x: size.x - 32, y: 0}, direcao: "", contador: 0},
 				2: {img: document.getElementById("npc2"), pos: {x: size.x - 32, y: size.y - 32}, direcao: "", contador: 0},
-				3: {img: document.getElementById("npc3"), pos: {x: 0, y: size.y - 32}, direcao: "", contador: 0}}
+				3: {img: document.getElementById("npc3"), pos: {x: 0, y: size.y - 32}, direcao: "", contador: 0}};
 	
-	console.log(npc);
+	//console.log(npc);
 	
 	var ret;
 	ret = criarMapa(screen, size);
 	
 	console.log(ret[0]);
 	
+	var evitar = {};
+	for(var key in ret[0]){
+		if(key != 2 && key != 5 && key != 6 && key != 7){
+			console.log(key);
+			for(var keys in ret[0][key]){
+				if(key == 1 || key == 3 || key == 4){
+					if(!(keys in ret[0][6] || keys in ret[0][7])) evitar[keys] = ret[0][key][keys];
+				}
+			}	
+		}
+	}
+	
+	//console.log(evitar);
+	[camNpc, caminho] = melhorCaminho(evitar, verfPos(jogador, ret[0]));
+	//console.log(camNpc);
+	
 	var teclado = new Keyboarder();
-	var keys = teclado.KEYS;
+	var keysTeclado = teclado.KEYS;
+	
+	var xf = 0;
 	
 	var tick = function(){
 		
-		[jogador, mapa] = mover(teclado, keys, jogador, size, ret[0]);
+		[jogador, mapa] = mover(teclado, keysTeclado, jogador, size, ret[0]);
 		screen.clearRect(0, 0, size.x, size.y);
-		desenharMapa(screen, ret[0], ret[1]);
+		desenharMapa(screen, ret[0], ret[1], camNpc);
 		screen.drawImage(jogador.img, jogador.pos.x, jogador.pos.y);
 		
 		npc = moverNPC(npc);
 		desenharNPC(screen, npc);
 		
+		var poss = {};
+		caminho = {};
 		for(var chave in npc){
-			mover(teclado, keys, npc[chave], size, ret[0], npc[chave].direcao);
-		}
+			mover(teclado, keysTeclado, npc[chave], size, ret[0], npc[chave].direcao);
+			[poss[chave], caminho[chave]] = melhorCaminho(evitar, verfPos(npc[chave], ret[0]));
+		}		
+		
+		if(xf <= 5) console.log(caminho); xf++;
+		
+		camNpc = {};
+		for(var key in poss){
+			for(var chave in poss[key]){
+				if(!(chave in camNpc)) camNpc[chave] = poss[key][chave];	
+			}
+		} 
 		
 		requestAnimationFrame(tick);
 	};
 	
 	tick();
+};
+
+var melhorCaminho = function(possivel, pos){
+	var caminho = {};
+	var camPoss = {};
+	var posAtual = pos;
+	var posInicial = pos;
+	//console.log(posAtual);
+	
+	caminho[posAtual] = {};
+	camPoss[posAtual] = 1;
+	
+	var x = 0;
+	var f = 0;
+	var e = 0;
+	
+	for(var z = 0; z <= 100; z++){
+		if(posAtual +1 in possivel || posAtual -1 in possivel || posAtual +40 in possivel || posAtual -40 in possivel){
+			if(posAtual + 1 in possivel && !(posAtual + 1 in camPoss) && posAtual % 39 != 0) camPoss[posAtual + 1] = e;e++;
+			if(posAtual - 1 in possivel && !(posAtual - 1 in camPoss) && posAtual % 40 != 0 && posAtual >= 1) camPoss[posAtual - 1] = e; e++;
+			if(posAtual + 40 in possivel && !(posAtual + 40 in camPoss)) camPoss[posAtual + 40] = e; e++;
+			if(posAtual - 40 in possivel && !(posAtual - 40 in camPoss)) camPoss[posAtual - 40] = e; e++;
+			
+			if(posAtual + 1 in possivel && !(posAtual + 1 in caminho[posInicial]) && posAtual % 39 != 0){
+				posAtual++;
+				caminho[posInicial][posAtual] = f;
+				f++;
+			}
+			else if(posAtual + 40 in possivel && !(posAtual + 40 in caminho[posInicial]) && posAtual <= 760){
+				posAtual += 40;
+				caminho[posInicial][posAtual] = f;
+				f++;
+			}
+			else if(posAtual - 1 in possivel && !(posAtual - 1 in caminho[posInicial]) && (posAtual % 40) != 0 && posAtual >= 1){
+				posAtual--;
+				caminho[posInicial][posAtual] = f;
+				f++;
+			}
+			else if(posAtual - 40 in possivel && !(posAtual - 40 in caminho[posInicial]) && posAtual >= 40){
+				posAtual -= 40;
+				caminho[posInicial][posAtual] = f;
+				f++;
+			}
+			else{
+				for(var key in camPoss){
+					if(key == posInicial && x == 0) x++;
+					else if(x == 1){
+						if(!(key in caminho)){
+							x++;
+							f = 0;
+							posInicial = parseInt(key);
+							caminho[posInicial] = {};
+							posAtual = posInicial;
+						}
+					}
+				}
+				x = 0;
+			}
+		}
+	}
+	
+	//console.log(caminho);
+	return [camPoss, caminho];
+	
 };
 
 var desenharNPC = function(screen, npc){
@@ -97,9 +191,8 @@ var mover = function(teclado, keys, jogador, size, mapa, direcao = "."){
 		if(verfColisao(jogador, mapa, jogador.direcao, "tudo")) jogador.pos.y += 2;
 	}
 	
-	if(teclado.isDown(keys.SPACE)){
+	if(teclado.isDown(keys.SPACE) && direcao == "."){
 		var ret = verfColisao(jogador, mapa, jogador.direcao, "tarefa");
-		console.log(ret);
 		if(ret in mapa[6]) delete mapa[6][ret];
 		else if(ret in mapa[7]) delete mapa[7][ret];
 	}
@@ -148,6 +241,17 @@ var verfColisao = function(jogador, mapa, direcao, tipo){
 	if(tipo == "tudo") return !(x in mapa[2] || x in mapa[6] || x in mapa[7]);
 	else return x;
 	
+};
+
+var verfPos = function(jogador, mapa){
+	var variavelX = 16;
+	var variavelY = 16;
+	posY = jogador.pos.y + variavelY;
+	posX = jogador.pos.x + variavelX;
+	
+	var x = Math.round((Math.floor(posY / 32) * 40) + (Math.floor(posX / 32)));
+	
+	return x;
 };
 
 var criarMapa = function(){
@@ -219,11 +323,12 @@ var criarMapa = function(){
 	return [mapa, local];
 };
 
-var desenharMapa = function(screen, mapa, local){
+var desenharMapa = function(screen, mapa, local, camPoss){
 
 	for(var key in mapa){
 		for(var chave in mapa[key]){
 			screen.drawImage(local[key], mapa[key][chave].x, mapa[key][chave].y);
+			if(chave in camPoss) screen.strokeText(chave, mapa[key][chave].x + 16, mapa[key][chave].y + 16);
 		}
 	}	
 };
