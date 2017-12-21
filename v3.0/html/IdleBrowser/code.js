@@ -259,7 +259,7 @@ var defItens = function(itens){
 	comida.rato = {lvl: 1, tempo: 10, sell: 1, buy: 3, tipo:"cacar", nome:"Rato"};
 	comida.urso = {lvl: 5, tempo: 30, sell: 3, buy: 5, tipo:"cacar", nome:"Urso"};
 	comida.lobo = {lvl: 5, tempo: 25, sell: 2, buy: 4, tipo:"cacar", nome:"Lobo"};
-	comida.jacare = {lvl: 8, tempo: 25, sell: 5, buy: 10, tipo:"cacar", nome:"Jacaré"};
+	comida.jacare = {lvl: 8, tempo: 25, sell: 5, buy: 10, tipo:"cacar", nome:"Jacare"};
 	
 	/* ITENS PARA FORJAR. */
 	forja.espada = {};
@@ -522,6 +522,8 @@ var textoFinalPagina = function(texto){
 
 var popUpItens = function(nome, tipo){
 
+	//console.log(nome, tipo);
+
 	var status = {};
 	status = iniciar(status);
 
@@ -542,7 +544,7 @@ var popUpItens = function(nome, tipo){
 	else{
 		
 		var item = verificarItem(minuscula(nome));
-		
+		//console.log(item);
 		var possui = 0;
 		if(nome in status.inventario) possui = status.inventario[nome];
 
