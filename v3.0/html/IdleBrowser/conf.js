@@ -54,8 +54,9 @@ $(document).ready(function(event){
 		//var refino = verificarRefino($(this).text());
 		var texto = $(this).text();
 		var tipo = $(this).attr("id");
-
-		popUpItens(texto, tipo);
+		
+		if(texto.includes("Empregado")) informacoes(texto);
+		else popUpItens(texto, tipo);
 		/*
 		if(refino[0] != ""){
 			var id = removerEspaco(refino[1].concat(refino[0]));
