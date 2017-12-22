@@ -186,6 +186,9 @@ var moverNPC = function(npc){
 
 var mover = function(teclado, keys, jogador, size, mapa, direcao = "."){
 	
+	var posx = jogador.pos.x;
+	var posy = jogador.pos.y;
+	
 	if((teclado.isDown(keys.LEFT) || direcao == "E") && jogador.pos.x >= 2){
 		jogador.direcao = "E";
 		if(verfColisao(jogador, mapa, jogador.direcao, "tudo")) jogador.pos.x -= 2;
@@ -210,7 +213,7 @@ var mover = function(teclado, keys, jogador, size, mapa, direcao = "."){
 	}
 	
 	var cont = 0;
-	if((teclado.isDown(keys.DOWN) || teclado.isDown(keys.UP) || teclado.isDown(keys.RIGHT) || teclado.isDown(keys.LEFT)) || direcao != "."){
+	if(((teclado.isDown(keys.DOWN) || teclado.isDown(keys.UP) || teclado.isDown(keys.RIGHT) || teclado.isDown(keys.LEFT)) || direcao != ".") && (jogador.pos.x != posx || jogador.pos.y != posy)){
 		if(jogador.contador >= 9){
 			jogador.contador = 0;
 			cont = 0;
