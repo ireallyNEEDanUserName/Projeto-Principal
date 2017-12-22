@@ -16,9 +16,15 @@ var inicar = function(){
 	
 	var jogador = {img: document.getElementById("jogador"), pos: {x: 0, y: 0}, direcao: "", contador: 0};
 	
-	var npc = {1: {img: document.getElementById("npc1"), pos: {x: size.x - 32, y: 0}, direcao: "", contador: 0},
-				2: {img: document.getElementById("npc2"), pos: {x: size.x - 32, y: size.y - 32}, direcao: "", contador: 0},
-				3: {img: document.getElementById("npc3"), pos: {x: 0, y: size.y - 32}, direcao: "", contador: 0}};
+	var npc = {1: {img: document.getElementById("npc1"), pos: {x: size.x - 32, y: 0}, direcao: "", contador: 0, src: "sprites/npc/cabeludo"},
+				2: {img: document.getElementById("npc1"), pos: {x: size.x - 32, y: 0}, direcao: "", contador: 0, src: "sprites/npc/cabeludo"},
+				3: {img: document.getElementById("npc1"), pos: {x: size.x - 32, y: 0}, direcao: "", contador: 0, src: "sprites/npc/cabeludo"},
+				4: {img: document.getElementById("npc2"), pos: {x: size.x /2, y: size.y /2}, direcao: "", contador: 0, src: "sprites/npc/dark"},
+				5: {img: document.getElementById("npc2"), pos: {x: size.x /3, y: size.y /3}, direcao: "", contador: 0, src: "sprites/npc/dark"},
+				6: {img: document.getElementById("npc2"), pos: {x: size.x - 32, y: size.y - 32}, direcao: "", contador: 0, src: "sprites/npc/dark"},
+				7: {img: document.getElementById("npc3"), pos: {x: 0, y: size.y - 32}, direcao: "", contador: 0, src: "sprites/npc/dark"},
+				8: {img: document.getElementById("npc3"), pos: {x: 0, y: size.y - 32}, direcao: "", contador: 0, src: "sprites/npc/dark"},
+				9: {img: document.getElementById("npc3"), pos: {x: 0, y: size.y - 32}, direcao: "", contador: 0, src: "sprites/npc/dark"}};
 	
 	//console.log(npc);
 	
@@ -94,7 +100,7 @@ var melhorCaminho = function(possivel, pos){
 	var f = 0;
 	var e = 0;
 	
-	for(var z = 0; z <= 100; z++){
+	for(var z = 0; z <= 50; z++){
 		if(posAtual +1 in possivel || posAtual -1 in possivel || posAtual +40 in possivel || posAtual -40 in possivel){
 			if(posAtual + 1 in possivel && !(posAtual + 1 in camPoss) && posAtual % 39 != 0) camPoss[posAtual + 1] = e;e++;
 			if(posAtual - 1 in possivel && !(posAtual - 1 in camPoss) && posAtual % 40 != 0 && posAtual >= 1) camPoss[posAtual - 1] = e; e++;
@@ -152,7 +158,7 @@ var desenharNPC = function(screen, npc){
 
 var moverNPC = function(npc){
 	
-	var dado = Math.floor((Math.random() * 11) + 1);
+	var dado = Math.floor((Math.random() * 35) + 1);
 	
 	var npcSelecionado = 0;
 	var direcaoTexto = {1: "E", 2: "D", 3: "C", 4: ""};
@@ -160,10 +166,16 @@ var moverNPC = function(npc){
 	if(dado <= 4) npcSelecionado = 1;
 	else if(dado <= 8) npcSelecionado = 2;
 	else if(dado <= 12) npcSelecionado = 3;
+	else if(dado <= 16) npcSelecionado = 4;
+	else if(dado <= 20) npcSelecionado = 5;
+	else if(dado <= 24) npcSelecionado = 6;
+	else if(dado <= 28) npcSelecionado = 7;
+	else if(dado <= 32) npcSelecionado = 8;
+	else if(dado <= 26) npcSelecionado = 9;
 	
 	npcSelecionado = dado;
 	
-	if(npcSelecionado >= 1 && npcSelecionado <= 3){
+	if(npcSelecionado >= 1 && npcSelecionado <= 9){
 		var direcao = Math.round((Math.random() * 39));
 		var sentido = Math.floor(direcao / 10) + 1;
 		npc[npcSelecionado].direcao = direcaoTexto[sentido];
@@ -198,7 +210,7 @@ var mover = function(teclado, keys, jogador, size, mapa, direcao = "."){
 	}
 	
 	var cont = 0;
-	if((teclado.isDown(keys.DOWN) || teclado.isDown(keys.UP) || teclado.isDown(keys.RIGHT) || teclado.isDown(keys.LEFT)) && direcao == "."){
+	if((teclado.isDown(keys.DOWN) || teclado.isDown(keys.UP) || teclado.isDown(keys.RIGHT) || teclado.isDown(keys.LEFT)) || direcao != "."){
 		if(jogador.contador >= 9){
 			jogador.contador = 0;
 			cont = 0;
@@ -210,6 +222,7 @@ var mover = function(teclado, keys, jogador, size, mapa, direcao = "."){
 		}
 	}
 	if(direcao == ".") jogador.img.src = "sprites/jogador/eusprite" + jogador.direcao.concat(cont) + ".png";
+	else jogador.img.src = jogador.src.concat(jogador.direcao.concat(cont)) + ".png";
 	
 	return [jogador, mapa];
 };
@@ -328,7 +341,7 @@ var desenharMapa = function(screen, mapa, local, camPoss){
 	for(var key in mapa){
 		for(var chave in mapa[key]){
 			screen.drawImage(local[key], mapa[key][chave].x, mapa[key][chave].y);
-			if(chave in camPoss) screen.strokeText(chave, mapa[key][chave].x + 16, mapa[key][chave].y + 16);
+			if(chave in camPoss) screen.strokeText(chave, mapa[key][chave].x + 8, mapa[key][chave].y + 16);
 		}
 	}	
 };
