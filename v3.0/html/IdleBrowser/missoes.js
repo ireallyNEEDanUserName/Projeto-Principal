@@ -218,9 +218,9 @@ var inicializacaoDados = function(){
 		item = verificarItem(tipo);
 		//console.log(item);
 		tipoMaterial = item.nome;
-	}else if(tipo.includes("comida")){
+	}else if(tipo.includes("caca")){
 		texto = "Cacar";
-		classeMaterial = "comida";
+		classeMaterial = "caca";
 		item = itens[classeMaterial][minuscula(tipoMaterial)];
 	}else if(tipo.includes("refinar")){
 		texto = "Forjar";
@@ -262,7 +262,7 @@ var verfTempo = function(classeMaterial, tipoMaterial, item, status){
 	var hab = "lvl";
 	
 	if(classeMaterial == "minerio") hab = hab.concat("Minerar");
-	else if(classeMaterial == "comida") hab = hab.concat("Cacar");
+	else if(classeMaterial == "caca") hab = hab.concat("Cacar");
 	else if(classeMaterial == "forja") hab = hab.concat("Forjar");
 	else if(classeMaterial == "refinar") hab = hab.concat("Forjar");
 	
@@ -355,7 +355,9 @@ var criarMissoes = function(){
 	for(key in status.inventario) objetos += key;
 
 	for(key in itens){
-		if(key != "forja") div += "<h4 class='" + key + "'>" + maiuscula(key) + "</h4>";
+		var h4 = key;
+		if(key == "caca") h4 = "caça";
+		if(key != "forja") div += "<h4 class='" + key + "'>" + maiuscula(h4) + "</h4>";
 		for(keys in itens[key]){
 			if(key != "forja"){
 				if(status.habilidades["lvl" + maiuscula(itens[key][keys].tipo)] >= itens[key][keys].lvl){
