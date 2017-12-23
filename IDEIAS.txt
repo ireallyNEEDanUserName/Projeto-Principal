@@ -1,3 +1,4 @@
 -----Idle Browser-----
+Fazer mais slots para fabricar itens.
 Fazer o mapa em quadrados para fazer um idle de estrategia.
 Fazer classes, possivel upar o lvl da classe, ex: Knight -> Knight +1.
