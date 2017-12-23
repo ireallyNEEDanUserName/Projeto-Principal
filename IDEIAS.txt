@@ -1,0 +1,3 @@
+-----Idle Browser-----
+Fazer o mapa em quadrados para fazer um idle de estrategia.
+Fazer classes, possivel upar o lvl da classe, ex: Knight -> Knight +1.
