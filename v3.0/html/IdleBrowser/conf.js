@@ -1,5 +1,10 @@
 $(document).ready(function(event){
-
+	
+	
+	$('.imgs').mouseover(function(){
+		
+	})
+	
 	$('#barra').click(function(){
 		clickBarraFunc(true);
 		
@@ -15,13 +20,19 @@ $(document).ready(function(event){
 		
 		if(clicked == "buy"){
 			$(document.getElementById('sell')).hide();
+			$(document.getElementById('premium')).hide();
 			$(document.getElementById('buy')).show();
 		}else if(clicked == "sell"){
 			$(document.getElementById('buy')).hide();
+			$(document.getElementById('premium')).hide();
 			$(document.getElementById('sell')).show();
+		}else if(clicked == "premium"){
+			$(document.getElementById('buy')).hide();
+			$(document.getElementById('sell')).hide();
+			$(document.getElementById('premium')).show();
 		}else{
 			$('.minerio').hide();
-			$('.comida').hide();
+			$('.caca').hide();
 			$('.forja').hide();
 			$('.refinar').hide();
 			
