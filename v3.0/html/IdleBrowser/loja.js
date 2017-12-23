@@ -85,8 +85,9 @@ var criarBuy = function(){
 	var div = "<p id='itens'>";
 	
 	for(var key in itens){
-		
-		div += "<h2> " + maiuscula(key) + " </h2>";
+		var h2 = key;
+		if(key == "caca") h2 = "caça";
+		div += "<h2> " + maiuscula(h2) + " </h2>";
 		
 		for(var keys in itens[key]){
 			if(key == "forja"){
@@ -138,25 +139,32 @@ var criarSell = function(){
 	div = "<p id='itens'>";
 	
 	for(var chave in itens){
-		div += "<h3>" + maiuscula(chave) + "</h3>";
+		var h3 = chave;
 		
 		if(chave == "minerio") tituloTipo = "minerar";
 		else if(chave == "forja") tituloTipo = "forjar";
-		else if(chave == "comida") tituloTipo = "cacar";
+		else if(chave == "caca"){
+			h3 = "Caça";
+			tituloTipo = "cacar";
+		}
+		
+		div += "<h3>" + maiuscula(h3) + "</h3>";
 		
 		for(var key in status.inventario){
 		
 			item = verificarItem(minuscula(key));
-			
+
 			try{
-				if(item.tipo == tituloTipo){
-				
-					if(chave != "forja"){
-						try{
-							//console.log(" Nome: " + item.nome + " nome chave: " + maiuscula(key));
-							if(item.nome == maiuscula(key)) div = sellDiv(status, div, item, chave, key);		
-						}catch(err){
-							console.log("Erro na criacao do Div de Sell: " + err);
+				if(item != null){
+					if(item.tipo == tituloTipo){
+					
+						if(chave != "forja"){
+							try{
+								//console.log(" Nome: " + item.nome + " nome chave: " + maiuscula(key));
+								if(item.nome == maiuscula(key)) div = sellDiv(status, div, item, chave, key);		
+							}catch(err){
+								console.log("Erro na criacao do Div de Sell: " + err);
+							}
 						}
 					}
 				}
@@ -173,7 +181,7 @@ var criarSell = function(){
 	for(var chave in itens.forja){
 	
 		if(objetos.indexOf(maiuscula(chave)) > -1){ //Verifica se a chave existe no inventario.
-			console.log("Possui: " + chave);
+			//console.log("Possui: " + chave);
 			div += "<h4>" + maiuscula(chave) + "</h4>";
 
 			for(var key in status.inventario){
