@@ -194,6 +194,11 @@ var checar = function(status){
 				if(typeof status[key][chave] == 'number') status[key][chave]  = Math.floor(status[key][chave]);
 			}
 		}
+		if(key == "empregados"){
+			for(chave in status[key]){
+				if(status[key][chave].tipo == "comida") status[key][chave].tipo = "caca";
+			}
+		}
 	}
 	
 	return status;
@@ -203,8 +208,9 @@ var checar = function(status){
 var iniciarInv = function(inventario){
 	
 	inventario.minerio = 0;
-	inventario.comida = 0;
+	inventario.caca = 0;
 	inventario.dinheiro = 0;
+	inventario.gemas = 0;
 	
 	return inventario;
 };
@@ -241,11 +247,11 @@ var adicionarEmp = function(empregados, funcao, tamanho){
 var defItens = function(itens){
 
 	itens.minerio = {};
-	itens.comida = {};
+	itens.caca = {};
 	itens.forja = {};
 
 	var minerio = itens.minerio;
-	var comida = itens.comida;
+	var caca = itens.caca;
 	var forja = itens.forja;
 	
 	/* MINERIOS PARA MINERAR. */
@@ -256,10 +262,10 @@ var defItens = function(itens){
 	minerio.ouro = {lvl: 10, tempo: 70, sell: 7, buy: 10, tipo:"minerar", nome:"Ouro"};
 	
 	/* ANIMAIS PARA CACAR. */
-	comida.rato = {lvl: 1, tempo: 10, sell: 1, buy: 3, tipo:"cacar", nome:"Rato"};
-	comida.urso = {lvl: 5, tempo: 30, sell: 3, buy: 5, tipo:"cacar", nome:"Urso"};
-	comida.lobo = {lvl: 5, tempo: 25, sell: 2, buy: 4, tipo:"cacar", nome:"Lobo"};
-	comida.jacare = {lvl: 8, tempo: 25, sell: 5, buy: 10, tipo:"cacar", nome:"Jacare"};
+	caca.rato = {lvl: 1, tempo: 10, sell: 1, buy: 3, tipo:"cacar", nome:"Rato"};
+	caca.urso = {lvl: 5, tempo: 30, sell: 3, buy: 5, tipo:"cacar", nome:"Urso"};
+	caca.lobo = {lvl: 5, tempo: 25, sell: 2, buy: 4, tipo:"cacar", nome:"Lobo"};
+	caca.jacare = {lvl: 8, tempo: 25, sell: 5, buy: 10, tipo:"cacar", nome:"Jacare"};
 	
 	/* ITENS PARA FORJAR. */
 	forja.espada = {};
@@ -289,7 +295,7 @@ var defItens = function(itens){
 	
 	
 	itens.minerio = minerio;
-	itens.comida = comida;
+	itens.caca = caca;
 	itens.forja = forja;
 
 	return itens;
@@ -366,8 +372,9 @@ var escrever = function(status){
 	var tipo = {};
 	
 	tipo.minerio = 0;
-	tipo.comida = 0;
+	tipo.caca = 0;
 	tipo.dinheiro = 0;
+	tipo.gemas = 0;
 	
 	for(var key in status.inventario){
 		if(key in tipo) tipo[key] += status.inventario[key];
@@ -381,12 +388,28 @@ var escrever = function(status){
 	console.log("Total de itens");
 	console.log(tipo);
 	
+	var qtd = "";
 	for(var key in tipo){
 		try{
 			var ele = document.getElementById(key + "Qtd");
-			ele.innerHTML = maiuscula(key) + ": " + tipo[key];
+			if(tipo[key] > 1000){
+				ele.style.color = "#cccccc";
+				qtd = (tipo[key] / 1000).toFixed(1) + "k";
+			}else if(tipo[key] > 1000000){
+				ele.style.color = "gold";
+				qtd = (tipo[key] / 1000000).toFixed(1) + "M";
+			}
+			else qtd = tipo[key];
+			ele.innerHTML = qtd;
+			
+			if(key == "caca") var title = "caça";
+			else var title = key;
+			
+			var id = "#" + key + "Cont";
+			$(id).attr({"title": maiuscula(title) + " : " + tipo[key]});
 		}catch(err){
-			console.log("Erro na chamada do code.js da funcao escrever() " + err);
+			console.log("Erro na chamada do code.js da funcao escrever() ");
+			console.log(err);
 		}
 	}
 };
@@ -407,7 +430,7 @@ var upaLevel = function(status, tipo){
 			var random = (Math.round(Math.random() * 10) + 1);
 			var emp = "";
 			if(random <= 5) emp = "minerio";
-			else emp = "comida";
+			else emp = "caca";
 			console.log("Empregado Ganho: " + emp);
 			status.empregados = adicionarEmp(status.empregados, emp, Object.keys(status.empregados).length);
 			console.log("Funcao upaLevel - " + Object.keys(status.empregados).length);
