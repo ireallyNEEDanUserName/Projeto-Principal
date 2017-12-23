@@ -58,6 +58,7 @@ li {
 	display: none;
 	position: absolute;
 	border: 3px solid black;
+	z-index: 10;
 }
 
 .opContent a{
@@ -176,7 +177,7 @@ li {
 	font-size: 20px;
 }
 
-.minerio, .comida, .forja, .refinar{
+.minerio, .caca, .forja, .refinar{
 	display: none;
 	background-color: #6796a0;
 	width: 20%;
@@ -195,17 +196,30 @@ li {
 	background-color: #16c5b0;
 }
 
+.img {
+	position: relative;
+	text-align: center;
+}
 
 #Materiais {
 	background-color: #008B8B;
 	color: white;
 	text-align: center;
+	padding-bottom: 0.5%;
+	padding-top: 0.5%;
 }
 
 .materiais {
+	text-align: center;
 	word-spacing: 5px;
 	margin-left: 10px;
 	font-size: 18px;
+}
+
+.materiais {
+	position: absolute;
+	top: 10%;
+	left: 10%;
 }
 
 /* POPUP DAS MISSOES */
