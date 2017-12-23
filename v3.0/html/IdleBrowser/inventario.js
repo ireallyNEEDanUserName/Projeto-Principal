@@ -13,7 +13,9 @@ var impInv = function(){
 	var div = "<div id='inventario'>";
 	
 	for(var key in itens){
-		div += "<h2>" + maiuscula(key) + "</h2>";
+		var h2 = key;
+		if(key == "caca") h2 = "caça";
+		div += "<h2>" + maiuscula(h2) + "</h2>";
 		div += "<p>";
 		for(var chave in itens[key]){		
 			if(maiuscula(chave) in status.inventario) div += maiuscula(chave) + " : " + status.inventario[maiuscula(chave)] + " | ";	
