@@ -605,7 +605,10 @@ var popUpItens = function(nome, tipo){
 			if(item.req != null){			
 				for(var chave in item.req){
 					if(x >= 1) req += " | ";
-					req += item.req[chave] + " " + chave;
+					//console.log(status.inventario[maiuscula(chave)] + " "  + chave);
+					var qtdInv = status.inventario[maiuscula(chave)];
+					if(!(maiuscula(chave) in status.inventario)) qtdInv = 0;
+					req += item.req[chave] + " " + maiuscula(chave) + " - " + qtdInv;
 					x++;
 				}
 				texto = "Item lvl: " + item.lvl + " | Req: " + req + " | Possui: " + possui;
