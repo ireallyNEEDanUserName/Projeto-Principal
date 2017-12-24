@@ -45,7 +45,7 @@ var impInv = function(){
 	}
 	
 	
-	div += "</div>";
+	div += "</div><br>";
 	
 	ult.insertAdjacentHTML('afterend', div);
 	
