@@ -103,7 +103,7 @@ var criarBuy = function(){
 				}
 			}
 			else{
-				div += "<i>" +  maiuscula(keys) + ": </i>"+
+				div += "<i>" +  itens[key][keys].nome + ": </i>"+
 						"<i id=" + keys + "Qtdbuy>  1 </i>" +
 						" | Custa: " +
 						"<i id=" + keys + "Valbuy>" + itens[key][keys].buy + "</i> | " +
@@ -114,7 +114,7 @@ var criarBuy = function(){
 		}
 	}
 	
-	div += "</p>";
+	div += "</p><br>";
 	
 	titulo.insertAdjacentHTML('afterend', div);
 	
@@ -193,7 +193,7 @@ var criarSell = function(){
 		}
 	}
 	
-	div += "<\p>";
+	div += "<\p><br>";
 	
 	titulo.insertAdjacentHTML('beforeend', div);
 };
