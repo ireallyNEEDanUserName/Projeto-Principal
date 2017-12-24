@@ -17,8 +17,9 @@ var impInv = function(){
 		if(key == "caca") h2 = "caça";
 		div += "<h2>" + maiuscula(h2) + "</h2>";
 		div += "<p>";
-		for(var chave in itens[key]){		
-			if(maiuscula(chave) in status.inventario) div += maiuscula(chave) + " : " + status.inventario[maiuscula(chave)] + " | ";	
+		for(var chave in itens[key]){	
+			if(status.inventario[itens[key][chave].nome] <= 0) delete status.inventario[itens[key][chave].nome];
+			if(itens[key][chave].nome in status.inventario) div += itens[key][chave].nome + " : " + status.inventario[itens[key][chave].nome] + " | ";	
 		}
 		div += " </p>";
 	}
