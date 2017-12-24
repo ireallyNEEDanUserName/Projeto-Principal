@@ -35,6 +35,7 @@ $(document).ready(function(event){
 			$('.caca').hide();
 			$('.forja').hide();
 			$('.refinar').hide();
+			$('.comida').hide();
 			
 			//$('.habilidade').show();
 			$("." + clicked).show();
@@ -126,8 +127,9 @@ $(document).ready(function(event){
 
 	$('.compra').click(function(){
 
-		var nome = $(this).attr("value");
-		var valor = parseInt($("#" + nome + "Qtdbuy").text());	
+		var nome = $(this).attr("nome");
+		var value = $(this).attr("value");
+		var valor = parseInt($("#" + value + "Qtdbuy").text());	
 		var tipo = $(this).attr("outro");
 
 		//console.log(nome + " " + valor + " " + tipo);
