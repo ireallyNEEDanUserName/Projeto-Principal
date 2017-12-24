@@ -256,10 +256,10 @@ var defItens = function(itens){
 	
 	/* MINERIOS PARA MINERAR. */
 	minerio.pedra = {lvl: 1, tempo: 10, sell: 1, buy: 3, tipo:"minerar", nome:"Pedra"};
-	minerio.cobre = {lvl: 3, tempo: 20, sell: 1, buy: 3, tipo:"minerar", nome:"Cobre"};
-	minerio.ferro = {lvl: 5, tempo: 30, sell: 2, buy: 5, tipo:"minerar", nome:"Ferro"};
-	minerio.prata = {lvl: 8, tempo: 40, sell: 3, buy: 7, tipo:"minerar", nome:"Prata"};
-	minerio.ouro = {lvl: 10, tempo: 70, sell: 7, buy: 10, tipo:"minerar", nome:"Ouro"};
+	minerio.cobre = {lvl: 3, tempo: 20, sell: 1, buy: 3, tipo:"minerar", nome:"Minerio de Cobre"};
+	minerio.ferro = {lvl: 5, tempo: 30, sell: 2, buy: 5, tipo:"minerar", nome:"Minerio de Ferro"};
+	minerio.prata = {lvl: 8, tempo: 40, sell: 3, buy: 7, tipo:"minerar", nome:"Minerio de Prata"};
+	minerio.ouro = {lvl: 10, tempo: 70, sell: 7, buy: 10, tipo:"minerar", nome:"Minerio de Ouro"};
 	
 	/* ANIMAIS PARA CACAR. */
 	caca.rato = {lvl: 1, tempo: 10, sell: 1, buy: 3, tipo:"cacar", nome:"Rato"};
@@ -268,23 +268,29 @@ var defItens = function(itens){
 	caca.jacare = {lvl: 8, tempo: 25, sell: 5, buy: 10, tipo:"cacar", nome:"Jacare"};
 	
 	/* ITENS PARA FORJAR. */
+	forja.barra = {};
 	forja.espada = {};
 	forja.capacete = {};
 	forja.bota = {};
 	forja.escudo = {};
 	forja.luva = {};
 	
+	forja.barra.cobre = {lvl: 3, tempo: 25, sell: 5, buy: 7, tipo:"forjar", req: { "Minerio de Cobre": 4 }, nome:"Barra de Cobre"};
+	forja.barra.ferro = {lvl: 5, tempo: 40, sell: 10, buy: 15, tipo:"forjar", req: { pedra: 1, "Minerio de Ferro": 2 }, nome:"Barra de Ferro"};
+	forja.barra.prata = {lvl: 8, tempo: 50, sell: 15, buy: 25, tipo:"forjar", req: { pedra: 2, "Minerio de Prata": 1 }, nome:"Barra de Prata"};
+	forja.barra.ouro = {lvl: 10, tempo: 80, sell: 50, buy: 70, tipo:"forjar", req: { "Minerio de Prata": 1, "Minerio de Ouro": 3 }, nome:"Barra de Ouro"};
+	
 	forja.espada.pedra = {lvl: 1, tempo: 10, sell: 5, buy: 10, req: { pedra: 4 }, tipo:"forjar", nome:"Espada de Pedra", estatisticas: {atk: 1, precisao: 20, vel: 1}};
-	forja.espada.cobre = {lvl: 5, tempo: 15, sell: 6, buy: 13, req: { cobre: 4, pedra: 1 }, tipo:"forjar", nome:"Espada de Cobre", estatisticas: {atk: 2, precisao: 25, vel: 2}};
-	forja.espada.ferro = {lvl: 7, tempo: 35, sell: 7, buy: 18, req: { cobre: 2, pedra: 1, ferro: 2 }, tipo:"forjar", nome:"Espada de Ferro", estatisticas: {atk: 5, precisao: 25, vel: 3}};
+	forja.espada.cobre = {lvl: 5, tempo: 15, sell: 6, buy: 13, req: { "Barra de Cobre": 4, pedra: 1 }, tipo:"forjar", nome:"Espada de Cobre", estatisticas: {atk: 2, precisao: 25, vel: 2}};
+	forja.espada.ferro = {lvl: 7, tempo: 35, sell: 7, buy: 18, req: { "Barra de Cobre": 2, pedra: 1, "Barra de Ferro": 2 }, tipo:"forjar", nome:"Espada de Ferro", estatisticas: {atk: 5, precisao: 25, vel: 3}};
 	
 	forja.capacete.pedra = {lvl: 1, tempo: 15, sell: 5, buy: 10, req: { pedra: 5 }, tipo:"forjar", nome:"Capacete de Pedra", estatisticas: {defFisica: 10, vel: -1}};
-	forja.capacete.cobre = {lvl: 4, tempo: 25, sell: 15, buy: 35, req: { cobre: 5 }, tipo:"forjar", nome:"Capacete de Cobre", estatisticas: {defFisica: 20, vel: -3}};
-	forja.capacete.ferro = {lvl: 7, tempo: 40, sell: 20, buy: 50, req: { ferro: 5, pedra: 2 }, tipo:"forjar", nome:"Capacete de Ferro", estatisticas: {defFisica: 25, vel: -3}};
+	forja.capacete.cobre = {lvl: 4, tempo: 25, sell: 15, buy: 35, req: { "Barra de Cobre": 5 }, tipo:"forjar", nome:"Capacete de Cobre", estatisticas: {defFisica: 20, vel: -3}};
+	forja.capacete.ferro = {lvl: 7, tempo: 40, sell: 20, buy: 50, req: { "Barra de Ferro": 5, pedra: 2 }, tipo:"forjar", nome:"Capacete de Ferro", estatisticas: {defFisica: 25, vel: -3}};
 	
 	forja.bota.pedra = {lvl: 1, tempo: 5, sell: 2, buy: 10, req: { pedra: 2 }, tipo:"forjar", nome:"Bota de Pedra", estatisticas: {defFisica: 10, vel: -1}};
-	forja.bota.cobre = {lvl: 3, tempo: 10, sell: 5, buy: 20, req: { cobre: 3 }, tipo:"forjar", nome:"Bota de Cobre", estatisticas: {defFisica: 15, vel: -1}};
-	forja.bota.ferro = {lvl: 5, tempo: 20, sell: 10, buy: 30, req: { ferro: 3 }, tipo:"forjar", nome:"Bota de Ferro", estatisticas: {defFisica: 20, vel: -3}};
+	forja.bota.cobre = {lvl: 3, tempo: 10, sell: 5, buy: 20, req: { "Barra de Cobre": 3 }, tipo:"forjar", nome:"Bota de Cobre", estatisticas: {defFisica: 15, vel: -1}};
+	forja.bota.ferro = {lvl: 5, tempo: 20, sell: 10, buy: 30, req: { "Barra de Ferro": 3 }, tipo:"forjar", nome:"Bota de Ferro", estatisticas: {defFisica: 20, vel: -3}};
 	
 	forja.escudo.pedra = {lvl: 2, tempo: 10, sell: 2, buy: 10, req: { pedra: 2, rato: 1 }, tipo:"forjar", nome:"Escudo de Pedra", estatisticas: {defFisica: 30, vel: -2}};
 	forja.escudo.rato = {lvl: 2, tempo: 7, sell: 2, buy: 7, req: { rato: 5 }, tipo:"forjar", nome:"Escudo de Couro de Rato", estatisticas: {defFisica: 7, defMagica: 7, vel: 2}};
@@ -513,7 +519,8 @@ var verificarItem = function(nome){
 	for(var chave in itens){
 		for(var key in itens[chave]){
 			if(nome.indexOf(key) > -1){
-				if(!(maiuscula(nome) == itens[chave][key].nome)){
+				//console.log(key);
+				if(maiuscula(nome) != itens[chave][key].nome){
 					for(var keys in itens[chave][key]){
 						if(nome.indexOf(keys) > -1){
 							//console.log(itens[chave][key][keys]);
