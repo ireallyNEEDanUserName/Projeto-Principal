@@ -121,6 +121,8 @@ var checar = function(status){
 	estrutura.habilidades.expForjar = 0;
 	estrutura.habilidades.lvlCacar = 1;
 	estrutura.habilidades.expCacar = 0;
+	estrutura.habilidades.lvlCozinhar = 1;
+	estrutura.habilidades.expCozinhar = 0;
 	estrutura.habilidades.lvlChefe = 1;
 	estrutura.habilidades.expChefe = 0;
 	
@@ -246,13 +248,22 @@ var adicionarEmp = function(empregados, funcao, tamanho){
 //Função para criar itens;
 var defItens = function(itens){
 
+	itens.geral = {};
+
 	itens.minerio = {};
 	itens.caca = {};
+	itens.comida = {};
 	itens.forja = {};
-
+	
+	var geral = itens.geral;
 	var minerio = itens.minerio;
 	var caca = itens.caca;
+	var comida = itens.comida;
 	var forja = itens.forja;
+	
+	/* ITENS NO GERAL */
+	
+	geral.agua = {lvl: 1, tempo: 0, sell: 1, buy: 1, tipo:"geral", nome:"Garrafa de Agua"};
 	
 	/* MINERIOS PARA MINERAR. */
 	minerio.pedra = {lvl: 1, tempo: 10, sell: 1, buy: 3, tipo:"minerar", nome:"Pedra"};
@@ -266,6 +277,14 @@ var defItens = function(itens){
 	caca.urso = {lvl: 5, tempo: 30, sell: 3, buy: 5, tipo:"cacar", nome:"Urso"};
 	caca.lobo = {lvl: 5, tempo: 25, sell: 2, buy: 4, tipo:"cacar", nome:"Lobo"};
 	caca.jacare = {lvl: 8, tempo: 25, sell: 5, buy: 10, tipo:"cacar", nome:"Jacare"};
+	
+	/* ANIMAIS PARA COZINHAR. */
+	
+	comida.rato = {lvl: 1, tempo: 5, sell: 0, buy: 2, tipo:"cozinhar", req: { rato: 1 }, nome:"Carne de Rato", cura: 5};
+	comida.rato = {lvl: 3, tempo: 15, sell: 7, buy: 10, tipo:"cozinhar", req: { rato: 1, "Garrafa de Agua": 1 }, nome:"Sopa de Rato", cura: 7};
+	comida.urso = {lvl: 8, tempo: 20, sell: 5, buy: 7, tipo:"cozinhar", req: { urso: 1 }, nome:"Carne de Urso", cura: 10};
+	comida.lobo = {lvl: 5, tempo: 10, sell: 4, buy: 5, tipo:"cozinhar", req: { lobo: 1 }, nome:"Carne de Lobo", cura: 7};
+	comida.jacare = {lvl: 10, tempo: 15, sell: 10, buy: 15, tipo:"cozinhar", req: { jacare: 1 }, nome:"Carne de Jacare", cura: 20};
 	
 	/* ITENS PARA FORJAR. */
 	forja.barra = {};
@@ -302,6 +321,8 @@ var defItens = function(itens){
 	
 	itens.minerio = minerio;
 	itens.caca = caca;
+	itens.comida = comida;
+	itens.geral = geral;
 	itens.forja = forja;
 
 	return itens;
