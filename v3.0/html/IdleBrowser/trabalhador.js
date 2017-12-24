@@ -52,7 +52,7 @@ var criarHTML = function(empregados, tamanho){
 			"<div id=" + maiuscula(empregados[nome].tipo) + ">" +	
 			"<p id=" + maiuscula(empregados[nome].tipo) + "Item' class='item'>Empregado " + tamanho + ": " + maiuscula(tipoItem) + "</p>" +
 			"<div id='barraProgresso" + nome +"' class='progresso'>" +
-			"<div id='barra" + nome +"' class='barra'>0 %</div>" +
+			"<div id='barraLoad" + nome +"' class='barraLoad'>0 %</div>" +
 			"</div>" +
 			"</div>" +
 			"</div>";
@@ -90,6 +90,7 @@ var updateOffline = function(status){
 		//TEMPO TOTAL OFFLINE
 		var tempoOffline = atual - status.empregados[nome].offline;
 		invTipo = verfTipo(itens, status.empregados[nome]);
+		var material = itens[status.empregados[nome].tipo][invTipo].nome;
 		var tempoNecessarioTarefa = itens[status.empregados[nome].tipo][invTipo].tempo;
 		//SE TEMPO FOR MAIOR QUE 6H MUDAR PARA 6H
 		if(tempoOffline > (21600 + status.empregados[nome].lvl)) tempoOffline = 21600 + status.empregados[nome].lvl;
@@ -102,10 +103,10 @@ var updateOffline = function(status){
 		totalItens += qtd; //Total de itens que todos trabalhadores pegaram.
 		//SE TEMPO OFFLINE FOR MAIOR QUE 1MIN ADICIONAR NO INVENTARIO E DEFINIR TEMPO OFFLINE COMO ATUAL.
 		if(qtd >= 1){
-			if(maiuscula(invTipo) in status.inventario) status.inventario[maiuscula(invTipo)] += qtd;
+			if(material in status.inventario) status.inventario[material] += qtd;
 			else{
-				status.inventario[maiuscula(invTipo)] = 0;
-				status.inventario[maiuscula(invTipo)] += qtd;
+				status.inventario[material] = 0;
+				status.inventario[material] += qtd;
 			}
 			status.empregados[nome].exp += exp;
 			status.empregados[nome].offline = atual;
@@ -159,6 +160,7 @@ var updateEmp = function(status){
 		for(x = 1; x <= tamanho; x++){
 			nome = "n" + x; //nome do trabalhador.
 			tipo = verfTipo(itens, status.empregados[nome]);
+			var material = itens[status.empregados[nome].tipo][invTipo].nome;
 			tempoDesdeOInicio[x] = atual - inicial[x];
 			tempoMaterial = itens[status.empregados[nome].tipo][invTipo].tempo - Math.floor((status.empregados[nome].lvl / 2)); //tempo que demora para pegar o material.
 			if(tempoMaterial < 0) tempoMaterial = 1;
@@ -166,7 +168,7 @@ var updateEmp = function(status){
 			qtdMaterial = 1 + Math.floor(status.empregados[nome].lvl / itens[status.empregados[nome].tipo][invTipo].lvl); //qtuantidade de material que o empregado pega.
 			tipoMaterial = maiuscula(tipo);
 		
-			var barra = document.getElementById("barra" + nome);
+			var barra = document.getElementById("barraLoad" + nome);
 			var barraCheia = document.getElementById("barraProgresso" + nome);
 			
 			//Caso o tempo seja maior ou igual o tempo necessario.
@@ -176,10 +178,10 @@ var updateEmp = function(status){
 				status.empregados[nome].offline = inicial[x]; //adicionar no tempo offline o tempo atual como inicial.
 				tempoDesdeOInicio.x = 0; 
 				//adicionar o material no inventario.
-				if(tipoMaterial in status.inventario) status.inventario[tipoMaterial] += qtdMaterial;
+				if(material in status.inventario) status.inventario[material] += qtdMaterial;
 				else{
-					status.inventario[tipoMaterial] = 0;
-					status.inventario[tipoMaterial] += qtdMaterial;
+					status.inventario[material] = 0;
+					status.inventario[material] += qtdMaterial;
 				}
 				
 				status.empregados[nome].exp += qtdMaterial; //adicionar no exp no empregado a quantidade de material pego.
@@ -221,7 +223,8 @@ var informacoes = function(texto){
 	try{
 		document.body.removeChild(objeto);
 	}catch(err){
-		console.log("Erro informacoes Empregado " + err);
+		console.log("Erro informacoes Empregado ");
+		console.log(err);
 	}
 	
 	var status = {};
