@@ -202,7 +202,11 @@ var inicializacaoDados = function(){
 	itens = defItens(itens);
 	
 	var tipo = status.habilidades.acao.tipo;
-	var tipoMaterial = status.habilidades.acao.material;
+	var item = verificarItem(minuscula(status.habilidades.acao.material));
+	console.log(item);
+	var tipoMaterial = item.nome;
+	console.log(tipoMaterial);
+	
 	
 	var dados = [];
 	
@@ -211,25 +215,27 @@ var inicializacaoDados = function(){
 	if(tipo.includes("minerio")){
 		texto = "Minerar";
 		classeMaterial = "minerio";
-		item = itens[classeMaterial][minuscula(tipoMaterial)];
+		//item = itens[classeMaterial][minuscula(tipoMaterial)];
 	}else if(tipo.includes("forja")){
 		texto = "Forjar";
 		classeMaterial = "forja";
-		item = verificarItem(tipo);
+		//item = verificarItem(tipo);
 		//console.log(item);
-		tipoMaterial = item.nome;
 	}else if(tipo.includes("caca")){
 		texto = "Cacar";
 		classeMaterial = "caca";
-		item = itens[classeMaterial][minuscula(tipoMaterial)];
+		//item = itens[classeMaterial][minuscula(tipoMaterial)];
 	}else if(tipo.includes("refinar")){
 		texto = "Forjar";
 		classeMaterial = "refinar";
-		item = verificarItem(tipo);
+		//item = verificarItem(tipo);
 		//console.log(item);
 		itemRefino = verificarRefino(tipoMaterial);
 		if(itemRefino[0] == "") itemRefino[0] = 1;
 	}
+	
+	tipoMaterial = item.nome;
+	console.log(tipoMaterial);
 	
 	qtdMaterial = 1 + (Math.round(status.habilidades["lvl".concat(texto)] - item.lvl) - parseInt(itemRefino[0]));
 	if(qtdMaterial <= 0) qtdMaterial = 1;
@@ -247,7 +253,7 @@ var inicializacaoBarras = function(){
 	
 	var barras = [];
 	
-	barras[0] = document.getElementById("barra");
+	barras[0] = document.getElementById("barraLoad");
 	barras[1] = document.getElementById("barraProgresso");
 	barras[2]  = "";
 	
@@ -363,11 +369,11 @@ var criarMissoes = function(){
 				if(status.habilidades["lvl" + maiuscula(itens[key][keys].tipo)] >= itens[key][keys].lvl){
 					div += "<div id='" + itens[key][keys].tipo + "' class='" + key + "'>" +
 							"<div id='" + maiuscula(keys) + "'>" +
-							"<p id='" + key.concat(keys) + "' class='item'>" + maiuscula(keys) + "</p>" +
+							"<p id='" + key.concat(keys) + "' class='item'>" + itens[key][keys].nome + "</p>" +
 							"</div> </div>";
 				}
 			}else{
-				div += "<div class='" + key + "' id='" + keys + "'>"
+				div += "<div class='" + key + "' id='" + keys + "' caixas='caixas'>"
 				div += maiuscula(keys);
 				for(chaveForja in itens[key][keys]){
 					var nome = itens[key][keys][chaveForja].nome;
@@ -383,28 +389,30 @@ var criarMissoes = function(){
 		}		
 	}
 	
+	//FAZ AS OPCOES DE REFINAR.
 	for(var chave in itens.forja){
-		
-		if(objetos.indexOf(maiuscula(chave)) > -1){ //Verifica se a chave existe no inventario.
-			div += "<div class='refinar' id='" + chave + "'>";
-			div += maiuscula(chave);
-			for(var key in status.inventario){
-				if(key.includes(maiuscula(chave))){
-					var refinarItem = verificarItem(minuscula(key));
-					var nome = removerEspaco(minuscula(key));
-					var refino = verificarRefino(key);
-					var val = 0;
-					if(refino[0] != "") val = parseInt(refino[0]);
-					console.log((refinarItem.lvl * 2) + val);
-					if(status.habilidades["lvl" + maiuscula(refinarItem.tipo)] >= (refinarItem.lvl * 2) + val){
-						div += "<div id='forjar'>" +
-								"<div id='" + nome + "'>" +
-								"<p id='" + "refinar".concat(nome) + "' class='item'>" + key + "</p>" +
-								"</div> </div>";
+		if(chave != "barra"){
+			if(objetos.indexOf(maiuscula(chave)) > -1){ //Verifica se a chave existe no inventario.
+				div += "<div class='refinar' id='" + chave + "'>";
+				div += maiuscula(chave);
+				for(var key in status.inventario){
+					if(key.includes(maiuscula(chave))){
+						var refinarItem = verificarItem(minuscula(key));
+						var nome = removerEspaco(minuscula(key));
+						var refino = verificarRefino(key);
+						var val = 0;
+						if(refino[0] != "") val = parseInt(refino[0]);
+						//console.log((refinarItem.lvl * 2) + val);
+						if(status.habilidades["lvl" + maiuscula(refinarItem.tipo)] >= (refinarItem.lvl * 2) + val){
+							div += "<div id='forjar'>" +
+									"<div id='" + nome + "'>" +
+									"<p id='" + "refinar".concat(nome) + "' class='item'>" + key + "</p>" +
+									"</div> </div>";
+						}
 					}
 				}
+				div += "</div>";
 			}
-			div += "</div>";
 		}
 	}
 	
