@@ -12,14 +12,14 @@ var addInv = function(nome, qtd, tipo){
 	var itens = {}; 
 	itens = defItens(itens);
 	
-	console.log(nome);
-	if(tipo == "forja"){
-		item = verificarItem(nome);
-		nome = item.nome;
-	}
-	else item = itens[tipo][nome];
+	//console.log(nome);
+
+	item = verificarItem(nome);
+	console.log(item);
+	nome = item.nome;
+
 	
-	console.log(item.buy);
+	//console.log(item.buy);
 	
 	var custo = item.buy;
 	var preco = qtd * custo;
@@ -146,7 +146,7 @@ var criarSell = function(){
 		else if(chave == "caca"){
 			h3 = "Caça";
 			tituloTipo = "cacar";
-		}
+		}else if(chave == "comida") tituloTipo = "cozinhar";
 		
 		div += "<h3>" + maiuscula(h3) + "</h3>";
 		
