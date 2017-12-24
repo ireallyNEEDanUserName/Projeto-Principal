@@ -34,6 +34,7 @@ var escreverStatus = function(status){
 					if(chave.includes("Minerar")) texto = "Minerar";	
 					else if(chave.includes("Forjar")) texto = "Forjar";
 					else if(chave.includes("Caca")) texto = "Cacar";
+					else if(chave.includes("Cozinhar")) texto = "Cozinhar";
 					else if(chave.includes("Chefe")) texto = "Chefe";
 					else if(chave.includes("Combate")) texto = "Combate";
 
