@@ -177,7 +177,7 @@ li {
 	font-size: 20px;
 }
 
-.minerio, .caca, .forja, .refinar, .comida{
+div[caixas=caixas]{
 	display: none;
 	background-color: #6796a0;
 	width: 20%;
