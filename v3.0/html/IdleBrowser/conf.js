@@ -31,13 +31,8 @@ $(document).ready(function(event){
 			$(document.getElementById('sell')).hide();
 			$(document.getElementById('premium')).show();
 		}else{
-			$('.minerio').hide();
-			$('.caca').hide();
-			$('.forja').hide();
-			$('.refinar').hide();
-			$('.comida').hide();
-			
-			//$('.habilidade').show();
+			$("[caixas='caixas']").hide();
+
 			$("." + clicked).show();
 		}
 		
@@ -140,14 +135,14 @@ $(document).ready(function(event){
 	
 	$('.venda').click(function(){
 		
-		var nome = $(this).attr("value");
-		var produto = $(this).attr("nome");
-		var qtd = parseInt($("#" + nome + "Qtdsell").text());	
+		var value = $(this).attr("value");
+		var nome = $(this).attr("nome");
+		var qtd = parseInt($("#" + value + "Qtdsell").text());	
 		var tipo = $(this).attr("outro");
 
 		//console.log(nome + " " + valor + " " + tipo);
 		
-		venderInv(minuscula(produto), qtd, tipo);
+		venderInv(nome, qtd, tipo);
 		
 	})
 	
