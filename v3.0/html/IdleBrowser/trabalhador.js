@@ -43,6 +43,7 @@ var criarHTML = function(empregados, tamanho){
 	//NOME PARA ACESSAR O FUNCIONARIO EX: N1
 	var nome = "n" + tamanho; 
 	var tipoItem = verfTipo(itens, empregados[nome]);
+	console.log(nome + " " + tipoItem.nome + " " + tipoItem.tempo);
 	
 	//ADICIONAR O FUNCIONARIO ABAIXO DO MENU
 	var ult = document.getElementById('Menu');
@@ -50,7 +51,7 @@ var criarHTML = function(empregados, tamanho){
 	//HTML DE CADA FUNCIONARIO.
 	var emp = "<br><div id=" + nome + " class='Empregado'>" +
 			"<div id=" + maiuscula(empregados[nome].tipo) + ">" +	
-			"<p id=" + maiuscula(empregados[nome].tipo) + "Item' class='item'>Empregado " + tamanho + ": " + maiuscula(tipoItem) + "</p>" +
+			"<p id='" + maiuscula(empregados[nome].tipo) + "Item" + nome + "' class='item'>Empregado " + tamanho + ": " + tipoItem.nome + "</p>" +
 			"<div id='barraProgresso" + nome +"' class='progresso'>" +
 			"<div id='barraLoad" + nome +"' class='barraLoad'>0 %</div>" +
 			"</div>" +
@@ -90,15 +91,16 @@ var updateOffline = function(status){
 		//TEMPO TOTAL OFFLINE
 		var tempoOffline = atual - status.empregados[nome].offline;
 		invTipo = verfTipo(itens, status.empregados[nome]);
-		var material = itens[status.empregados[nome].tipo][invTipo].nome;
-		var tempoNecessarioTarefa = itens[status.empregados[nome].tipo][invTipo].tempo;
+		console.log(nome + " " + invTipo.nome + " " + invTipo.tempo);
+		var material = invTipo.nome;
+		var tempoNecessarioTarefa = invTipo.tempo;
 		//SE TEMPO FOR MAIOR QUE 6H MUDAR PARA 6H
 		if(tempoOffline > (21600 + status.empregados[nome].lvl)) tempoOffline = 21600 + status.empregados[nome].lvl;
-		qtd = 1 + Math.round(status.empregados[nome].lvl / itens[status.empregados[nome].tipo][invTipo].lvl) * Math.floor(tempoOffline / tempoNecessarioTarefa); //qtd de itens que o trabalhador pega.
+		qtd = 1 + Math.round(status.empregados[nome].lvl / invTipo.lvl) * Math.floor(tempoOffline / tempoNecessarioTarefa); //qtd de itens que o trabalhador pega.
 
 		console.log("Tempo Atual: " + atual, "| Tempo do Empregado: " + status.empregados[nome].offline, "| Tempo Offline: " + tempoOffline + " | Qtd: " + qtd);
 		
-		exp = Math.round((1 + qtd) * itens[status.empregados[nome].tipo][invTipo].lvl);
+		exp = Math.round((1 + qtd) * invTipo.lvl);
 		console.log("Experiencia do Empregado: " + exp);
 		totalItens += qtd; //Total de itens que todos trabalhadores pegaram.
 		//SE TEMPO OFFLINE FOR MAIOR QUE 1MIN ADICIONAR NO INVENTARIO E DEFINIR TEMPO OFFLINE COMO ATUAL.
@@ -108,6 +110,7 @@ var updateOffline = function(status){
 				status.inventario[material] = 0;
 				status.inventario[material] += qtd;
 			}
+			console.log(material);
 			status.empregados[nome].exp += exp;
 			status.empregados[nome].offline = atual;
 			status.empregados[nome] = upaLevel(status.empregados[nome], "");
@@ -138,11 +141,25 @@ var updateEmp = function(status){
 	console.log(status.empregados);
 	console.log("updateEmp - " + tamanho);
 	
+	var tipo = new Array();
+	var tipoMaterial;
+	var qtdMaterial;
+	var nome;
+	var tempoMaterial;
+	
 	var dataInicial = new Array();
 	var inicial = new Array();
 	for(x = 1; x <= tamanho; x++){
 		dataInicial[x] = new Date();
 		inicial[x] = (dataInicial[x].getTime() / 1000).toFixed(0);	 //variavel de tempo de cada trabalhador
+		
+		nome = "n" + x; //nome do trabalhador.
+		tipo[x] = verfTipo(itens, status.empregados[nome]);
+		console.log(x + " " + tipo[x].nome + " " + tipo[x].tempo);
+		
+		var elem = maiuscula(status.empregados[nome].tipo).concat("Item").concat(nome);
+		var empTexto = document.getElementById(elem);
+		empTexto.innerHTML = "Empregado " + x + ": " + tipo[x].nome;
 	}
 	
 	var tick = function(){
@@ -150,24 +167,17 @@ var updateEmp = function(status){
 		var data = new Date(); 
 		var atual = (data.getTime() / 1000).toFixed(0);	//data atual para comparar o tempo que passou com a variavel 'inicial'
 		var tempoDesdeOInicio = new Array(); //variavel para guardar o tempo que passou desde que começou.
-	
-		var tipo;
-		var tipoMaterial;
-		var qtdMaterial;
-		var nome;
-		var tempoMaterial;
 		
 		for(x = 1; x <= tamanho; x++){
-			nome = "n" + x; //nome do trabalhador.
-			tipo = verfTipo(itens, status.empregados[nome]);
-			var material = itens[status.empregados[nome].tipo][invTipo].nome;
-			tempoDesdeOInicio[x] = atual - inicial[x];
-			tempoMaterial = itens[status.empregados[nome].tipo][invTipo].tempo - Math.floor((status.empregados[nome].lvl / 2)); //tempo que demora para pegar o material.
-			if(tempoMaterial < 0) tempoMaterial = 1;
-			 //tipo do material que o empregado pega.
-			qtdMaterial = 1 + Math.floor(status.empregados[nome].lvl / itens[status.empregados[nome].tipo][invTipo].lvl); //qtuantidade de material que o empregado pega.
-			tipoMaterial = maiuscula(tipo);
 		
+			nome = "n" + x; //nome do trabalhador.
+			var material = tipo[x].nome;
+			tempoMaterial = tipo[x].tempo - Math.floor((status.empregados[nome].lvl / 2)); //tempo que demora para pegar o material.
+			if(tempoMaterial < 0) tempoMaterial = 1;
+			qtdMaterial = 1 + Math.floor(status.empregados[nome].lvl / tipo[x].lvl); //qtuantidade de material que o empregado pega.
+			tipoMaterial = status.empregados[nome].tipo;
+			
+			tempoDesdeOInicio[x] = atual - inicial[x];
 			var barra = document.getElementById("barraLoad" + nome);
 			var barraCheia = document.getElementById("barraProgresso" + nome);
 			
@@ -189,6 +199,8 @@ var updateEmp = function(status){
 				
 				status.habilidades.expChefe += qtdMaterial; //adicionar exp na skill do jogador.
 				status = upaLevel(status, "Chefe"); //chamada da função que verifica se upou de level do jogador.
+				
+				tipo[x] = verfTipo(itens, status.empregados[nome]);				
 				
 				salvar(status); //save do jogo.
 				textoFinalPagina("Você adquiriu " + maiuscula(tipoMaterial) + ": " + qtdMaterial); //barra final da tela com informações.
@@ -217,16 +229,7 @@ var updateEmp = function(status){
 
 //barra final da pagina com informações do empregado quando clica nele.
 var informacoes = function(texto){
-	
-	var objeto = document.getElementById("statusEmpregado");
-	
-	try{
-		document.body.removeChild(objeto);
-	}catch(err){
-		console.log("Erro informacoes Empregado ");
-		console.log(err);
-	}
-	
+
 	var status = {};
 	status = iniciar(status);
 	var tamanho = Object.keys(status.empregados).length;
@@ -246,15 +249,28 @@ var informacoes = function(texto){
 
 var verfTipo = function(itens, emp){
 	
+	var tiposHabilidades = [];
+	
 	for(var key in itens){
 		if(key == emp.tipo){
+			//console.log(emp.tipo);
+			if(emp.tipo == "minerar" || emp.tipo == "forjar"){
+				for(var keys in itens[key]) tiposHabilidades.push(keys);
+				var random = Math.round(Math.random() * (tiposHabilidades.length - 1)) + 1;
+				//console.log(random + " " + tiposHabilidades[random - 1]);
+				for(var chaves in itens[key][tiposHabilidades[random - 1]]){
+					if(emp.lvl >= itens[key][tiposHabilidades[random - 1]][chaves].lvl){
+						invTipo = itens[key][tiposHabilidades[random - 1]][chaves];
+					}
+				}
+			}
 			for(var keys in itens[key]){
 				if(emp.lvl >= itens[key][keys].lvl){
-					invTipo = keys;
+					invTipo = itens[key][keys];
 				}
 			}
 		}
 	}
-	//console.log("Itens que o empregado pega: " + invTipo);
+	//console.log("Itens que o empregado pega: " + invTipo.nome);
 	return invTipo;
 };
