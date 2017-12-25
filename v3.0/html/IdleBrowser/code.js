@@ -126,6 +126,14 @@ var checar = function(status){
 	estrutura.habilidades.lvlChefe = 1;
 	estrutura.habilidades.expChefe = 0;
 	
+	estrutura.log = {};
+	estrutura.log.forjar = 0;
+	estrutura.log.minerar = 0;
+	estrutura.log.cacar = 0;
+	estrutura.log.cozinhar = 0;
+	estrutura.log.buy = 0;
+	estrutura.log.sell = 0;
+		
 	estrutura.equipamentos = {};
 	estrutura.equipamentos.espada = "";
 	estrutura.equipamentos.escudo = "";
@@ -198,7 +206,7 @@ var checar = function(status){
 		}
 		if(key == "empregados"){
 			for(chave in status[key]){
-				if(status[key][chave].tipo == "comida") status[key][chave].tipo = "caca";
+				if(status[key][chave].tipo == "minerio") status[key][chave].tipo = "minerar";
 			}
 		}
 	}
@@ -221,7 +229,7 @@ var iniciarEmp = function(empregados){
 	
 	var tamanho = Object.keys(empregados).length;
 	//console.log("iniciarEmp - " + tamanho);
-	empregados = adicionarEmp(empregados, "minerio", tamanho);
+	empregados = adicionarEmp(empregados, "minerar", tamanho);
 	
 	return empregados;
 };
@@ -249,14 +257,18 @@ var adicionarEmp = function(empregados, funcao, tamanho){
 var defItens = function(itens){
 
 	itens.geral = {};
-
-	itens.minerio = {};
+	
+	itens.minerar = {};
+	itens.minerar.minerio = {};
+	itens.minerar.gemas = {};
+	
 	itens.caca = {};
 	itens.comida = {};
 	itens.forja = {};
 	
 	var geral = itens.geral;
-	var minerio = itens.minerio;
+	var minerio = itens.minerar.minerio;
+	var gemas = itens.minerar.gemas;
 	var caca = itens.caca;
 	var comida = itens.comida;
 	var forja = itens.forja;
@@ -271,6 +283,14 @@ var defItens = function(itens){
 	minerio.ferro = {lvl: 5, tempo: 30, sell: 2, buy: 5, tipo:"minerar", nome:"Minerio de Ferro"};
 	minerio.prata = {lvl: 8, tempo: 40, sell: 3, buy: 7, tipo:"minerar", nome:"Minerio de Prata"};
 	minerio.ouro = {lvl: 10, tempo: 70, sell: 7, buy: 10, tipo:"minerar", nome:"Minerio de Ouro"};
+	minerio.titanio = {lvl: 15, tempo: 80, sell: 20, buy: 30, tipo:"minerar", nome:"Minerio de Titanio"};
+	minerio.platina = {lvl: 25, tempo: 100, sell: 50, buy: 100, tipo:"minerar", nome:"Minerio de Platina"};
+	minerio.osmio = {lvl: 33, tempo: 100, sell: 70, buy: 200, tipo:"minerar", nome:"Minerio de Osmio"};
+	minerio.iridio = {lvl: 40, tempo: 120, sell: 80, buy: 200, tipo:"minerar", nome:"Minerio de Iridio"};
+	minerio.tungstenio = {lvl: 50, tempo: 300, sell: 500, buy: 1000, tipo:"minerar", nome:"Minerio de Tungstenio"};
+	
+	/* GEMAS PARA MINERAR */
+	gemas.safira = {lvl: 5, tempo: 30, sell: 5, buy: 10, tipo:"minerar", nome:"Gema de Safira"};
 	
 	/* ANIMAIS PARA CACAR. */
 	caca.rato = {lvl: 1, tempo: 10, sell: 1, buy: 3, tipo:"cacar", nome:"Rato"};
@@ -300,16 +320,17 @@ var defItens = function(itens){
 	forja.barra.ouro = {lvl: 10, tempo: 80, sell: 50, buy: 70, tipo:"forjar", req: { "Minerio de Prata": 1, "Minerio de Ouro": 3 }, nome:"Barra de Ouro"};
 	
 	forja.espada.pedra = {lvl: 1, tempo: 10, sell: 5, buy: 10, req: { pedra: 4 }, tipo:"forjar", nome:"Espada de Pedra", estatisticas: {atk: 1, precisao: 20, vel: 1}};
-	forja.espada.cobre = {lvl: 5, tempo: 15, sell: 6, buy: 13, req: { "Barra de Cobre": 4, pedra: 1 }, tipo:"forjar", nome:"Espada de Cobre", estatisticas: {atk: 2, precisao: 25, vel: 2}};
-	forja.espada.ferro = {lvl: 7, tempo: 35, sell: 7, buy: 18, req: { "Barra de Cobre": 2, pedra: 1, "Barra de Ferro": 2 }, tipo:"forjar", nome:"Espada de Ferro", estatisticas: {atk: 5, precisao: 25, vel: 3}};
+	forja.espada.cobre = {lvl: 5, tempo: 15, sell: 6, buy: 13, req: { "Barra de Cobre": 3, pedra: 1 }, tipo:"forjar", nome:"Espada de Cobre", estatisticas: {atk: 2, precisao: 25, vel: 2}};
+	forja.espada.ferro = {lvl: 7, tempo: 35, sell: 7, buy: 18, req: { "Barra de Cobre": 1, pedra: 1, "Barra de Ferro": 2 }, tipo:"forjar", nome:"Espada de Ferro", estatisticas: {atk: 5, precisao: 25, vel: 3}};
+	forja.espada.excalibur = {lvl: 70, tempo: 350, sell: 7000, buy: 180000, req: { "Barra de Tungstenio": 10, "Barra de Titanio": 50, "Onix": 5 }, tipo:"forjar", nome:"Excalibur", estatisticas: {atk: 50, precisao: 100, vel: 30}};
 	
 	forja.capacete.pedra = {lvl: 1, tempo: 15, sell: 5, buy: 10, req: { pedra: 5 }, tipo:"forjar", nome:"Capacete de Pedra", estatisticas: {defFisica: 10, vel: -1}};
-	forja.capacete.cobre = {lvl: 4, tempo: 25, sell: 15, buy: 35, req: { "Barra de Cobre": 5 }, tipo:"forjar", nome:"Capacete de Cobre", estatisticas: {defFisica: 20, vel: -3}};
-	forja.capacete.ferro = {lvl: 7, tempo: 40, sell: 20, buy: 50, req: { "Barra de Ferro": 5, pedra: 2 }, tipo:"forjar", nome:"Capacete de Ferro", estatisticas: {defFisica: 25, vel: -3}};
+	forja.capacete.cobre = {lvl: 4, tempo: 25, sell: 15, buy: 35, req: { "Barra de Cobre": 3 }, tipo:"forjar", nome:"Capacete de Cobre", estatisticas: {defFisica: 20, vel: -3}};
+	forja.capacete.ferro = {lvl: 7, tempo: 40, sell: 20, buy: 50, req: { "Barra de Ferro": 3, pedra: 2 }, tipo:"forjar", nome:"Capacete de Ferro", estatisticas: {defFisica: 25, vel: -3}};
 	
 	forja.bota.pedra = {lvl: 1, tempo: 5, sell: 2, buy: 10, req: { pedra: 2 }, tipo:"forjar", nome:"Bota de Pedra", estatisticas: {defFisica: 10, vel: -1}};
-	forja.bota.cobre = {lvl: 3, tempo: 10, sell: 5, buy: 20, req: { "Barra de Cobre": 3 }, tipo:"forjar", nome:"Bota de Cobre", estatisticas: {defFisica: 15, vel: -1}};
-	forja.bota.ferro = {lvl: 5, tempo: 20, sell: 10, buy: 30, req: { "Barra de Ferro": 3 }, tipo:"forjar", nome:"Bota de Ferro", estatisticas: {defFisica: 20, vel: -3}};
+	forja.bota.cobre = {lvl: 3, tempo: 10, sell: 5, buy: 20, req: { "Barra de Cobre": 2 }, tipo:"forjar", nome:"Bota de Cobre", estatisticas: {defFisica: 15, vel: -1}};
+	forja.bota.ferro = {lvl: 5, tempo: 20, sell: 10, buy: 30, req: { "Barra de Ferro": 2 }, tipo:"forjar", nome:"Bota de Ferro", estatisticas: {defFisica: 20, vel: -3}};
 	
 	forja.escudo.pedra = {lvl: 2, tempo: 10, sell: 2, buy: 10, req: { pedra: 2, rato: 1 }, tipo:"forjar", nome:"Escudo de Pedra", estatisticas: {defFisica: 30, vel: -2}};
 	forja.escudo.rato = {lvl: 2, tempo: 7, sell: 2, buy: 7, req: { rato: 5 }, tipo:"forjar", nome:"Escudo de Couro de Rato", estatisticas: {defFisica: 7, defMagica: 7, vel: 2}};
@@ -319,7 +340,8 @@ var defItens = function(itens){
 	forja.luva.pedra = {lvl: 1, tempo: 20, sell: 2, buy: 3, req: { pedra: 2 }, tipo:"forjar", nome:"Luva de Pedra", estatisticas: {defFisica: 5, vel: 1}};
 	
 	
-	itens.minerio = minerio;
+	itens.minerar.minerio = minerio;
+	itens.minerar.gemas = gemas;
 	itens.caca = caca;
 	itens.comida = comida;
 	itens.geral = geral;
@@ -454,9 +476,10 @@ var upaLevel = function(status, tipo){
     if (habilidades[experiencia] >= compExp ) {
     	habilidades[level] += 1; 
 		if(tipo == "Chefe" && (habilidades[level] % 5) == 0){
-			var random = (Math.round(Math.random() * 10) + 1);
+			var random = (Math.round(Math.random() * 14) + 1);
 			var emp = "";
-			if(random <= 5) emp = "minerio";
+			if(random < 5) emp = "minerar";
+			else if(random >= 5 && random < 10) emp = "cozinhar";
 			else emp = "caca";
 			console.log("Empregado Ganho: " + emp);
 			status.empregados = adicionarEmp(status.empregados, emp, Object.keys(status.empregados).length);
@@ -539,18 +562,21 @@ var verificarItem = function(nome){
 
 	for(var chave in itens){
 		for(var key in itens[chave]){
-			if(nome.indexOf(key) > -1){
-				//console.log(key);
-				if(maiuscula(nome) != itens[chave][key].nome){
-					for(var keys in itens[chave][key]){
-						if(nome.indexOf(keys) > -1){
-							//console.log(itens[chave][key][keys]);
-							return itens[chave][key][keys];
-						}
+			
+			if(maiuscula(nome) == itens[chave][key].nome){
+				//console.log(nome + " " + itens[chave][key].nome);
+				return itens[chave][key];
+			}
+			else{
+				for(var keys in itens[chave][key]){
+					if(chave == "forja"){
+						var refino = verificarRefino(nome);
+						if(refino[1] != "") nome = refino[1];
 					}
-				}else{
-					//console.log(itens[chave][key]);
-					return itens[chave][key];
+					if(maiuscula(nome) == itens[chave][key][keys].nome){
+						//console.log(nome + " " + itens[chave][key][keys].nome + " " + key);
+						return itens[chave][key][keys];
+					}
 				}
 			}
 		}
