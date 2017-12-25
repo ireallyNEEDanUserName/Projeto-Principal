@@ -18,8 +18,15 @@ var impInv = function(){
 		div += "<h2>" + maiuscula(h2) + "</h2>";
 		div += "<p>";
 		for(var chave in itens[key]){	
-			if(status.inventario[itens[key][chave].nome] <= 0) delete status.inventario[itens[key][chave].nome];
-			if(itens[key][chave].nome in status.inventario) div += itens[key][chave].nome + " : " + status.inventario[itens[key][chave].nome] + " | ";	
+			if(key == "minerar"){
+				for(var keys in itens[key][chave]){
+					if(status.inventario[itens[key][chave][keys].nome] <= 0) delete status.inventario[itens[key][chave][keys].nome];
+					if(itens[key][chave][keys].nome in status.inventario) div += itens[key][chave][keys].nome + " : " + status.inventario[itens[key][chave][keys].nome] + " | ";	
+				}
+			}else{
+				if(status.inventario[itens[key][chave].nome] <= 0) delete status.inventario[itens[key][chave].nome];
+				if(itens[key][chave].nome in status.inventario) div += itens[key][chave].nome + " : " + status.inventario[itens[key][chave].nome] + " | ";	
+			}
 		}
 		div += " </p>";
 	}
@@ -36,7 +43,8 @@ var impInv = function(){
 							div += key + " : " + status.inventario[key] + " | ";
 						}
 					}catch(err){
-						console.log("Erro na pagina inventario.js na linha 31 - " + err);
+						console.log("Erro na pagina inventario.js na linha 31 - ");
+						console.log(err);
 					}
 				}
 			}
