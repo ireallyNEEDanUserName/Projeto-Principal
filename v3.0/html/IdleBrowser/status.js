@@ -25,7 +25,7 @@ var escreverStatus = function(status){
 		}else if(key == 'empregados'){
 			tam = Object.keys(status[key]).length;
 			str += " | " + cap + ": " + tam + " | ";
-		}else if(key.includes("combate") || key.includes("habilidades")){
+		}else if(key.includes("combate") || key.includes("habilidades") || key.includes("log")){
 			//console.log(status[key]);
 			for(var chave in status[key]){
 				cap = maiuscula(chave);
