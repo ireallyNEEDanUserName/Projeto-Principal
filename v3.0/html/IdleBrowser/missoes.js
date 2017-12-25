@@ -216,6 +216,9 @@ var inicializacaoDados = function(){
 	if(tipo.includes("minerio")){
 		texto = "Minerar";
 		classeMaterial = "minerio";
+	}else if(tipo.includes("gemas")){
+		texto = "Minerar";
+		classeMaterial = "gemas";
 	}else if(tipo.includes("forja")){
 		texto = "Forjar";
 		classeMaterial = "forja";
@@ -266,6 +269,7 @@ var verfTempo = function(classeMaterial, tipoMaterial, item, status){
 	var hab = "lvl";
 	
 	if(classeMaterial == "minerio") hab = hab.concat("Minerar");
+	else if(classeMaterial == "gemas") hab = hab.concat("Minerar");
 	else if(classeMaterial == "caca") hab = hab.concat("Cacar");
 	else if(classeMaterial == "comida") hab = hab.concat("Cozinhar");
 	else if(classeMaterial == "forja") hab = hab.concat("Forjar");
@@ -364,30 +368,32 @@ var criarMissoes = function(){
 			if(key != "geral"){
 				var h4 = key;
 				if(key == "caca") h4 = "caça";
-				if(key != "forja") div += "<h4 class='" + key + "'>" + maiuscula(h4) + "</h4>";
+				if(key != "forja" && key != "minerar") div += "<div class='" + key + "' caixas='caixas'>" + maiuscula(h4);
 				for(keys in itens[key]){
-					if(key != "forja"){
+					if(key != "forja" && key != "minerar"){
 						if(status.habilidades["lvl" + maiuscula(itens[key][keys].tipo)] >= itens[key][keys].lvl){
-							div += "<div id='" + itens[key][keys].tipo + "' class='" + key + "'>" +
+							div += "<div id='" + itens[key][keys].tipo + "'>" +
 									"<div id='" + maiuscula(keys) + "'>" +
 									"<p id='" + key.concat(keys) + "' class='item'>" + itens[key][keys].nome + "</p>" +
 									"</div> </div>";
 						}
 					}else{
+						console.log(key);
 						div += "<div class='" + key + "' id='" + keys + "' caixas='caixas'>"
 						div += maiuscula(keys);
-						for(chaveForja in itens[key][keys]){
-							var nome = itens[key][keys][chaveForja].nome;
-							if(status.habilidades["lvl" + maiuscula(itens[key][keys][chaveForja].tipo)] >= itens[key][keys][chaveForja].lvl){
-								div += "<div id='" + itens[key][keys][chaveForja].tipo + "'>" +
-										"<div id='" + keys.concat(chaveForja) + "'>" +
-										"<p id='" + key.concat(keys.concat(chaveForja)) + "' class='item'>" + nome + "</p>" +
+						for(var chave in itens[key][keys]){
+							var nome = itens[key][keys][chave].nome;
+							if(status.habilidades["lvl" + maiuscula(itens[key][keys][chave].tipo)] >= itens[key][keys][chave].lvl){
+								div += "<div id='" + itens[key][keys][chave].tipo + "'>" +
+										"<div id='" + keys.concat(chave) + "'>" +
+										"<p id='" + key.concat(keys.concat(chave)) + "' class='item'>" + nome + "</p>" +
 										"</div> </div>";
 							}
 						}
 						div += "</div>";
 					}
 				}	
+				if(key != "forja" && key != "minerar") div += "</div>";
 			}
 		}
 	}catch(err){
@@ -404,6 +410,8 @@ var criarMissoes = function(){
 				for(var key in status.inventario){
 					if(key.includes(maiuscula(chave))){
 						var refinarItem = verificarItem(minuscula(key));
+						console.log(key);
+						console.log(refinarItem);
 						var nome = removerEspaco(minuscula(key));
 						var refino = verificarRefino(key);
 						var val = 0;
