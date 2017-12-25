@@ -50,19 +50,20 @@ var venderInv = function(nome, qtd, tipo){
 	
 	multiplicador = 1;
 	
-	if(tipo == "forja"){
+	if(tipo == "forjar"){
 		refino = verificarRefino(nome);
-		item = verificarItem(nome);
+		item = verificarItem(minuscula(nome));
 		if(refino[0] != ""){
 			multiplicador = parseInt(refino[0]) + 1;
 			nomeElemento = refino[1].concat(refino[0]);
 		}else nomeElemento = item.nome;
 	}
 	else {
-		item = itens[tipo][nome];
+		item = verificarItem(minuscula(nome));
 		nomeElemento = nome;
 	}
 	
+	//console.log(status.inventario[maiuscula(nome)] + " " + qtd);
 	if(status.inventario[maiuscula(nome)] >= qtd){
 		status.inventario.dinheiro += (item.sell * multiplicador) * qtd;
 		status.inventario[maiuscula(nome)] -= qtd;
@@ -92,7 +93,7 @@ var criarBuy = function(){
 		div += "<h2> " + maiuscula(h2) + " </h2>";
 		
 		for(var keys in itens[key]){
-			if(key == "forja"){
+			if(key == "forja" || key == "minerar"){
 				div += "<h4> " + maiuscula(keys) + " </h4>";
 				for(var chave in itens[key][keys]){
 					div += "<i>" +  itens[key][keys][chave].nome + ": </i>"+
@@ -103,8 +104,7 @@ var criarBuy = function(){
 						"<i class='compra' value='" + keys.concat(chave) + "' outro='" + key + "' nome='" + minuscula(itens[key][keys][chave].nome) +"'> COMPRAR </i>" +
 						"<a class='btnMaisMenos' value='" + keys.concat(chave) + "' id='-' outro='" + key + "' tipo='compra' nome='" + minuscula(itens[key][keys][chave].nome) +"'> - </a> <br>";
 				}
-			}
-			else{
+			}else{
 				div += "<i>" +  itens[key][keys].nome + ": </i>"+
 						"<i id=" + keys + "Qtdbuy>  1 </i>" +
 						" | Custa: " +
@@ -136,21 +136,19 @@ var criarSell = function(){
 	
 	var item;
 	var tituloTipo = "";
-	var tituloSecundario = {espada: false, capacete: false};
 	
 	div = "<p id='itens'>";
 	
 	for(var chave in itens){
 		var h3 = chave;
 		
-		if(chave == "minerio") tituloTipo = "minerar";
-		else if(chave == "forja") tituloTipo = "forjar";
-		else if(chave == "caca"){
+		if(chave == "caca"){
 			h3 = "Caça";
 			tituloTipo = "cacar";
 		}else if(chave == "comida") tituloTipo = "cozinhar";
+		else if(chave == "geral") tituloTipo = "geral";
 		
-		div += "<h3>" + maiuscula(h3) + "</h3>";
+		if(h3 != "minerar" && h3 != "forja") div += "<h2>" + maiuscula(h3) + "</h2>";
 		
 		for(var key in status.inventario){
 		
@@ -158,9 +156,9 @@ var criarSell = function(){
 
 			try{
 				if(item != null){
+					//console.log(item.nome);
 					if(item.tipo == tituloTipo){
-					
-						if(chave != "forja"){
+						if(chave != "forja" && chave != "minerar"){
 							try{
 								//console.log(" Nome: " + item.nome + " nome chave: " + maiuscula(key));
 								if(item.nome == maiuscula(key)) div = sellDiv(status, div, item, chave, key);		
@@ -171,7 +169,7 @@ var criarSell = function(){
 					}
 				}
 			}catch(err){
-				console.log("Erro no loja.js linha 176");
+				console.log("Erro no loja.js no criar sell");
 				console.log(err);
 			}
 		}
@@ -180,20 +178,31 @@ var criarSell = function(){
 	var objetos = "";
 	for(key in status.inventario) objetos += key;
 	
-	for(var chave in itens.forja){
+	for(var chaves in itens){
 	
-		if(objetos.indexOf(maiuscula(chave)) > -1){ //Verifica se a chave existe no inventario.
-			//console.log("Possui: " + chave);
-			div += "<h4>" + maiuscula(chave) + "</h4>";
-
-			for(var key in status.inventario){
-				item = verificarItem(minuscula(key)); //Verifica qual é o item que está no inventario.
-				if(key.includes(maiuscula(chave))){ //Verifica se o item é do tipo certo para por na ordem.
-					div = sellDiv(status, div, item, "forja", key); //chama a função que cria a div com os itens e preços e etc.
+		if(chaves == "forja" || chaves == "minerar"){
+			div += "<h2>" + maiuscula(chaves) + "</h2>";
+			
+			for(var chave in itens[chaves]){
+			
+				div += "<h4>" + maiuscula(chave) + "</h4>";
+				
+				for(var keys in itens[chaves][chave]){
+					for(var key in status.inventario){
+						if(key == itens[chaves][chave][keys].nome){
+							item = verificarItem(minuscula(key));
+							if(item != null){
+								if(item.tipo == "minerar" || item.tipo == "forjar"){
+									div = sellDiv(status, div, item, item.tipo, key);
+								}
+							}
+						}
+					}
 				}
 			}
 		}
 	}
+	
 	
 	div += "<\p><br>";
 	
@@ -204,7 +213,7 @@ var sellDiv = function(status, div, item, tipo, keyInv){
 	
 	refino = "";
 	
-	if(tipo == "forja"){
+	if(tipo == "forjar"){
 		nome = keyInv
 		refino = verificarRefino(keyInv);
 		key = removerEspaco(refino[1].concat(refino[0]))
