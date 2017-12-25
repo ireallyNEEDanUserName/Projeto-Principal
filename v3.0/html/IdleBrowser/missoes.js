@@ -151,6 +151,7 @@ var start = function(){
 						status.inventario[materialAddInv] = 0;
 						status.inventario[materialAddInv] += qtdMaterial;
 					}
+					status.log[minuscula(texto)] += qtdMaterial;
 					
 					status.habilidades[expTexto] += exp;
 					status = upaLevel(status, texto);
