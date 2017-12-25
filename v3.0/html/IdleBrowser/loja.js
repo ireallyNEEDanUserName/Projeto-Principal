@@ -30,6 +30,7 @@ var addInv = function(nome, qtd, tipo){
 			status.inventario[maiuscula(nome)] = 0;
 			status.inventario[maiuscula(nome)] += qtd;
 		}
+		status.log.buy += qtd;
 		status.inventario["dinheiro"] -= preco;
 		textoFinalPagina("Comprou com sucesso " + qtd + " de " + maiuscula(nome) + " por: " + preco);
 	}
@@ -65,6 +66,7 @@ var venderInv = function(nome, qtd, tipo){
 	if(status.inventario[maiuscula(nome)] >= qtd){
 		status.inventario.dinheiro += (item.sell * multiplicador) * qtd;
 		status.inventario[maiuscula(nome)] -= qtd;
+		status.log.sell += qtd;
 		textoFinalPagina("Vendeu com sucesso " + qtd + " de " + maiuscula(nome) + " por: " + (item.sell * multiplicador) * qtd);
 		document.getElementById("total" + removerEspaco(minuscula(nomeElemento))).innerHTML = (status.inventario[maiuscula(nome)]) + " / ";
 		if(status.inventario[maiuscula(nome)] <= 0) delete status.inventario[maiuscula(nome)];
