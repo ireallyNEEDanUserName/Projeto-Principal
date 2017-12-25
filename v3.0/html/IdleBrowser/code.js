@@ -476,11 +476,12 @@ var upaLevel = function(status, tipo){
     if (habilidades[experiencia] >= compExp ) {
     	habilidades[level] += 1; 
 		if(tipo == "Chefe" && (habilidades[level] % 5) == 0){
-			var random = (Math.round(Math.random() * 14) + 1);
+			var random = (Math.round(Math.random() * 9) + 1);
 			var emp = "";
 			if(random < 5) emp = "minerar";
-			else if(random >= 5 && random < 10) emp = "cozinhar";
 			else emp = "caca";
+			//else if(random >= 5 && random < 10) emp = "cozinhar";
+			
 			console.log("Empregado Ganho: " + emp);
 			status.empregados = adicionarEmp(status.empregados, emp, Object.keys(status.empregados).length);
 			console.log("Funcao upaLevel - " + Object.keys(status.empregados).length);
