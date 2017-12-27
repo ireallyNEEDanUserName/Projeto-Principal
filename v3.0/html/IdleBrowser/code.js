@@ -131,6 +131,7 @@ var checar = function(status){
 	estrutura.log.minerar = 0;
 	estrutura.log.cacar = 0;
 	estrutura.log.cozinhar = 0;
+	estrutura.log.empregado = 0;
 	estrutura.log.buy = 0;
 	estrutura.log.sell = 0;
 		
@@ -220,7 +221,7 @@ var iniciarInv = function(inventario){
 	inventario.minerio = 0;
 	inventario.caca = 0;
 	inventario.dinheiro = 0;
-	inventario.gemas = 0;
+	inventario.diamante = 0;
 	
 	return inventario;
 };
@@ -259,16 +260,13 @@ var defItens = function(itens){
 	itens.geral = {};
 	
 	itens.minerar = {};
-	itens.minerar.minerio = {};
-	itens.minerar.gemas = {};
 	
 	itens.caca = {};
 	itens.comida = {};
 	itens.forja = {};
 	
 	var geral = itens.geral;
-	var minerio = itens.minerar.minerio;
-	var gemas = itens.minerar.gemas;
+	var minerar = itens.minerar;
 	var caca = itens.caca;
 	var comida = itens.comida;
 	var forja = itens.forja;
@@ -277,20 +275,25 @@ var defItens = function(itens){
 	
 	geral.agua = {lvl: 1, tempo: 0, sell: 1, buy: 1, tipo:"geral", nome:"Garrafa de Agua"};
 	
+	/*SKILL MINERAR */
+	
+	minerar.minerio = {};
+	minerar.gemas = {};
+	
 	/* MINERIOS PARA MINERAR. */
-	minerio.pedra = {lvl: 1, tempo: 10, sell: 1, buy: 3, tipo:"minerar", nome:"Pedra"};
-	minerio.cobre = {lvl: 3, tempo: 20, sell: 1, buy: 3, tipo:"minerar", nome:"Minerio de Cobre"};
-	minerio.ferro = {lvl: 5, tempo: 30, sell: 2, buy: 5, tipo:"minerar", nome:"Minerio de Ferro"};
-	minerio.prata = {lvl: 8, tempo: 40, sell: 3, buy: 7, tipo:"minerar", nome:"Minerio de Prata"};
-	minerio.ouro = {lvl: 10, tempo: 70, sell: 7, buy: 10, tipo:"minerar", nome:"Minerio de Ouro"};
-	minerio.titanio = {lvl: 15, tempo: 80, sell: 20, buy: 30, tipo:"minerar", nome:"Minerio de Titanio"};
-	minerio.platina = {lvl: 25, tempo: 100, sell: 50, buy: 100, tipo:"minerar", nome:"Minerio de Platina"};
-	minerio.osmio = {lvl: 33, tempo: 100, sell: 70, buy: 200, tipo:"minerar", nome:"Minerio de Osmio"};
-	minerio.iridio = {lvl: 40, tempo: 120, sell: 80, buy: 200, tipo:"minerar", nome:"Minerio de Iridio"};
-	minerio.tungstenio = {lvl: 50, tempo: 300, sell: 500, buy: 1000, tipo:"minerar", nome:"Minerio de Tungstenio"};
+	minerar.minerio.pedra = {lvl: 1, tempo: 10, sell: 1, buy: 3, tipo:"minerar", nome:"Pedra"};
+	minerar.minerio.cobre = {lvl: 3, tempo: 20, sell: 1, buy: 3, tipo:"minerar", nome:"Minerio de Cobre"};
+	minerar.minerio.ferro = {lvl: 5, tempo: 30, sell: 2, buy: 5, tipo:"minerar", nome:"Minerio de Ferro"};
+	minerar.minerio.prata = {lvl: 8, tempo: 40, sell: 3, buy: 7, tipo:"minerar", nome:"Minerio de Prata"};
+	minerar.minerio.ouro = {lvl: 10, tempo: 70, sell: 7, buy: 10, tipo:"minerar", nome:"Minerio de Ouro"};
+	minerar.minerio.titanio = {lvl: 15, tempo: 80, sell: 20, buy: 30, tipo:"minerar", nome:"Minerio de Titanio"};
+	minerar.minerio.platina = {lvl: 25, tempo: 100, sell: 50, buy: 100, tipo:"minerar", nome:"Minerio de Platina"};
+	minerar.minerio.osmio = {lvl: 33, tempo: 100, sell: 70, buy: 200, tipo:"minerar", nome:"Minerio de Osmio"};
+	minerar.minerio.iridio = {lvl: 40, tempo: 120, sell: 80, buy: 200, tipo:"minerar", nome:"Minerio de Iridio"};
+	minerar.minerio.tungstenio = {lvl: 50, tempo: 300, sell: 500, buy: 1000, tipo:"minerar", nome:"Minerio de Tungstenio"};
 	
 	/* GEMAS PARA MINERAR */
-	gemas.safira = {lvl: 5, tempo: 30, sell: 5, buy: 10, tipo:"minerar", nome:"Gema de Safira"};
+	minerar.gemas.safira = {lvl: 5, tempo: 30, sell: 5, buy: 10, tipo:"minerar", nome:"Gema de Safira"};
 	
 	/* ANIMAIS PARA CACAR. */
 	caca.rato = {lvl: 1, tempo: 10, sell: 1, buy: 3, tipo:"cacar", nome:"Rato"};
@@ -340,8 +343,7 @@ var defItens = function(itens){
 	forja.luva.pedra = {lvl: 1, tempo: 20, sell: 2, buy: 3, req: { pedra: 2 }, tipo:"forjar", nome:"Luva de Pedra", estatisticas: {defFisica: 5, vel: 1}};
 	
 	
-	itens.minerar.minerio = minerio;
-	itens.minerar.gemas = gemas;
+	itens.minerar = minerar;
 	itens.caca = caca;
 	itens.comida = comida;
 	itens.geral = geral;
@@ -420,16 +422,17 @@ var escrever = function(status){
 	
 	var tipo = {};
 	
-	tipo.minerio = 0;
-	tipo.caca = 0;
+	tipo.minerar = 0;
+	tipo.cacar = 0;
 	tipo.dinheiro = 0;
-	tipo.gemas = 0;
+	tipo.diamante = 0;
 	
 	for(var key in status.inventario){
-		if(key in tipo) tipo[key] += status.inventario[key];
+		if(key in tipo) tipo[key] += status.inventario[key]; //Soma o dinheiro e gemas.
 		else{
-			for(var keys in itens){
-				if(minuscula(key) in itens[keys]) tipo[keys] += status.inventario[key];
+			item = verificarItem(key);
+			if(item != null){
+				if(item.tipo in tipo) tipo[item.tipo] += status.inventario[key];
 			}
 		}
 	}
