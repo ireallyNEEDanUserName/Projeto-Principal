@@ -111,6 +111,7 @@ var updateOffline = function(status){
 				status.inventario[material] += qtd;
 			}
 			console.log(material);
+			status.log.empregado += qtd;
 			status.empregados[nome].exp += exp;
 			status.empregados[nome].offline = atual;
 			status.empregados[nome] = upaLevel(status.empregados[nome], "");
@@ -193,7 +194,7 @@ var updateEmp = function(status){
 					status.inventario[material] = 0;
 					status.inventario[material] += qtdMaterial;
 				}
-				
+				status.log.empregado += qtdMaterial;
 				status.empregados[nome].exp += qtdMaterial; //adicionar no exp no empregado a quantidade de material pego.
 				status.empregados[nome] = upaLevel(status.empregados[nome], ""); //chamada da função que verifica se upou de level do empregado.
 				
