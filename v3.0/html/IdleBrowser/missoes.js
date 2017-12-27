@@ -410,8 +410,8 @@ var criarMissoes = function(){
 				for(var key in status.inventario){
 					if(key.includes(maiuscula(chave))){
 						var refinarItem = verificarItem(minuscula(key));
-						console.log(key);
-						console.log(refinarItem);
+						//console.log(key);
+						//console.log(refinarItem);
 						var nome = removerEspaco(minuscula(key));
 						var refino = verificarRefino(key);
 						var val = 0;
