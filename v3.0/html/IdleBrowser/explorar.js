@@ -1,3 +1,15 @@
+var dungeon = function(){
+	
+	var status = iniciar(status);
+	var itens = {};
+	itens = defItens(itens);
+	
+	
+	
+	
+};
+
+
 var iniciarExp = function(){
 
 	var status = iniciar(status);
