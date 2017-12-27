@@ -15,21 +15,25 @@ var impInv = function(){
 	for(var key in itens){
 		var h2 = key;
 		if(key == "caca") h2 = "caça";
-		div += "<h2>" + maiuscula(h2) + "</h2>";
-		div += "<p>";
+		if(key != "forja") div += "<h2>" + maiuscula(h2) + "</h2>";
+		div += "";
 		for(var chave in itens[key]){	
 			if(key == "minerar"){
+				div += "<h3>" + maiuscula(chave) + "</h3>";
 				for(var keys in itens[key][chave]){
 					if(status.inventario[itens[key][chave][keys].nome] <= 0) delete status.inventario[itens[key][chave][keys].nome];
 					if(itens[key][chave][keys].nome in status.inventario) div += itens[key][chave][keys].nome + " : " + status.inventario[itens[key][chave][keys].nome] + " | ";	
 				}
-			}else{
+			}else if(key != "forja"){
 				if(status.inventario[itens[key][chave].nome] <= 0) delete status.inventario[itens[key][chave].nome];
 				if(itens[key][chave].nome in status.inventario) div += itens[key][chave].nome + " : " + status.inventario[itens[key][chave].nome] + " | ";	
 			}
 		}
 		div += " </p>";
+		console.log(div);
 	}
+	
+	div += "<h2> Forja </h2>";
 	
 	for(var chave in itens.forja){
 		div += "<h3>" + maiuscula(chave) + "</h3><p>";
