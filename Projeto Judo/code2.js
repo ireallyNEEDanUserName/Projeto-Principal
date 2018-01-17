@@ -30,8 +30,6 @@ var load = function(){
 			if(x == 1) var nomePai = 1;
 			else var nomePai = arrayNome[u].concat(z.toString());
 			
-			//if(z % 2 == 0) u
-			
 			orgchart.insertNode(nomePai, {Name: arrayNome[u + 1]}, nome);
 		}
 	}
