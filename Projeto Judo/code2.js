@@ -17,6 +17,8 @@ var load = function(){
 	arrayNome[3] = "Quartas-de-Final";
 	arrayNome[4] = "Oitavas-de-Final";
 	
+	# Fazer uma função que vê potencia de 2 para saber quantas filas antes dos concorrentes.
+	
 	var y = Math.floor(Object.keys(data).length / 2);
 	console.log(y);
 	
