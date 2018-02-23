@@ -24,7 +24,7 @@
 
                         foreach($resultAll as $key){
                                 echo "<tr>";
-                                echo "<td>" . $key['hostname'] . "</td>";
+                                echo "<td>" . $key['hostname'] . " |</td>";
                                 echo "<td>" . $key['ip'] . "</td>>";
                                 echo "</tr>";
                         }
