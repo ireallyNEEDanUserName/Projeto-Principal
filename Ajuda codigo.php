@@ -18,7 +18,7 @@
                         echo "<table>";
 			echo "<th colspan = " . "2 " ."></th>";
 			echo "<tr>
-					<th>Hostname</th> |
+					<th>Hostname |</th>
 					<th>IP</th>
 				</tr>";
 
