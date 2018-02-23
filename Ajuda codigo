@@ -1,0 +1,45 @@
+<html>
+<body>
+
+        <?php
+                echo "INICIIOOOOOOOo <br>"
+                $strBanco = "host=172.16.19.140 port=5432 bdname=portal_tst user=portalusr password=P0rta1!";
+
+
+                if(!@($conexao = pg_connect($strBanco))){
+                        print "Num deu boa";
+                        echo "ERRRORRR"
+                }else{
+
+                        $sql = "SELECT * FROM inv_srv";
+                        $result = pg_query($conexao, $sql);
+                        $resultAll = pg_fetch_all($result);
+
+                        echo "Funciona";
+
+                        foreach($resultAll as $key){
+                                echo "Hostname: " . $key['hostname'] . "<br>"
+                                echo "IP: " . $key['ip'] . "<br>";
+                        }
+
+                pg_close($conexao);
+
+                }
+
+        ?>
+
+
+
+
+</body>
+</html>
+
+/* se quiser ja me ajudar a colocar os campos dentro da tabela, eu agradeço hahahahaha
+a tabela ficara assim:
+
+hostname | IP
+XXXXXXXX | XXXXXX
+
+vlw 
+
+*/
