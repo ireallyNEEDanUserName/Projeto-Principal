@@ -2,13 +2,13 @@
 <body>
 
         <?php
-                echo "INICIIOOOOOOOo <br>"
+                echo "INICIIOOOOOOOo <br>";
                 $strBanco = "host=172.16.19.140 port=5432 bdname=portal_tst user=portalusr password=P0rta1!";
 
 
                 if(!@($conexao = pg_connect($strBanco))){
                         print "Num deu boa";
-                        echo "ERRRORRR"
+                        echo "ERRRORRR";
                 }else{
 
                         $sql = "SELECT * FROM inv_srv";
@@ -18,11 +18,11 @@
                         echo "Funciona";
 
                         foreach($resultAll as $key){
-                                echo "Hostname: " . $key['hostname'] . "<br>"
+                                echo "Hostname: " . $key['hostname'] . "<br>";
                                 echo "IP: " . $key['ip'] . "<br>";
                         }
 
-                pg_close($conexao);
+                        pg_close($conexao);
 
                 }
 
