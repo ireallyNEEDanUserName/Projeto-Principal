@@ -15,12 +15,20 @@
                         $result = pg_query($conexao, $sql);
                         $resultAll = pg_fetch_all($result);
 
-                        echo "Funciona";
+                        echo "<table>";
+			echo "<th colspan = " . "2 " ."></th>";
+			echo "<tr>
+					<th>Hostname</th> |
+					<th>IP</th>
+				</tr>";
 
                         foreach($resultAll as $key){
-                                echo "Hostname: " . $key['hostname'] . "<br>";
-                                echo "IP: " . $key['ip'] . "<br>";
+                                echo "<tr>";
+                                echo "<td>" . $key['hostname'] . "</td>";
+                                echo "<td>" . $key['ip'] . "</td>>";
+                                echo "</tr>";
                         }
+                        echo "</table>";
 
                         pg_close($conexao);
 
