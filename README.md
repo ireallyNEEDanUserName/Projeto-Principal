@@ -1,7 +1,8 @@
-# skullInvaders
-
-Um jogo survival!
-
-Você controla um personagem enquanto sobrevive a enxurrada de magias dos invasores Caveiras!
+#Pagina de jogos e demais projetos via browser.
 
 http://nolifedev.ddns.net
+
+#Criado Por:
+Felipe André Wieler
+Bruno Nicastro Ribeiro de Araujo
+
