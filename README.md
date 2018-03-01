@@ -3,6 +3,4 @@
 http://nolifedev.ddns.net
 
 #Criado Por:
-Felipe André Wieler
-Bruno Nicastro Ribeiro de Araujo
-
+Felipe e Bruno
