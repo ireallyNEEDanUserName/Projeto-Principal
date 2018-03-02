@@ -15,7 +15,7 @@
 		
 		foreach($resultAll as $key){
 			echo "Hostname: " . $key['hostname'] . "<br>";
-			echo "IP: " . $key['ip'] . "<br>"
+			echo "IP: " . $key['ip'] . "<br>";
 		}
 		
 		pg_close($conexao);
