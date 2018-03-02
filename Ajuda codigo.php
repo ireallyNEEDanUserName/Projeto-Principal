@@ -11,6 +11,8 @@
 		$result = pg_query($conexao, $sql);
 		$resultAll = pg_fetch_all($result);
 		
+		echo $resultAll;
+		
 		for($i = 0; $i < count($resultAll); $i++){
 			echo $resultAll[$i];
 			foreach($resulAll[$i] as $key => $value){
