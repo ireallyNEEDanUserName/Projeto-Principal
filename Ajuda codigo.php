@@ -22,7 +22,11 @@
 			else if($key['obsolescencia'] == "NAO") $total["nao"]++;
 			else if($key['obsolescencia'] == "MIGRAR") $total["migrar"]++;
 		}
-		echo $total;
+		
+		foreach($total as $chave){
+			echo $total[$chave] + " | ";
+		}
+		//echo $total;
 		
 		pg_close($conexao);
 	}
