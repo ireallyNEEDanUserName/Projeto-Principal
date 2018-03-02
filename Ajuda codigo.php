@@ -11,7 +11,7 @@
 		$result = pg_query($conexao, $sql);
 		$resultAll = pg_fetch_all($result);
 		
-		echo "Funciona";
+		//echo "Funciona";
 		
 		$total = array(
 					"sim" => 0,
@@ -24,12 +24,12 @@
 		}
 		
 		foreach($total as $chave => $value){
-			echo $chave . ": " . $value . " | ";
+			echo $chave . ": " . $value . " <br> ";
 		}
 		
 		pg_close($conexao);
 	}
 	
-	echo "FIM <br>";
+	echo "<br> FIM <br>";
 
 ?>
