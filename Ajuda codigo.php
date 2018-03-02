@@ -19,8 +19,8 @@
 					"migrar" => 0);
 		foreach($resultAll as $key){
 			if($key['obsolescencia'] == "SIM") $total["sim"]++;
-			if($key['obsolescencia'] == "NAO") $total["nao"]++;
-			if($key['obsolescencia'] == "MIGRAR") $total["migrar"]++;
+			else if($key['obsolescencia'] == "NAO") $total["nao"]++;
+			else if($key['obsolescencia'] == "MIGRAR") $total["migrar"]++;
 		}
 		echo $total;
 		
