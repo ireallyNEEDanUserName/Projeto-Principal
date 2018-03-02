@@ -24,7 +24,7 @@
 		}
 		
 		foreach($total as $chave){
-			echo $total[$chave] + " | ";
+			echo $chave . ": " . $total[$chave] . " | ";
 		}
 		//echo $total;
 		
