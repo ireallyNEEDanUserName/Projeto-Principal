@@ -13,10 +13,13 @@
 		
 		echo "Funciona";
 		
+		$total = 0;
 		foreach($resultAll as $key){
-			echo "Hostname: " . $key['hostname'] . "<br>";
-			echo "IP: " . $key['ip'] . "<br>";
+			if($key['obsolescencia'] == "SIM") $total++;
+			//echo "Hostname: " . $key['hostname'] . "<br>";
+			//echo "IP: " . $key['ip'] . "<br>"
 		}
+		echo $total;
 		
 		pg_close($conexao);
 	}
