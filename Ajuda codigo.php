@@ -7,28 +7,16 @@
 		print "Não foi possível estabelecer uma conexão com o banco de dados.";
 		echo "ERRO: <BR>";
 	}else{
-		$sql = "SELECT obsolescencia FROM inv_srv";
+		$sql = "SELECT COUNT(IP) AS ATUALIZAR FROM inv_srv WHERE obsolescencia='SIM'";
 		$result = pg_query($conexao, $sql);
 		$resultAll = pg_fetch_all($result);
 		
-		echo $resultAll;
-		
-		for($i = 0; $i < count($resultAll); $i++){
-			echo $resultAll[$i];
-			foreach($resulAll[$i] as $key => $value){
-				echo $key;
-				echo $value;
-			}
-		}
-	
-		/*
 		echo "Funciona";
 		
 		foreach($resultAll as $key){
 			echo "Hostname: " . $key['hostname'] . "<br>";
 			echo "IP: " . $key['ip'] . "<br>"
 		}
-		*/
 		
 		pg_close($conexao);
 	}
