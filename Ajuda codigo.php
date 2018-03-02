@@ -7,7 +7,7 @@
 		print "Não foi possível estabelecer uma conexão com o banco de dados.";
 		echo "ERRO: <BR>";
 	}else{
-		$sql = "SELECT COUNT(IP) AS ATUALIZAR FROM inv_srv WHERE obsolescencia='SIM'";
+		$sql = "SELECT * FROM inv_srv";
 		$result = pg_query($conexao, $sql);
 		$resultAll = pg_fetch_all($result);
 		
