@@ -13,11 +13,14 @@
 		
 		echo "Funciona";
 		
-		$total = 0;
+		$total = array(
+					"sim" => 0,
+					"nao" => 0,
+					"migrar" => 0);
 		foreach($resultAll as $key){
-			if($key['obsolescencia'] == "SIM") $total++;
-			//echo "Hostname: " . $key['hostname'] . "<br>";
-			//echo "IP: " . $key['ip'] . "<br>"
+			if($key['obsolescencia'] == "SIM") $total["sim"]++;
+			if($key['obsolescencia'] == "NAO") $total["nao"]++;
+			if($key['obsolescencia'] == "MIGRAR") $total["migrar"]++;
 		}
 		echo $total;
 		
