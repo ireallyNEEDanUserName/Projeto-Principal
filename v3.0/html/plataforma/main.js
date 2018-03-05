@@ -13,42 +13,72 @@ var gameLoop = function(){
 	var teclado = new Keyboarder();
 	
 	var pPos = {x: canvas.width / 2, y: canvas.height - 64};
+	var ultimaPosY = pPos.y;
 	var pos;
 	
 	var cameraPosY = 0;
 	
 	var player = new Image();
 	var plataforma = new Image();
+	var theEnd = new Image();
 	player.src = "player/euspriteD0.png";
 	plataforma.src = "plataforma/plataforma.png";
+	theEnd.src = "plataforma/THEEND.png";
 	
-	var posicoesPlataforma = [{x: 0, y: canvas.height - 32},
-								{x: 160, y: canvas.height - 32},
-								{x: 160 * 2, y: canvas.height - 32},
-								{x: 160 * 3, y: canvas.height - 32},
-								{x: 160 * 4, y: canvas.height - 32}];
-								
-	var maiorY = 468;
+	var posicoesPlataforma = [{x: 0, y: canvas.height - 32, src: plataforma},
+								{x: 160, y: canvas.height - 32, src: plataforma},
+								{x: 160 * 2, y: canvas.height - 32, src: plataforma},
+								{x: 160 * 3, y: canvas.height - 32, src: plataforma},
+								{x: 160 * 4, y: canvas.height - 32, src: plataforma}];
 	
-	for(var u = 0; u < 100; u++){
+	var u = 0;
+	while(posicoesPlataforma.length < 25){
 	
 		var add = true;
-		var randY = Math.floor((Math.random() * -5000) + 404) ;
+		var addM300 = false;
+		var randY = Math.floor((Math.random() * -15000) + 404) ;
 		var randX = Math.floor((Math.random() * canvas.width) - 32);
 		
 		for(var x = 0; x < posicoesPlataforma.length; x++){
 			if(posicoesPlataforma[x].y < 0 && randY < 0) var z = Math.abs(posicoesPlataforma[x].y) - Math.abs(randY);
 			else var z = posicoesPlataforma[x].y - randY;
 			if(z < 0) z *= -1;
-			if(z < 64){
+			if(z < 90){
 				add = false;
-				console.log("U: " + u + " PlatY: " + posicoesPlataforma[x].y + " randY: " + randY);
-			}
+				//console.log("U: " + u + " PlatY: " + posicoesPlataforma[x].y + " randY: " + randY);
+			}else if(z < 300) addM300 = true;
 		}
-		if(add){
-			posicoesPlataforma.push({x: randX, y: randY});
+		//console.log(addM300);
+		if(add && addM300){
+			posicoesPlataforma.push({x: randX, y: randY, src: plataforma});
+		}
+		
+		u++;
+	}
+	
+	//console.log(u);
+	//console.log("Antes: ");
+	//console.log(posicoesPlataforma);
+	
+	//Ordenar lista de localizacoes das plataformas.
+	posicoesPlataforma = ordenar(posicoesPlataforma);
+
+	var tam = posicoesPlataforma.length;
+	for(var y = 1; y < tam; y++){
+		if(posicoesPlataforma[y - 1].y - posicoesPlataforma[y].y > 100){
+			//console.log(posicoesPlataforma[y - 1].y - posicoesPlataforma[y].y);
+			var randX = Math.floor((Math.random() * canvas.width) - 32);
+			//var randY = Math.floor((Math.random() * 100) + 32);
+			//console.log(randY);
+			posicoesPlataforma.push({x: randX, y: posicoesPlataforma[y - 1].y - Math.floor((posicoesPlataforma[y - 1].y - posicoesPlataforma[y].y) / 2), src: plataforma});
 		}
 	}
+	
+	posicoesPlataforma = ordenar(posicoesPlataforma);
+	tam = posicoesPlataforma.length;
+	posicoesPlataforma.push({x: (canvas.width / 2) - 150, y: posicoesPlataforma[tam - 1].y - 300, src: theEnd});
+	
+	//console.log("Depois: ");
 	console.log(posicoesPlataforma);
 	
 	var direcao = "D"
@@ -68,12 +98,23 @@ var gameLoop = function(){
 		
 		//PLATAFORMA.
 		for(var u = 0; u < posicoesPlataforma.length; u++){
-			screen.drawImage(plataforma, posicoesPlataforma[u].x, posicoesPlataforma[u].y - cameraPosY);
+			screen.drawImage(posicoesPlataforma[u].src, posicoesPlataforma[u].x, posicoesPlataforma[u].y - cameraPosY);
 		}		
 		anteriorJump = anterior;
 		[pos, direcao, anterior] = move(teclado, anterior, direcao, count);
 		
-		pPos.x += pos.x;
+		
+		//if(pPos.x + pos.x + 32 <= canvas.width && pPos.x + pos.x >= 0) pPos.x += pos.x;
+		if(pPos.x + pos.x + 5 >= canvas.width){
+			var sobra = pPos.x + pos.x - canvas.width;
+			//console.log(sobra);
+			pPos.x = sobra * -1;
+		}else if(pPos.x + pos.x < 0){
+			var sobra = pPos.x + pos.x;
+			pPos.x = canvas.width - sobra - 32;
+			//console.log(sobra);
+			//console.log(pos.x + " / " + pPos.x);
+		}else pPos.x += pos.x;
 		
 		if(colidiu){
 			jump = pos.y;
@@ -92,26 +133,38 @@ var gameLoop = function(){
 		if(count <= 5) count++;
 		else count = 0;
 		
+		//Se esta descendo e nao colidiu com nada, aumentar a posicao do player e a camera que desce.
 		if(jump >= 0 && !colidiu){
 			pPos.y += 5;
 			descerCamera += 5;
 		}
 		
-		
-		if(subirCamera > 0){
+		//Subir a camera enquanto o player sobe ou desce.
+		if(subirCamera > 0 && ultimaPosY != pPos.y){
 			cameraPosY -= 3;
 			subirCamera -= 3;
-		}else if(descerCamera > 0){
-			cameraPosY += 3;
-			descerCamera -= 3;
+		}else if(descerCamera > 0 && ultimaPosY != pPos.y){
+			cameraPosY += 6;
+			descerCamera -= 6;
 		}
+		
+		//Centralizar o player na tela se não estiver.
+		if(pPos.y - cameraPosY > canvas.height / 2){
+			console.log("Meio do Canvas pra Mais: " + canvas.height / 2);
+			cameraPosY += 1;
+		}else if(subirCamera > 0 && pPos.y < canvas.height / 2) subirCamera = 0;
+		
+		if(pPos.y - cameraPosY < canvas.height / 2){
+			console.log("Meio do Canvas pra Menos: " + canvas.height / 2);
+			cameraPosY -= 1;
+		}else if(descerCamera > 0 && pPos.y > canvas.height / 2) descerCamera = 0;
 		
 		colidiu = collide(pPos, posicoesPlataforma);
 		if(colidiu) jump = 0;
+		ultimaPosY = pPos.y;
 		
-		p.innerHTML = cameraPosY * -1;
-		
-		console.log(colidiu + " p:" + (pPos.y + 32) + " j:" + jump + " camPs: " + subirCamera);
+		p.innerHTML = cameraPosY * -1; 
+		console.log(colidiu + " p:" + (pPos.y + 32) + " j:" + jump + " camPs: " + subirCamera + " camDs: " + descerCamera);
 		
 		requestAnimationFrame(tick);
 	}
@@ -165,6 +218,21 @@ var move = function(teclado, ant, direcao, count){
 	
 	return [pos, direcao, ant];
 	
+};
+
+var ordenar = function(posicoesPlataforma){
+	var naoMenor = 0;
+	for(var y = 0; y < posicoesPlataforma.length; y++){
+		for(var y2 = y + 1; y2 <  posicoesPlataforma.length; y2++){
+			if(posicoesPlataforma[y].y < posicoesPlataforma[y2].y){
+				naoMenor = posicoesPlataforma[y];
+				posicoesPlataforma[y] = posicoesPlataforma[y2];
+				posicoesPlataforma[y2] = naoMenor;
+			}
+		}	
+	}
+	
+	return posicoesPlataforma;
 };
 
 var Keyboarder = function(){
