@@ -3,7 +3,7 @@
 var gameLoop = function(){
 
 	var canvas = document.getElementById("screen");
-	canvas.width = 480;
+	canvas.width = 400;
 	canvas.height = 500;
 	var screen = canvas.getContext("2d");
 	
@@ -16,7 +16,7 @@ var gameLoop = function(){
 	var ultimaPosY = pPos.y;
 	var pos;
 	
-	var cameraPosY = 0;
+	var cameraPosY = canvas.height / 2;
 	
 	var player = new Image();
 	var plataforma = new Image();
@@ -86,7 +86,8 @@ var gameLoop = function(){
 	var anteriorJump = 0;
 	var jump = 0;
 	
-	var colidiu = collide(pPos, posicoesPlataforma);
+	var colidiu = collide(pPos, posicoesPlataforma, cameraPosY);
+	var sobrePlataforma = sobreColide(pPos, posicoesPlataforma);
 	
 	var subirCamera = 0;
 	var descerCamera = 0;
@@ -94,15 +95,16 @@ var gameLoop = function(){
 	var tick = function(){
 		
 		screen.fillRect(0, 0, canvas.width, canvas.height);
-		screen.drawImage(player, pPos.x, pPos.y - cameraPosY);
 		
 		//PLATAFORMA.
 		for(var u = 0; u < posicoesPlataforma.length; u++){
 			screen.drawImage(posicoesPlataforma[u].src, posicoesPlataforma[u].x, posicoesPlataforma[u].y - cameraPosY);
 		}		
-		anteriorJump = anterior;
-		[pos, direcao, anterior] = move(teclado, anterior, direcao, count);
+		//PLAYER
+		screen.drawImage(player, pPos.x, pPos.y - cameraPosY);
 		
+		anteriorJump = anterior; //variavel para nao mudar sprite do jogador no ar.
+		[pos, direcao, anterior] = move(teclado, anterior, direcao, count);
 		
 		//if(pPos.x + pos.x + 32 <= canvas.width && pPos.x + pos.x >= 0) pPos.x += pos.x;
 		if(pPos.x + pos.x + 5 >= canvas.width){
@@ -113,28 +115,28 @@ var gameLoop = function(){
 			var sobra = pPos.x + pos.x;
 			pPos.x = canvas.width - sobra - 32;
 			//console.log(sobra);
-			//console.log(pos.x + " / " + pPos.x);
-		}else pPos.x += pos.x;
+		//console.log(pos.x + " / " + pPos.x);
+			}else pPos.x += pos.x;
 		
-		if(colidiu){
+		if(sobrePlataforma){
 			jump = pos.y;
 			//subirCamera += jump * -1;
 		}
 		
-		if(jump < 0){
+		if(jump < 0 && !colidiu){
 			pPos.y -= 5;
 			jump += 5;
 			subirCamera += 5;
 		}
 		
-		if(!colidiu) anterior = anteriorJump;
+		if(!colidiu && !sobrePlataforma) anterior = anteriorJump;
 		player.src = "player/eusprite" + direcao + anterior + ".png";
 		
 		if(count <= 5) count++;
 		else count = 0;
 		
 		//Se esta descendo e nao colidiu com nada, aumentar a posicao do player e a camera que desce.
-		if(jump >= 0 && !colidiu){
+		if(jump >= 0 && !sobrePlataforma){
 			pPos.y += 5;
 			descerCamera += 5;
 		}
@@ -150,21 +152,22 @@ var gameLoop = function(){
 		
 		//Centralizar o player na tela se não estiver.
 		if(pPos.y - cameraPosY > canvas.height / 2){
-			console.log("Meio do Canvas pra Mais: " + canvas.height / 2);
+			//console.log("Meio do Canvas pra Mais: " + canvas.height / 2);
 			cameraPosY += 1;
 		}else if(subirCamera > 0 && pPos.y < canvas.height / 2) subirCamera = 0;
 		
 		if(pPos.y - cameraPosY < canvas.height / 2){
-			console.log("Meio do Canvas pra Menos: " + canvas.height / 2);
+			//console.log("Meio do Canvas pra Menos: " + canvas.height / 2);
 			cameraPosY -= 1;
 		}else if(descerCamera > 0 && pPos.y > canvas.height / 2) descerCamera = 0;
 		
-		colidiu = collide(pPos, posicoesPlataforma);
+		colidiu = collide(pPos, posicoesPlataforma, cameraPosY);
+		sobrePlataforma = sobreColide(pPos, posicoesPlataforma);
 		if(colidiu) jump = 0;
 		ultimaPosY = pPos.y;
 		
 		p.innerHTML = cameraPosY * -1; 
-		console.log(colidiu + " p:" + (pPos.y + 32) + " j:" + jump + " camPs: " + subirCamera + " camDs: " + descerCamera);
+		//console.log(colidiu + " p:" + (pPos.y + 32) + " j:" + jump + " camPs: " + subirCamera + " camDs: " + descerCamera);
 		
 		requestAnimationFrame(tick);
 	}
@@ -173,14 +176,37 @@ var gameLoop = function(){
 	
 };
 
-var collide = function(posPlayer, array){
+var collide = function(posPlayer, array, camY){
 	
 	var colidiu = false;
 	for(var x = 0; x < array.length; x++){
-		
-		if((posPlayer.y + 32 >= array[x].y && posPlayer.y + 32 <= array[x].y + 32) &&
-			(posPlayer.x + 32 >= array[x].x && posPlayer.x + 32 <= array[x].x + 160)) colidiu = true;
-			
+		if(posPlayer.x + 16 >= array[x].x && posPlayer.x - 16 <= array[x].x + 132){
+			if(posPlayer.y <= array[x].y + 30 && posPlayer.y > array[x].y + 12){
+				colidiu = true;
+				if(x > 4){
+					//console.log("x: " + x + " || " + array[x].x + " > "  + posPlayer.x +  " < " + (array[x].x + 160));
+					console.log("Bateu - xY: " + x + " || " + (array[x].y + 32) + " > "  + (posPlayer.y) +  " < " + (array[x].y + 27));
+				}
+			}
+		}
+	}
+	
+	return colidiu;
+};
+
+var sobreColide = function(posPlayer, array){
+	
+	var colidiu = false;
+	for(var x = 0; x < array.length; x++){
+		if(posPlayer.x + 16 >= array[x].x && posPlayer.x - 16 <= array[x].x + 132){
+			if((posPlayer.y + 32) >= array[x].y  && (posPlayer.y + 32) < array[x].y + 5){
+				colidiu = true;
+				if(x < 4){
+					//console.log("x: " + x + " || " + array[x].x + " > "  + posPlayer.x +  " < " + (array[x].x + 160));
+					//console.log("xY: " + x + " || " + (array[x].y ) + " > "  + (posPlayer.y) +  "+32 < " + (array[x].y + 5)) ;
+				}
+			}
+		}
 	}
 	
 	return colidiu;
